@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   CCard,
   CCardBody,
@@ -11,9 +11,71 @@ import {
   CAccordionItem,
 } from '@coreui/react'
 import { DocsComponents, DocsExample } from 'src/components'
+import supabase from '../../../supaBaseClient'
+import ModalAluno from './ModalAluno'
 
 
 const Accordion = () => {
+
+  const [alunos, setAlunos] = useState([]);
+  const [alunoEditando, setAlunoEditando] = useState(null);
+
+  useEffect(() => {
+    fetchAlunos();
+  }, []);
+
+  // const fetchAlunos = async () => {
+  //   const { data, error } = await supabase.from("alunos").select("*");
+  //   if (error) {
+  //     console.error("Erro ao buscar alunos:", error);
+  //   } else {
+  //     setAlunos(data);
+  //   }
+  // };
+
+  const fetchAlunos = async () => {
+  const { data, error } = await supabase
+    .from("alunos")
+    .select(`
+      id,
+      nome,
+      data_nascimento,
+      email,
+      telefone,
+      responsavel:responsaveis (
+        id,
+        nome,
+        telefone
+      )
+    `);
+
+  if (error) {
+    console.error("Erro ao buscar alunos:", error);
+  } else {
+    setAlunos(data);
+  }
+};
+
+
+  const deletarAluno = async (id) => {
+    const { error } = await supabase.from("alunos").delete().eq("id", id);
+    if (error) {
+      console.error("Erro ao deletar aluno:", error);
+    } else {
+      setAlunos((prev) => prev.filter((aluno) => aluno.id !== id));
+    }
+  };
+
+  const abrirModalNovo = () => {
+    setAlunoEditando(null);
+    new bootstrap.Modal(document.getElementById("modalAluno")).show();
+  };
+
+  const abrirModalEditar = (aluno) => {
+    setAlunoEditando(aluno);
+    new bootstrap.Modal(document.getElementById("modalAluno")).show();
+  };
+
   return (
     <CRow>
       <CCol xs={12}>
@@ -54,7 +116,15 @@ const Accordion = () => {
         <CRow className="my-4">
           <CCol md={8}></CCol>
           <CCol xs={6} md={4}>
-            <button type="button" class="btn btn-primary">Registar</button>
+            {/* <button  type="button" class="btn btn-primary" onClick={() => setShowModal(true)}>Registar</button> */}
+            <button
+              className="btn btn-success"
+              data-bs-toggle="modal"
+              data-bs-target="#modalAluno"
+              onClick={abrirModalNovo}
+            >
+              Registrar Aluno
+            </button>
           </CCol>
         </CRow>
         <CCard className="my-4">
@@ -63,97 +133,47 @@ const Accordion = () => {
               <thead class="table-dark">
                 <tr>
                   <th scope="col">#</th>
-                  <th scope="col">Número da Matrícula</th>
                   <th scope="col">Nome Completo</th>
-                  <th scope="col">Turma</th>
-                  <th scope="col">Série</th>
-                  <th scope="col">Curso</th>
-                  <th scope="col">Status Acadêmico</th>
-                  <th scope="col">Nome do Responsável</th>
+                  <th scope="col">Data de Nascimento</th>
+                  <th scope="col">E-mail</th>
                   <th scope="col">Telefone</th>
-                  <th scope="col">Situação Financeira</th>
-                  <th scope="col">Data de Ingresso</th>
+                  <th scope="col">Status Acadêmico</th>
+                  <th scope="col">Endereço</th>
+                  <th scope="col">Responsáveis</th>
                   <th scope="col">Ações</th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <th scope="row">1</th>
-                  <td>2025001</td>
-                  <td>Mark Otto</td>
-                  <td>A</td>
-                  <td>3ª Série</td>
-                  <td>Engenharia</td>
-                  <td>Ativo</td>
-                  <td>Maria Otto</td>
-                  <td>(11) 99999-0000</td>
-                  <td>Em dia</td>
-                  <td>15/02/2022</td>
-                  <td>
-                    <div class="dropdown">
-                      <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                        Opções
+                {alunos.map((aluno) => (
+                  <tr key={aluno.id}>
+                    <td>{aluno.id}</td>
+                    <td>{aluno.nome}</td>
+                    <td>{aluno.data_nascimento}</td>
+                    <td>{aluno.email}</td>
+                    <td>{aluno.telefone}</td>
+                    <td>{aluno.status}</td>
+                    <td>{aluno.endereco}</td>
+                    <td>{aluno.responsavel.nome}</td>
+                    <td>
+                      <button
+                        className="btn btn-primary btn-sm me-2"
+                        onClick={() => abrirModalEditar(aluno)}
+                      >
+                        Editar
                       </button>
-                      <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Ver</a></li>
-                        <li><a class="dropdown-item" href="#">Editar</a></li>
-                        <li><a class="dropdown-item text-danger" href="#">Excluir</a></li>
-                      </ul>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <th scope="row">2</th>
-                  <td>2025002</td>
-                  <td>Jacob Thornton</td>
-                  <td>B</td>
-                  <td>2ª Série</td>
-                  <td>Direito</td>
-                  <td>Trancado</td>
-                  <td>João Thornton</td>
-                  <td>(11) 98888-1234</td>
-                  <td>Inadimplente</td>
-                  <td>10/03/2021</td>
-                  <td>
-                    <div class="dropdown">
-                      <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                        Opções
+                      <button
+                        className="btn btn-danger btn-sm"
+                        onClick={() => deletarAluno(aluno.id)}
+                      >
+                        Deletar
                       </button>
-                      <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Ver</a></li>
-                        <li><a class="dropdown-item" href="#">Editar</a></li>
-                        <li><a class="dropdown-item text-danger" href="#">Excluir</a></li>
-                      </ul>
-                    </div>
-                  </td>
-                </tr>
-                <tr>
-                  <th scope="row">3</th>
-                  <td>2025003</td>
-                  <td>Larry Bird</td>
-                  <td>C</td>
-                  <td>1ª Série</td>
-                  <td>Administração</td>
-                  <td>Formado</td>
-                  <td>Paulo Bird</td>
-                  <td>(11) 97777-5678</td>
-                  <td>Em dia</td>
-                  <td>20/01/2020</td>
-                  <td>
-                    <div class="dropdown">
-                      <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                        Opções
-                      </button>
-                      <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Ver</a></li>
-                        <li><a class="dropdown-item" href="#">Editar</a></li>
-                        <li><a class="dropdown-item text-danger" href="#">Excluir</a></li>
-                      </ul>
-                    </div>
-                  </td>
-                </tr>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
+            {/* Modal */}
+            <ModalAluno alunoEditando={alunoEditando} onSalvo={fetchAlunos} />
           </CCardBody>
         </CCard>
       </CCol>
