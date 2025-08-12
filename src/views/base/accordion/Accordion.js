@@ -12,162 +12,148 @@ import {
 } from '@coreui/react'
 import { DocsComponents, DocsExample } from 'src/components'
 
+
 const Accordion = () => {
   return (
     <CRow>
       <CCol xs={12}>
-        <DocsComponents href="components/accordion/" />
-        <CCard className="mb-4">
-          <CCardHeader>
-            <strong>React Accordion</strong>
-          </CCardHeader>
+        <CCardHeader className="my-4">
+          <strong>Gestão de Alunos </strong>
+        </CCardHeader>
+        <CRow className="my-4">
+          <CCol md={6} className="md-6">
+            <div class="input-group mb-3">
+              <label class="input-group-text" for="inputGroupSelect01">Tipo de Filtro</label>
+              <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Dropdown</button>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">Action</a></li>
+                <li><a class="dropdown-item" href="#">Another action</a></li>
+                <li><a class="dropdown-item" href="#">Something else here</a></li>
+                <li><hr class="dropdown-divider" /></li>
+                <li><a class="dropdown-item" href="#">Separated link</a></li>
+              </ul>
+              <input type="text" class="form-control" aria-label="Text input with dropdown button" />
+            </div>
+          </CCol>
+          <CCol>
+            <div class="input-group mb-3">
+              <label class="input-group-text" for="inputGroupSelect01">Data de Inicio</label>
+              <input type="date" class="form-control" placeholder="Data" aria-label="data" />
+            </div>
+          </CCol>
+          <CCol>
+            <div class="input-group mb-3">
+              <label class="input-group-text" for="inputGroupSelect01">Data de Fim</label>
+              <input type="date" class="form-control" placeholder="Data" aria-label="data" />
+            </div>
+          </CCol>
+          <CCol>
+            <button type="button" class="btn btn-primary">Filtrar</button>
+          </CCol>
+        </CRow>
+        <CRow className="my-4">
+          <CCol md={8}></CCol>
+          <CCol xs={6} md={4}>
+            <button type="button" class="btn btn-primary">Registar</button>
+          </CCol>
+        </CRow>
+        <CCard className="my-4">
           <CCardBody>
-            <p className="text-body-secondary small">
-              Click the accordions below to expand/collapse the accordion content.
-            </p>
-            <DocsExample href="components/accordion">
-              <CAccordion activeItemKey={2}>
-                <CAccordionItem itemKey={1}>
-                  <CAccordionHeader>Accordion Item #1</CAccordionHeader>
-                  <CAccordionBody>
-                    <strong>This is the first item&#39;s accordion body.</strong> It is hidden by
-                    default, until the collapse plugin adds the appropriate classes that we use to
-                    style each element. These classes control the overall appearance, as well as the
-                    showing and hiding via CSS transitions. You can modify any of this with custom
-                    CSS or overriding our default variables. It&#39;s also worth noting that just
-                    about any HTML can go within the <code>.accordion-body</code>, though the
-                    transition does limit overflow.
-                  </CAccordionBody>
-                </CAccordionItem>
-                <CAccordionItem itemKey={2}>
-                  <CAccordionHeader>Accordion Item #2</CAccordionHeader>
-                  <CAccordionBody>
-                    <strong>This is the second item&#39;s accordion body.</strong> It is hidden by
-                    default, until the collapse plugin adds the appropriate classes that we use to
-                    style each element. These classes control the overall appearance, as well as the
-                    showing and hiding via CSS transitions. You can modify any of this with custom
-                    CSS or overriding our default variables. It&#39;s also worth noting that just
-                    about any HTML can go within the <code>.accordion-body</code>, though the
-                    transition does limit overflow.
-                  </CAccordionBody>
-                </CAccordionItem>
-                <CAccordionItem itemKey={3}>
-                  <CAccordionHeader>Accordion Item #3</CAccordionHeader>
-                  <CAccordionBody>
-                    <strong>This is the second item&#39;s accordion body.</strong> It is hidden by
-                    default, until the collapse plugin adds the appropriate classes that we use to
-                    style each element. These classes control the overall appearance, as well as the
-                    showing and hiding via CSS transitions. You can modify any of this with custom
-                    CSS or overriding our default variables. It&#39;s also worth noting that just
-                    about any HTML can go within the <code>.accordion-body</code>, though the
-                    transition does limit overflow.
-                  </CAccordionBody>
-                </CAccordionItem>
-              </CAccordion>
-            </DocsExample>
-          </CCardBody>
-        </CCard>
-        <CCard className="mb-4">
-          <CCardHeader>
-            <strong>React Accordion</strong> <small>Flush</small>
-          </CCardHeader>
-          <CCardBody>
-            <p className="text-body-secondary small">
-              Add <code>flush</code> to remove the default <code>background-color</code>, some
-              borders, and some rounded corners to render accordions edge-to-edge with their parent
-              container.
-            </p>
-            <DocsExample href="components/accordion#flush">
-              <CAccordion flush>
-                <CAccordionItem itemKey={1}>
-                  <CAccordionHeader>Accordion Item #1</CAccordionHeader>
-                  <CAccordionBody>
-                    <strong>This is the first item&#39;s accordion body.</strong> It is hidden by
-                    default, until the collapse plugin adds the appropriate classes that we use to
-                    style each element. These classes control the overall appearance, as well as the
-                    showing and hiding via CSS transitions. You can modify any of this with custom
-                    CSS or overriding our default variables. It&#39;s also worth noting that just
-                    about any HTML can go within the <code>.accordion-body</code>, though the
-                    transition does limit overflow.
-                  </CAccordionBody>
-                </CAccordionItem>
-                <CAccordionItem itemKey={2}>
-                  <CAccordionHeader>Accordion Item #2</CAccordionHeader>
-                  <CAccordionBody>
-                    <strong>This is the second item&#39;s accordion body.</strong> It is hidden by
-                    default, until the collapse plugin adds the appropriate classes that we use to
-                    style each element. These classes control the overall appearance, as well as the
-                    showing and hiding via CSS transitions. You can modify any of this with custom
-                    CSS or overriding our default variables. It&#39;s also worth noting that just
-                    about any HTML can go within the <code>.accordion-body</code>, though the
-                    transition does limit overflow.
-                  </CAccordionBody>
-                </CAccordionItem>
-                <CAccordionItem itemKey={3}>
-                  <CAccordionHeader>Accordion Item #3</CAccordionHeader>
-                  <CAccordionBody>
-                    <strong>This is the second item&#39;s accordion body.</strong> It is hidden by
-                    default, until the collapse plugin adds the appropriate classes that we use to
-                    style each element. These classes control the overall appearance, as well as the
-                    showing and hiding via CSS transitions. You can modify any of this with custom
-                    CSS or overriding our default variables. It&#39;s also worth noting that just
-                    about any HTML can go within the <code>.accordion-body</code>, though the
-                    transition does limit overflow.
-                  </CAccordionBody>
-                </CAccordionItem>
-              </CAccordion>
-            </DocsExample>
-          </CCardBody>
-        </CCard>
-        <CCard className="mb-4">
-          <CCardHeader>
-            <strong>React Accordion</strong> <small>Always open</small>
-          </CCardHeader>
-          <CCardBody>
-            <p className="text-body-secondary small">
-              Add <code>alwaysOpen</code> property to make accordion items stay open when another
-              item is opened.
-            </p>
-            <DocsExample href="components/accordion#flush">
-              <CAccordion alwaysOpen>
-                <CAccordionItem itemKey={1}>
-                  <CAccordionHeader>Accordion Item #1</CAccordionHeader>
-                  <CAccordionBody>
-                    <strong>This is the first item&#39;s accordion body.</strong> It is hidden by
-                    default, until the collapse plugin adds the appropriate classes that we use to
-                    style each element. These classes control the overall appearance, as well as the
-                    showing and hiding via CSS transitions. You can modify any of this with custom
-                    CSS or overriding our default variables. It&#39;s also worth noting that just
-                    about any HTML can go within the <code>.accordion-body</code>, though the
-                    transition does limit overflow.
-                  </CAccordionBody>
-                </CAccordionItem>
-                <CAccordionItem itemKey={2}>
-                  <CAccordionHeader>Accordion Item #2</CAccordionHeader>
-                  <CAccordionBody>
-                    <strong>This is the second item&#39;s accordion body.</strong> It is hidden by
-                    default, until the collapse plugin adds the appropriate classes that we use to
-                    style each element. These classes control the overall appearance, as well as the
-                    showing and hiding via CSS transitions. You can modify any of this with custom
-                    CSS or overriding our default variables. It&#39;s also worth noting that just
-                    about any HTML can go within the <code>.accordion-body</code>, though the
-                    transition does limit overflow.
-                  </CAccordionBody>
-                </CAccordionItem>
-                <CAccordionItem itemKey={3}>
-                  <CAccordionHeader>Accordion Item #3</CAccordionHeader>
-                  <CAccordionBody>
-                    <strong>This is the second item&#39;s accordion body.</strong> It is hidden by
-                    default, until the collapse plugin adds the appropriate classes that we use to
-                    style each element. These classes control the overall appearance, as well as the
-                    showing and hiding via CSS transitions. You can modify any of this with custom
-                    CSS or overriding our default variables. It&#39;s also worth noting that just
-                    about any HTML can go within the <code>.accordion-body</code>, though the
-                    transition does limit overflow.
-                  </CAccordionBody>
-                </CAccordionItem>
-              </CAccordion>
-            </DocsExample>
+            <table class="table table-bordered table-striped">
+              <thead class="table-dark">
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Número da Matrícula</th>
+                  <th scope="col">Nome Completo</th>
+                  <th scope="col">Turma</th>
+                  <th scope="col">Série</th>
+                  <th scope="col">Curso</th>
+                  <th scope="col">Status Acadêmico</th>
+                  <th scope="col">Nome do Responsável</th>
+                  <th scope="col">Telefone</th>
+                  <th scope="col">Situação Financeira</th>
+                  <th scope="col">Data de Ingresso</th>
+                  <th scope="col">Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">1</th>
+                  <td>2025001</td>
+                  <td>Mark Otto</td>
+                  <td>A</td>
+                  <td>3ª Série</td>
+                  <td>Engenharia</td>
+                  <td>Ativo</td>
+                  <td>Maria Otto</td>
+                  <td>(11) 99999-0000</td>
+                  <td>Em dia</td>
+                  <td>15/02/2022</td>
+                  <td>
+                    <div class="dropdown">
+                      <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        Opções
+                      </button>
+                      <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Ver</a></li>
+                        <li><a class="dropdown-item" href="#">Editar</a></li>
+                        <li><a class="dropdown-item text-danger" href="#">Excluir</a></li>
+                      </ul>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row">2</th>
+                  <td>2025002</td>
+                  <td>Jacob Thornton</td>
+                  <td>B</td>
+                  <td>2ª Série</td>
+                  <td>Direito</td>
+                  <td>Trancado</td>
+                  <td>João Thornton</td>
+                  <td>(11) 98888-1234</td>
+                  <td>Inadimplente</td>
+                  <td>10/03/2021</td>
+                  <td>
+                    <div class="dropdown">
+                      <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        Opções
+                      </button>
+                      <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Ver</a></li>
+                        <li><a class="dropdown-item" href="#">Editar</a></li>
+                        <li><a class="dropdown-item text-danger" href="#">Excluir</a></li>
+                      </ul>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row">3</th>
+                  <td>2025003</td>
+                  <td>Larry Bird</td>
+                  <td>C</td>
+                  <td>1ª Série</td>
+                  <td>Administração</td>
+                  <td>Formado</td>
+                  <td>Paulo Bird</td>
+                  <td>(11) 97777-5678</td>
+                  <td>Em dia</td>
+                  <td>20/01/2020</td>
+                  <td>
+                    <div class="dropdown">
+                      <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        Opções
+                      </button>
+                      <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Ver</a></li>
+                        <li><a class="dropdown-item" href="#">Editar</a></li>
+                        <li><a class="dropdown-item text-danger" href="#">Excluir</a></li>
+                      </ul>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </CCardBody>
         </CCard>
       </CCol>

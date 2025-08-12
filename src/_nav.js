@@ -22,447 +22,444 @@ const _nav = [
     name: 'Dashboard',
     to: '/dashboard',
     icon: <CIcon icon={cilSpeedometer} customClassName="nav-icon" />,
-    badge: {
-      color: 'info',
-      text: 'NEW',
-    },
+    // badge: {
+    //   color: 'info',
+    //   text: 'NEW',
+    // },
+  },
+  // {
+  //   component: CNavTitle,
+  //   name: 'Theme',
+  // },
+  // {
+  //   component: CNavItem,
+  //   name: 'Colors',
+  //   to: '/theme/colors',
+  //   icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
+  // },
+  // {
+  //   component: CNavItem,
+  //   name: 'Typography',
+  //   to: '/theme/typography',
+  //   icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
+  // },
+    {
+    component: CNavItem,
+    name: 'Analises',
+    to: '/charts',
+    icon: <CIcon icon={cilChartPie} customClassName="nav-icon" />,
   },
   {
     component: CNavTitle,
-    name: 'Theme',
-  },
-  {
-    component: CNavItem,
-    name: 'Colors',
-    to: '/theme/colors',
-    icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
-  },
-  {
-    component: CNavItem,
-    name: 'Typography',
-    to: '/theme/typography',
-    icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
-  },
-  {
-    component: CNavTitle,
-    name: 'Components',
+    name: 'Principal'
   },
   {
     component: CNavGroup,
-    name: 'Base',
+    name: 'Gestão Acadêmica',
     to: '/base',
     icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
     items: [
       {
         component: CNavItem,
-        name: 'Accordion',
+        name: 'Gestão de Alunos',
         to: '/base/accordion',
       },
       {
-        component: CNavItem,
-        name: 'Breadcrumb',
-        to: '/base/breadcrumbs',
-      },
-      {
-        component: CNavItem,
-        name: (
-          <React.Fragment>
-            {'Calendar'}
-            <CIcon icon={cilExternalLink} size="sm" className="ms-2" />
-          </React.Fragment>
-        ),
-        href: 'https://coreui.io/react/docs/components/calendar/',
-        badge: {
-          color: 'danger',
-          text: 'PRO',
-        },
-      },
-      {
-        component: CNavItem,
-        name: 'Cards',
-        to: '/base/cards',
-      },
-      {
-        component: CNavItem,
-        name: 'Carousel',
+        name: 'Matrícula e Rematrícula',
+                component: CNavItem,
         to: '/base/carousels',
       },
-      {
+            {
         component: CNavItem,
-        name: 'Collapse',
-        to: '/base/collapses',
+        name: 'Histórico Escolar e Boletins',
+        to: '/base/cards',
       },
-      {
+       {
         component: CNavItem,
-        name: 'List group',
+        to: '/base/collapses',
+        name: 'Emissão de Documentos',
+      },
+       {
+        name: 'Gestão de Turma',
+        component: CNavItem,
         to: '/base/list-groups',
       },
-      {
+       {
         component: CNavItem,
-        name: 'Navs & Tabs',
         to: '/base/navs',
+        name: 'Gestão de Notas',
       },
-      {
+       {
+        name: 'Gestão de Frequência',
         component: CNavItem,
-        name: 'Pagination',
         to: '/base/paginations',
       },
-      {
+       {
         component: CNavItem,
-        name: 'Placeholders',
         to: '/base/placeholders',
+        name: 'Gestão de Calendário Acadêmico',
       },
-      {
+       {
         component: CNavItem,
-        name: 'Popovers',
         to: '/base/popovers',
+        name: 'Gestão de Aulas',
       },
-      {
+       {
         component: CNavItem,
-        name: 'Progress',
         to: '/base/progress',
+        name: 'Transferência interna e externa de alunos',
       },
-      {
-        component: CNavItem,
-        name: 'Smart Pagination',
-        href: 'https://coreui.io/react/docs/components/smart-pagination/',
-        badge: {
-          color: 'danger',
-          text: 'PRO',
-        },
-      },
-      {
-        component: CNavItem,
-        name: (
-          <React.Fragment>
-            {'Smart Table'}
-            <CIcon icon={cilExternalLink} size="sm" className="ms-2" />
-          </React.Fragment>
-        ),
-        href: 'https://coreui.io/react/docs/components/smart-table/',
-        badge: {
-          color: 'danger',
-          text: 'PRO',
-        },
-      },
-      {
-        component: CNavItem,
-        name: 'Spinners',
-        to: '/base/spinners',
-      },
-      {
-        component: CNavItem,
-        name: 'Tables',
-        to: '/base/tables',
-      },
-      {
-        component: CNavItem,
-        name: 'Tabs',
-        to: '/base/tabs',
-      },
-      {
-        component: CNavItem,
-        name: 'Tooltips',
-        to: '/base/tooltips',
-      },
-      {
-        component: CNavItem,
-        name: (
-          <React.Fragment>
-            {'Virtual Scroller'}
-            <CIcon icon={cilExternalLink} size="sm" className="ms-2" />
-          </React.Fragment>
-        ),
-        href: 'https://coreui.io/react/docs/components/virtual-scroller/',
-        badge: {
-          color: 'danger',
-          text: 'PRO',
-        },
-      },
+      
     ],
   },
   {
     component: CNavGroup,
-    name: 'Buttons',
+    name: 'Gestão de Perfis',
     to: '/buttons',
     icon: <CIcon icon={cilCursor} customClassName="nav-icon" />,
     items: [
       {
         component: CNavItem,
-        name: 'Buttons',
+        name: 'Gestão de Professores',
         to: '/buttons/buttons',
       },
-      {
+       {
         component: CNavItem,
-        name: 'Buttons groups',
-        to: '/buttons/button-groups',
-      },
-      {
-        component: CNavItem,
-        name: 'Dropdowns',
+        name: 'Atribuição de Disciplinas a Professores',
         to: '/buttons/dropdowns',
       },
       {
         component: CNavItem,
-        name: (
-          <React.Fragment>
-            {'Loading Button'}
-            <CIcon icon={cilExternalLink} size="sm" className="ms-2" />
-          </React.Fragment>
-        ),
-        href: 'https://coreui.io/react/docs/components/loading-button/',
-        badge: {
-          color: 'danger',
-          text: 'PRO',
-        },
+        name: 'Gestão de Equipe Administrativa',
+        to: '/buttons/button-groups',
       },
+      
+       {
+        component: CNavItem,
+        name: 'Gestão de Equipe Administrativa',
+        to: '/buttons/button-groups',
+      },
+       {
+        component: CNavItem,
+        name: 'Controle de Carga horária',
+        to: '/buttons/button-groups',
+      },
+       {
+        component: CNavItem,
+        name: 'Acompanhamento de Desem,penho Docente',
+        to: '/buttons/button-groups',
+      },
+       {
+        component: CNavItem,
+        name: 'Portal do Professor',
+        to: '/buttons/button-groups',
+      },
+      
     ],
   },
   {
     component: CNavGroup,
-    name: 'Forms',
+    name: 'Portal do Aluno',
     icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
     items: [
       {
         component: CNavItem,
-        name: (
-          <React.Fragment>
-            {'Autocomplete'}
-            <CIcon icon={cilExternalLink} size="sm" className="ms-2" />
-          </React.Fragment>
-        ),
-        href: 'https://coreui.io/react/docs/forms/autocomplete/',
-        badge: {
-          color: 'danger',
-          text: 'PRO',
-        },
-      },
-      {
-        component: CNavItem,
-        name: 'Checks & Radios',
+        name: 'Visualização de Notas e Faltas',
         to: '/forms/checks-radios',
       },
       {
         component: CNavItem,
-        name: (
-          <React.Fragment>
-            {'Date Picker'}
-            <CIcon icon={cilExternalLink} size="sm" className="ms-2" />
-          </React.Fragment>
-        ),
-        href: 'https://coreui.io/react/docs/forms/date-picker/',
-        badge: {
-          color: 'danger',
-          text: 'PRO',
-        },
-      },
-      {
-        component: CNavItem,
-        name: 'Date Range Picker',
-        href: 'https://coreui.io/react/docs/forms/date-range-picker/',
-        badge: {
-          color: 'danger',
-          text: 'PRO',
-        },
-      },
-      {
-        component: CNavItem,
-        name: 'Floating Labels',
+        name: 'Acesso a Boletins e Documentos',
         to: '/forms/floating-labels',
       },
       {
         component: CNavItem,
-        name: 'Form Control',
+        name: 'Download de Materiais e Tarefas',
         to: '/forms/form-control',
       },
       {
         component: CNavItem,
-        name: 'Input Group',
+        name: 'Matrícula e Rematrícula',
         to: '/forms/input-group',
       },
+     
       {
         component: CNavItem,
-        name: (
-          <React.Fragment>
-            {'Multi Select'}
-            <CIcon icon={cilExternalLink} size="sm" className="ms-2" />
-          </React.Fragment>
-        ),
-        href: 'https://coreui.io/react/docs/forms/multi-select/',
-        badge: {
-          color: 'danger',
-          text: 'PRO',
-        },
-      },
-      {
-        component: CNavItem,
-        name: (
-          <React.Fragment>
-            {'Password Input'}
-            <CIcon icon={cilExternalLink} size="sm" className="ms-2" />
-          </React.Fragment>
-        ),
-        href: 'https://coreui.io/react/docs/forms/password-input/',
-        badge: {
-          color: 'danger',
-          text: 'PRO',
-        },
-      },
-      {
-        component: CNavItem,
-        name: 'Range',
+        name: 'Cronograma do Aluno',
         to: '/forms/range',
       },
       {
         component: CNavItem,
-        name: (
-          <React.Fragment>
-            {'Range Slider'}
-            <CIcon icon={cilExternalLink} size="sm" className="ms-2" />
-          </React.Fragment>
-        ),
-        href: 'https://coreui.io/react/docs/forms/range-slider/',
-        badge: {
-          color: 'danger',
-          text: 'PRO',
-        },
-      },
-      {
-        component: CNavItem,
-        name: (
-          <React.Fragment>
-            {'Rating'}
-            <CIcon icon={cilExternalLink} size="sm" className="ms-2" />
-          </React.Fragment>
-        ),
-        href: 'https://coreui.io/react/docs/forms/rating/',
-        badge: {
-          color: 'danger',
-          text: 'PRO',
-        },
-      },
-      {
-        component: CNavItem,
-        name: 'Select',
+        name: 'Chat',
         to: '/forms/select',
       },
-      {
-        component: CNavItem,
-        name: (
-          <React.Fragment>
-            {'Stepper'}
-            <CIcon icon={cilExternalLink} size="sm" className="ms-2" />
-          </React.Fragment>
-        ),
-        href: 'https://coreui.io/react/docs/forms/stepp/',
-        badge: {
-          color: 'danger',
-          text: 'PRO',
-        },
-      },
-      {
-        component: CNavItem,
-        name: (
-          <React.Fragment>
-            {'Time Picker'}
-            <CIcon icon={cilExternalLink} size="sm" className="ms-2" />
-          </React.Fragment>
-        ),
-        href: 'https://coreui.io/react/docs/forms/time-picker/',
-        badge: {
-          color: 'danger',
-          text: 'PRO',
-        },
-      },
-      {
-        component: CNavItem,
-        name: 'Layout',
-        to: '/forms/layout',
-      },
-      {
-        component: CNavItem,
-        name: 'Validation',
-        to: '/forms/validation',
-      },
+      // {
+      //   component: CNavItem,
+      //   name: 'Layout',
+      //   to: '/forms/layout',
+      // },
+      // {
+      //   component: CNavItem,
+      //   name: 'Validation',
+      //   to: '/forms/validation',
+      // },
     ],
   },
-  {
-    component: CNavItem,
-    name: 'Charts',
-    to: '/charts',
-    icon: <CIcon icon={cilChartPie} customClassName="nav-icon" />,
-  },
+
   {
     component: CNavGroup,
-    name: 'Icons',
+    name: 'Portal dos Pais/Responsáveis',
     icon: <CIcon icon={cilStar} customClassName="nav-icon" />,
     items: [
       {
         component: CNavItem,
-        name: 'CoreUI Free',
+        name: 'Desempenho do Aluno',
+        to: '/icons/coreui-icons',
+      },
+       {
+        component: CNavItem,
+        name: 'Notificações e cominicados da escola',
         to: '/icons/coreui-icons',
       },
       {
         component: CNavItem,
-        name: 'CoreUI Flags',
+        name: 'Soliocitação de Documentos e Matrícula',
         to: '/icons/flags',
       },
       {
         component: CNavItem,
-        name: 'CoreUI Brands',
+        name: 'Contato com Professors e Direção',
         to: '/icons/brands',
       },
     ],
   },
   {
     component: CNavGroup,
-    name: 'Notifications',
+    name: 'Gestão Escolar/Administração',
     icon: <CIcon icon={cilBell} customClassName="nav-icon" />,
     items: [
       {
         component: CNavItem,
-        name: 'Alerts',
+        name: 'Gestão de Unidade Escolares',
         to: '/notifications/alerts',
       },
       {
         component: CNavItem,
-        name: 'Badges',
+        name: 'Parâmetos e Regras Acadêmicas',
         to: '/notifications/badges',
       },
       {
         component: CNavItem,
-        name: 'Modal',
+        name: 'Cadastro de Feriados e Datas letivas',
         to: '/notifications/modals',
       },
       {
         component: CNavItem,
-        name: 'Toasts',
+        name: 'Controle de Disciplinas',
         to: '/notifications/toasts',
       },
+      {
+        component: CNavItem,
+        name: 'Relatórios Gerenciais e Estatísticos',
+        to: '/notifications/toasts',
+      },
+      
     ],
   },
-  {
-    component: CNavItem,
-    name: 'Widgets',
-    to: '/widgets',
-    icon: <CIcon icon={cilCalculator} customClassName="nav-icon" />,
-    badge: {
-      color: 'info',
-      text: 'NEW',
-    },
+
+    {
+    component: CNavGroup,
+    name: 'Gestão Financeira',
+    icon: <CIcon icon={cilBell} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Controle de Mensalidades e Cobranças',
+        to: '/notifications/alerts',
+      },
+      {
+        component: CNavItem,
+        name: 'Parâmetos e Regras Acadêmicas',
+        to: '/notifications/badges',
+      },
+      {
+        component: CNavItem,
+        name: 'Emissão de Faturas e Recibos',
+        to: '/notifications/modals',
+      },
+      {
+        component: CNavItem,
+        name: 'Controle de inadimplência',
+        to: '/notifications/toasts',
+      },
+      {
+        component: CNavItem,
+        name: 'Relatório Financeiro',
+        to: '/notifications/toasts',
+      },
+        {
+        component: CNavItem,
+        name: 'Desconto, Bolsas e Bolsas Parciais',
+        to: '/notifications/toasts',
+      },
+        {
+        component: CNavItem,
+        name: 'Integração com Gateway de Pagamento',
+        to: '/notifications/toasts',
+      },
+      
+    ],
   },
+
+   {
+    component: CNavGroup,
+    name: 'Gestão de Avaliação',
+    icon: <CIcon icon={cilBell} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Registro de Provas e Trabalhos',
+        to: '/notifications/alerts',
+      },
+      {
+        component: CNavItem,
+        name: 'Peso das Avaliações',
+        to: '/notifications/badges',
+      },
+      {
+        component: CNavItem,
+        name: 'Recuperação e Avaliação Final',
+        to: '/notifications/modals',
+      },
+     
+    ],
+  },
+
+   {
+    component: CNavGroup,
+    name: 'Documentação e Registros',
+    icon: <CIcon icon={cilBell} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Emissão de Boletin',
+        to: '/notifications/alerts',
+      },
+      {
+        component: CNavItem,
+        name: 'Atestado de Matrícula',
+        to: '/notifications/badges',
+      },
+      {
+        component: CNavItem,
+        name: 'Histórico da Escola',
+        to: '/notifications/modals',
+      },
+       {
+        component: CNavItem,
+        name: 'Declaração de Frequência',
+        to: '/notifications/modals',
+      },
+
+       {
+        component: CNavItem,
+        name: 'Gestão de Arquivos',
+        to: '/notifications/modals',
+      },
+     
+    ],
+  },
+  // {
+  //   component: CNavItem,
+  //   name: 'Widgets',
+  //   to: '/widgets',
+  //   icon: <CIcon icon={cilCalculator} customClassName="nav-icon" />,
+  //   badge: {
+  //     color: 'info',
+  //     text: 'NEW',
+  //   },
+  // },
   {
     component: CNavTitle,
     name: 'Extras',
   },
   {
     component: CNavGroup,
+    name: 'Comunicação',
+    icon: <CIcon icon={cilStar} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Envio de mensagense notificações para alunos, responsáveis e professores',
+        to: '/login',
+      },
+      {
+        component: CNavItem,
+        name: 'Avisos  Gerais',
+        to: '/register',
+      },
+      {
+        component: CNavItem,
+        name: 'Integração com Apps',
+        to: '/404',
+      },
+      {
+        component: CNavItem,
+        name: 'Chat',
+        to: '/500',
+      },
+    ],
+  },
+
+  {
+    component: CNavGroup,
+    name: 'Arquivos e Marerias Didáticos',
+    icon: <CIcon icon={cilStar} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Upload e Download de Arquivos',
+        to: '/login',
+      },
+      {
+        component: CNavItem,
+        name: 'Register',
+        to: '/register',
+      },
+      {
+        component: CNavItem,
+        name: 'Error 404',
+        to: '/404',
+      },
+      {
+        component: CNavItem,
+        name: 'Error 500',
+        to: '/500',
+      },
+    ],
+  },
+
+  {
+    component: CNavGroup,
+    name: 'Relatórios e Indicadores',
+    icon: <CIcon icon={cilStar} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Relatórios',
+        to: '/login',
+      },
+    ],
+  },
+
+    {
+    component: CNavGroup,
     name: 'Pages',
     icon: <CIcon icon={cilStar} customClassName="nav-icon" />,
     items: [
       {
         component: CNavItem,
-        name: 'Login',
+        name: 'login',
         to: '/login',
       },
       {
