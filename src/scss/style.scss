@@ -1,4 +1,4 @@
-@use "@coreui/coreui/scss/coreui" as * with ( 
+@use "@coreui/coreui/scss/coreui" as * with (
   $enable-deprecation-messages: false,
 );
 @use "@coreui/chartjs/scss/coreui-chartjs";
@@ -64,4 +64,16 @@ body {
   .footer {
     --cui-footer-bg: var(--cui-body-bg);
   }
+}
+
+// Local styles
+
+.filter-modal {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+}
+.filter-modal .modal-content {
+  position: relative;
+  box-shadow: none;
 }

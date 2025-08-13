@@ -1,197 +1,131 @@
-import React from 'react'
+// src/pages/academico/GestaoCalendarioPage.jsx
+import React, { useEffect, useState } from 'react'
 import {
-  CButton,
   CCard,
   CCardBody,
   CCardHeader,
-  CCardImage,
-  CCardText,
-  CCardTitle,
   CCol,
-  CPlaceholder,
+  CContainer,
   CRow,
+  CButton,
 } from '@coreui/react'
-import { DocsComponents, DocsExample } from 'src/components'
+import FullCalendar from '@fullcalendar/react'
+import dayGridPlugin from '@fullcalendar/daygrid'
+import timeGridPlugin from '@fullcalendar/timegrid'
+import interactionPlugin from '@fullcalendar/interaction'
+import supabase from '../../../supaBaseClient'
+import ModalEvento from './ModalEvento'
+import ModalFiltrosCalendario from './ModalFiltrosCalendario'
 
-import ReactImg from 'src/assets/images/react.jpg'
+const GestaoCalendarioPage = () => {
+  const [eventos, setEventos] = useState([])
+  const [filtros, setFiltros] = useState({ tipo: '', turma: '', startDate: '', endDate: '' })
+  const [eventoEditando, setEventoEditando] = useState(null)
+  const [showModalEvento, setShowModalEvento] = useState(false)
 
-const Placeholders = () => {
+  // Buscar eventos do banco
+  const fetchEventos = async (filtros = {}) => {
+    let query = supabase.from('eventos').select('*')
+
+    if (filtros.tipo) query = query.eq('tipo', filtros.tipo)
+    if (filtros.turma) query = query.eq('turma_id', filtros.turma)
+    if (filtros.startDate) query = query.gte('data_inicio', filtros.startDate)
+    if (filtros.endDate) query = query.lte('data_fim', filtros.endDate)
+
+    const { data, error } = await query
+    if (error) {
+      console.error('Erro ao buscar eventos:', error)
+    } else {
+      setEventos(
+        data.map((e) => ({
+          id: e.id,
+          title: e.titulo,
+          start: e.data_inicio,
+          end: e.data_fim,
+          backgroundColor: e.cor || '#3788d8',
+          extendedProps: {
+            tipo: e.tipo,
+            turma_id: e.turma_id,
+            descricao: e.descricao,
+          },
+        })),
+      )
+    }
+  }
+
+  useEffect(() => {
+    fetchEventos(filtros)
+  }, [])
+
+  const handleDateClick = (info) => {
+    // Abrir modal para novo evento com data selecionada
+    setEventoEditando({ data_inicio: info.dateStr, data_fim: info.dateStr })
+    setShowModalEvento(true)
+  }
+
+  const handleEventClick = (info) => {
+    // Abrir modal para edição
+    const evt = eventos.find((e) => e.id === info.event.id)
+    setEventoEditando(evt)
+    setShowModalEvento(true)
+  }
+
+  const handleEventoSalvo = () => {
+    fetchEventos(filtros)
+    setShowModalEvento(false)
+    setEventoEditando(null)
+  }
+
+  const handleFiltrar = (novosFiltros) => {
+    setFiltros(novosFiltros)
+    fetchEventos(novosFiltros)
+  }
+
   return (
-    <CRow>
-      <CCol xs={12}>
-        <DocsComponents href="components/placeholder/" />
-        <CCard className="mb-4">
-          <CCardHeader>
-            <strong>React Placeholder</strong>
-          </CCardHeader>
-          <CCardBody>
-            <p className="text-body-secondary small">
-              In the example below, we take a typical card component and recreate it with
-              placeholders applied to create a &#34;loading card&#34;. Size and proportions are the
-              same between the two.
-            </p>
-            <DocsExample href="components/placeholder">
-              <div className="d-flex justify-content-around p-3">
-                <CCard style={{ width: '18rem' }}>
-                  <CCardImage orientation="top" src={ReactImg} />
-                  <CCardBody>
-                    <CCardTitle>Card title</CCardTitle>
-                    <CCardText>
-                      Some quick example text to build on the card title and make up the bulk of the
-                      card&#39;s content.
-                    </CCardText>
-                    <CButton color="primary" href="#">
-                      Go somewhere
-                    </CButton>
-                  </CCardBody>
-                </CCard>
-                <CCard style={{ width: '18rem' }}>
-                  <svg
-                    className="card-img-top"
-                    width="100%"
-                    height="180"
-                    xmlns="http://www.w3.org/2000/svg"
-                    role="img"
-                    aria-label="Placeholder"
-                    preserveAspectRatio="xMidYMid slice"
-                    focusable="false"
-                  >
-                    <title>Placeholder</title>
-                    <rect width="100%" height="100%" fill="#868e96"></rect>
-                  </svg>
-                  <CCardBody>
-                    <CPlaceholder as={CCardTitle} animation="glow" xs={7}>
-                      <CPlaceholder xs={6} />
-                    </CPlaceholder>
-                    <CPlaceholder as={CCardText} animation="glow">
-                      <CPlaceholder xs={7} />
-                      <CPlaceholder xs={4} />
-                      <CPlaceholder xs={4} />
-                      <CPlaceholder xs={6} />
-                      <CPlaceholder xs={8} />
-                    </CPlaceholder>
-                    <CPlaceholder
-                      color="primary"
-                      as={CButton}
-                      disabled
-                      href="#"
-                      tabIndex={-1}
-                      xs={6}
-                    ></CPlaceholder>
-                  </CCardBody>
-                </CCard>
-              </div>
-            </DocsExample>
-          </CCardBody>
-        </CCard>
-        <CCard className="mb-4">
-          <CCardHeader>
-            <strong>React Placeholder</strong>
-          </CCardHeader>
-          <CCardBody>
-            <p className="text-body-secondary small">
-              Create placeholders with the <code>&lt;CPlaceholder&gt;</code> component and a grid
-              column propx (e.g., <code>xs={6}</code>) to set the <code>width</code>. They can
-              replace the text inside an element or be added as a modifier class to an existing
-              component.
-            </p>
-            <DocsExample href="components/placeholder">
-              <p aria-hidden="true">
-                <CPlaceholder xs={6} />
-              </p>
-              <CPlaceholder
-                color="primary"
-                as={CButton}
-                aria-hidden="true"
-                disabled
-                href="#"
-                tabIndex={-1}
-                xs={4}
-              ></CPlaceholder>
-            </DocsExample>
-          </CCardBody>
-        </CCard>
-        <CCard className="mb-4">
-          <CCardHeader>
-            <strong>React Placeholder</strong> <small> Width</small>
-          </CCardHeader>
-          <CCardBody>
-            <p className="text-body-secondary small">
-              You can change the <code>width</code> through grid column classes, width utilities, or
-              inline styles.
-            </p>
-            <DocsExample href="components/placeholder#width">
-              <CPlaceholder xs={6} />
-              <CPlaceholder className="w-75" />
-              <CPlaceholder style={{ width: '30%' }} />
-            </DocsExample>
-          </CCardBody>
-        </CCard>
-        <CCard className="mb-4">
-          <CCardHeader>
-            <strong>React Placeholder</strong> <small> Color</small>
-          </CCardHeader>
-          <CCardBody>
-            <p className="text-body-secondary small">
-              By default, the <code>&lt;CPlaceholder&gt;</code> uses <code>currentColor</code>. This
-              can be overridden with a custom color or utility class.
-            </p>
-            <DocsExample href="components/placeholder#color">
-              <CPlaceholder xs={12} />
+    <CContainer className="py-4">
+      <CCardHeader className="mb-4">
+        <strong>Gestão de Calendário Acadêmico</strong>
+      </CCardHeader>
 
-              <CPlaceholder color="primary" xs={12} />
-              <CPlaceholder color="secondary" xs={12} />
-              <CPlaceholder color="success" xs={12} />
-              <CPlaceholder color="danger" xs={12} />
-              <CPlaceholder color="warning" xs={12} />
-              <CPlaceholder color="info" xs={12} />
-              <CPlaceholder color="light" xs={12} />
-              <CPlaceholder color="dark" xs={12} />
-            </DocsExample>
-          </CCardBody>
-        </CCard>
-        <CCard className="mb-4">
-          <CCardHeader>
-            <strong>React Placeholder</strong> <small> Sizing</small>
-          </CCardHeader>
-          <CCardBody>
-            <p className="text-body-secondary small">
-              The size of <code>&lt;CPlaceholder&gt;</code>s are based on the typographic style of
-              the parent element. Customize them with <code>size</code> prop: <code>lg</code>,{' '}
-              <code>sm</code>, or <code>xs</code>.
-            </p>
-            <DocsExample href="components/placeholder#sizing">
-              <CPlaceholder xs={12} size="lg" />
-              <CPlaceholder xs={12} />
-              <CPlaceholder xs={12} size="sm" />
-              <CPlaceholder xs={12} size="xs" />
-            </DocsExample>
-          </CCardBody>
-        </CCard>
-        <CCard className="mb-4">
-          <CCardHeader>
-            <strong>React Placeholder</strong> <small> Animation</small>
-          </CCardHeader>
-          <CCardBody>
-            <p className="text-body-secondary small">
-              Animate placeholders with <code>animation=&#34;glow&#34;</code> or{' '}
-              <code>animation=&#34;wave&#34;</code> to better convey the perception of something
-              being <em>actively</em> loaded.
-            </p>
-            <DocsExample href="components/placeholder#animation">
-              <CPlaceholder as="p" animation="glow">
-                <CPlaceholder xs={12} />
-              </CPlaceholder>
+      <ModalFiltrosCalendario onFiltrar={handleFiltrar} />
 
-              <CPlaceholder as="p" animation="wave">
-                <CPlaceholder xs={12} />
-              </CPlaceholder>
-            </DocsExample>
-          </CCardBody>
-        </CCard>
-      </CCol>
-    </CRow>
+      <CRow className="my-3">
+        <CCol xs={12} className="d-flex justify-content-end">
+          <CButton color="success" onClick={() => setShowModalEvento(true)}>
+            + Adicionar Evento
+          </CButton>
+        </CCol>
+      </CRow>
+
+      <CCard>
+        <CCardBody>
+          <FullCalendar
+            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+            initialView="dayGridMonth"
+            headerToolbar={{
+              left: 'prev,next today',
+              center: 'title',
+              right: 'dayGridMonth,timeGridWeek,timeGridDay',
+            }}
+            events={eventos}
+            dateClick={handleDateClick}
+            eventClick={handleEventClick}
+            editable={true}
+            selectable={true}
+          />
+        </CCardBody>
+      </CCard>
+
+      {showModalEvento && (
+        <ModalEvento
+          show={showModalEvento}
+          onClose={() => setShowModalEvento(false)}
+          evento={eventoEditando}
+          onSalvo={handleEventoSalvo}
+        />
+      )}
+    </CContainer>
   )
 }
 
-export default Placeholders
+export default GestaoCalendarioPage
