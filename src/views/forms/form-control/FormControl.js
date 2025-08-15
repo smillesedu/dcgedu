@@ -1,244 +1,176 @@
-import React from 'react'
-import {
-  CButton,
-  CCard,
-  CCardBody,
-  CCardHeader,
-  CCol,
-  CForm,
-  CFormInput,
-  CFormLabel,
-  CFormTextarea,
-  CRow,
-} from '@coreui/react'
-import { DocsComponents, DocsExample } from 'src/components'
+import React, { useEffect, useState } from 'react'
+import { CCard, CCardBody, CCardHeader, CCol, CContainer, CRow } from '@coreui/react'
+import supabase from '../../../supaBaseClient'
+import FiltroMateriais from './FiltroMateriais'
+import ModalVisualizacaoMaterial from './ModalVisualizacaoMaterial'
+import { PaginationWrapper, ModalConfirmacao } from '../../../components'
 
-const FormControl = () => {
+const DownloadMateriais = () => {
+  const [materiais, setMateriais] = useState([])
+  const [disciplinas, setDisciplinas] = useState([])
+  const [turmas, setTurmas] = useState([])
+  const [professores, setProfessores] = useState([])
+
+  const [materialSelecionado, setMaterialSelecionado] = useState(null)
+  const [showConfirm, setShowConfirm] = useState(false)
+  const [materialParaExcluir, setMaterialParaExcluir] = useState(null)
+
+  // Buscar dados iniciais
+  useEffect(() => {
+    fetchMateriais()
+    fetchDadosAuxiliares()
+  }, [])
+
+  const fetchMateriais = async (filters = {}) => {
+    let query = supabase.from('materiais').select(`
+      id,
+      titulo,
+      descricao,
+      data_envio,
+      disciplina:disciplinas(nome),
+      turma:turmas(nome),
+      professor:professores(nome),
+      arquivo_url
+    `)
+
+    if (filters.disciplina) query = query.eq('disciplina', filters.disciplina)
+    if (filters.turma) query = query.eq('turma', filters.turma)
+    if (filters.professor) query = query.eq('professor', filters.professor)
+    if (filters.search) query = query.ilike('titulo', `%${filters.search}%`)
+
+    const { data, error } = await query
+    if (error) {
+      console.error('Erro ao buscar materiais:', error)
+    } else {
+      setMateriais(data || [])
+    }
+  }
+
+  const fetchDadosAuxiliares = async () => {
+    const { data: disciplinasData } = await supabase.from('disciplinas').select('*')
+    setDisciplinas(disciplinasData || [])
+
+    const { data: turmasData } = await supabase.from('turmas').select('*')
+    setTurmas(turmasData || [])
+
+    const { data: professoresData } = await supabase.from('professores').select('*')
+    setProfessores(professoresData || [])
+  }
+
+  const handleFiltrar = (filters) => {
+    fetchMateriais(filters)
+  }
+
+  const abrirModalVisualizacao = (material) => {
+    setMaterialSelecionado(material)
+  }
+
+  const confirmarExclusao = (material) => {
+    setMaterialParaExcluir(material)
+    setShowConfirm(true)
+  }
+
+  const handleConfirmDelete = async () => {
+    if (materialParaExcluir) {
+      const { error } = await supabase.from('materiais').delete().eq('id', materialParaExcluir.id)
+      if (!error) {
+        setMateriais((prev) => prev.filter((m) => m.id !== materialParaExcluir.id))
+      }
+    }
+    setShowConfirm(false)
+  }
+
   return (
     <CRow>
       <CCol xs={12}>
-        <DocsComponents href="forms/form-control/" />
-        <CCard className="mb-4">
-          <CCardHeader>
-            <strong>React Form Control</strong>
-          </CCardHeader>
+        <CCardHeader className="my-4">
+          <strong>Download de Materiais e Tarefas</strong>
+        </CCardHeader>
+
+        <CContainer className="px-4">
+          <FiltroMateriais
+            disciplinas={disciplinas}
+            turmas={turmas}
+            professores={professores}
+            onFiltrar={handleFiltrar}
+          />
+        </CContainer>
+
+        <CCard className="my-4">
           <CCardBody>
-            <DocsExample href="forms/form-control">
-              <CForm>
-                <div className="mb-3">
-                  <CFormLabel htmlFor="exampleFormControlInput1">Email address</CFormLabel>
-                  <CFormInput
-                    type="email"
-                    id="exampleFormControlInput1"
-                    placeholder="name@example.com"
-                  />
-                </div>
-                <div className="mb-3">
-                  <CFormLabel htmlFor="exampleFormControlTextarea1">Example textarea</CFormLabel>
-                  <CFormTextarea id="exampleFormControlTextarea1" rows={3}></CFormTextarea>
-                </div>
-              </CForm>
-            </DocsExample>
-          </CCardBody>
-        </CCard>
-      </CCol>
-      <CCol xs={12}>
-        <CCard className="mb-4">
-          <CCardHeader>
-            <strong>React Form Control</strong> <small>Sizing</small>
-          </CCardHeader>
-          <CCardBody>
-            <p className="text-body-secondary small">
-              Set heights using <code>size</code> property like <code>size=&#34;lg&#34;</code> and{' '}
-              <code>size=&#34;sm&#34;</code>.
-            </p>
-            <DocsExample href="forms/form-control#sizing">
-              <CFormInput
-                type="text"
-                size="lg"
-                placeholder="Large input"
-                aria-label="lg input example"
-              />
-              <br />
-              <CFormInput
-                type="text"
-                placeholder="Default input"
-                aria-label="default input example"
-              />
-              <br />
-              <CFormInput
-                type="text"
-                size="sm"
-                placeholder="Small input"
-                aria-label="sm input example"
-              />
-            </DocsExample>
-          </CCardBody>
-        </CCard>
-      </CCol>
-      <CCol xs={12}>
-        <CCard className="mb-4">
-          <CCardHeader>
-            <strong>React Form Control</strong> <small>Disabled</small>
-          </CCardHeader>
-          <CCardBody>
-            <p className="text-body-secondary small">
-              Add the <code>disabled</code> boolean attribute on an input to give it a grayed out
-              appearance and remove pointer events.
-            </p>
-            <DocsExample href="forms/form-control#disabled">
-              <CFormInput
-                type="text"
-                placeholder="Disabled input"
-                aria-label="Disabled input example"
-                disabled
-              />
-              <br />
-              <CFormInput
-                type="text"
-                placeholder="Disabled readonly input"
-                aria-label="Disabled input example"
-                disabled
-                readOnly
-              />
-              <br />
-            </DocsExample>
-          </CCardBody>
-        </CCard>
-      </CCol>
-      <CCol xs={12}>
-        <CCard className="mb-4">
-          <CCardHeader>
-            <strong>React Form Control</strong> <small>Readonly</small>
-          </CCardHeader>
-          <CCardBody>
-            <p className="text-body-secondary small">
-              Add the <code>readOnly</code> boolean attribute on an input to prevent modification of
-              the input&#39;s value. Read-only inputs appear lighter (just like disabled inputs),
-              but retain the standard cursor.
-            </p>
-            <DocsExample href="forms/form-control#readonly">
-              <CFormInput
-                type="text"
-                placeholder="Readonly input here..."
-                aria-label="readonly input example"
-                readOnly
-              />
-            </DocsExample>
-          </CCardBody>
-        </CCard>
-      </CCol>
-      <CCol xs={12}>
-        <CCard className="mb-4">
-          <CCardHeader>
-            <strong>React Form Control</strong> <small>Readonly plain text</small>
-          </CCardHeader>
-          <CCardBody>
-            <p className="text-body-secondary small">
-              If you want to have <code>&lt;input readonly&gt;</code> elements in your form styled
-              as plain text, use the <code>plainText</code> boolean property to remove the default
-              form field styling and preserve the correct margin and padding.
-            </p>
-            <DocsExample href="components/accordion">
-              <CRow className="mb-3">
-                <CFormLabel htmlFor="staticEmail" className="col-sm-2 col-form-label">
-                  Email
-                </CFormLabel>
-                <div className="col-sm-10">
-                  <CFormInput
-                    type="text"
-                    id="staticEmail"
-                    defaultValue="email@example.com"
-                    readOnly
-                    plainText
-                  />
-                </div>
-              </CRow>
-              <CRow className="mb-3">
-                <CFormLabel htmlFor="inputPassword" className="col-sm-2 col-form-label">
-                  Password
-                </CFormLabel>
-                <div className="col-sm-10">
-                  <CFormInput type="password" id="inputPassword" />
-                </div>
-              </CRow>
-            </DocsExample>
-            <DocsExample href="components/accordion">
-              <CForm className="row g-3">
-                <div className="col-auto">
-                  <CFormLabel htmlFor="staticEmail2" className="visually-hidden">
-                    Email
-                  </CFormLabel>
-                  <CFormInput
-                    type="text"
-                    id="staticEmail2"
-                    defaultValue="email@example.com"
-                    readOnly
-                    plainText
-                  />
-                </div>
-                <div className="col-auto">
-                  <CFormLabel htmlFor="inputPassword2" className="visually-hidden">
-                    Password
-                  </CFormLabel>
-                  <CFormInput type="password" id="inputPassword2" placeholder="Password" />
-                </div>
-                <div className="col-auto">
-                  <CButton color="primary" type="submit" className="mb-3">
-                    Confirm identity
-                  </CButton>
-                </div>
-              </CForm>
-            </DocsExample>
-          </CCardBody>
-        </CCard>
-      </CCol>
-      <CCol xs={12}>
-        <CCard className="mb-4">
-          <CCardHeader>
-            <strong>React Form Control</strong> <small>File input</small>
-          </CCardHeader>
-          <CCardBody>
-            <DocsExample href="forms/form-control#file-input">
-              <div className="mb-3">
-                <CFormLabel htmlFor="formFile">Default file input example</CFormLabel>
-                <CFormInput type="file" id="formFile" />
-              </div>
-              <div className="mb-3">
-                <CFormLabel htmlFor="formFileMultiple">Multiple files input example</CFormLabel>
-                <CFormInput type="file" id="formFileMultiple" multiple />
-              </div>
-              <div className="mb-3">
-                <CFormLabel htmlFor="formFileDisabled">Disabled file input example</CFormLabel>
-                <CFormInput type="file" id="formFileDisabled" disabled />
-              </div>
-              <div className="mb-3">
-                <CFormLabel htmlFor="formFileSm">Small file input example</CFormLabel>
-                <CFormInput type="file" size="sm" id="formFileSm" />
-              </div>
-              <div>
-                <CFormLabel htmlFor="formFileLg">Large file input example</CFormLabel>
-                <CFormInput type="file" size="lg" id="formFileLg" />
-              </div>
-            </DocsExample>
-          </CCardBody>
-        </CCard>
-      </CCol>
-      <CCol xs={12}>
-        <CCard className="mb-4">
-          <CCardHeader>
-            <strong>React Form Control</strong> <small>Color</small>
-          </CCardHeader>
-          <CCardBody>
-            <DocsExample href="forms/form-control#color">
-              <CFormLabel htmlFor="exampleColorInput">Color picker</CFormLabel>
-              <CFormInput
-                type="color"
-                id="exampleColorInput"
-                defaultValue="#563d7c"
-                title="Choose your color"
-              />
-            </DocsExample>
+            <PaginationWrapper data={materiais} itemsPerPage={5}>
+              {(paginaAtual) => (
+                <table className="table table-bordered table-striped">
+                  <thead className="table-dark">
+                    <tr>
+                      <th>#</th>
+                      <th>Título</th>
+                      <th>Descrição</th>
+                      <th>Disciplina</th>
+                      <th>Turma</th>
+                      <th>Professor</th>
+                      <th>Data</th>
+                      <th>Ações</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {paginaAtual.map((mat) => (
+                      <tr key={mat.id}>
+                        <td>{mat.id}</td>
+                        <td>{mat.titulo}</td>
+                        <td>{mat.descricao}</td>
+                        <td>{mat.disciplina?.nome || '-'}</td>
+                        <td>{mat.turma?.nome || '-'}</td>
+                        <td>{mat.professor?.nome || '-'}</td>
+                        <td>{new Date(mat.data_envio).toLocaleDateString()}</td>
+                        <td>
+                          <div className="dropdown">
+                            <button
+                              className="btn btn-secondary btn-sm dropdown-toggle"
+                              type="button"
+                              data-bs-toggle="dropdown"
+                            >
+                              Ações
+                            </button>
+                            <ul className="dropdown-menu">
+                              <li>
+                                <button
+                                  className="dropdown-item btn-sm"
+                                  onClick={() => abrirModalVisualizacao(mat)}
+                                >
+                                  <i className="fa fa-download"></i> Visualizar / Baixar
+                                </button>
+                              </li>
+                              <li>
+                                <button
+                                  className="dropdown-item btn-sm text-danger"
+                                  onClick={() => confirmarExclusao(mat)}
+                                >
+                                  <i className="fa fa-trash"></i> Excluir
+                                </button>
+                              </li>
+                            </ul>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </PaginationWrapper>
+
+            <ModalVisualizacaoMaterial
+              material={materialSelecionado}
+              onFechar={() => setMaterialSelecionado(null)}
+            />
+
+            <ModalConfirmacao
+              show={showConfirm}
+              onClose={() => setShowConfirm(false)}
+              onConfirm={handleConfirmDelete}
+              title="Excluir Material"
+              message={`Tem certeza que deseja excluir o material "${materialParaExcluir?.titulo}"?`}
+            />
           </CCardBody>
         </CCard>
       </CCol>
@@ -246,4 +178,4 @@ const FormControl = () => {
   )
 }
 
-export default FormControl
+export default DownloadMateriais

@@ -24,6 +24,9 @@ const Tooltips = React.lazy(() => import('./views/base/tooltips/Tooltips'))
 // Buttons
 const Buttons = React.lazy(() => import('./views/buttons/buttons/Buttons'))
 const ButtonGroups = React.lazy(() => import('./views/buttons/button-groups/ButtonGroups'))
+const LookTeacher = React.lazy(() => import('./views/buttons/look-teatcher/LookTeacher'))
+const TeacherPortal = React.lazy(() => import('./views/buttons/teatcher-portal/TeacherPortal'))
+const TimeControler = React.lazy(() => import('./views/buttons/time-controler/TimeControler'))
 const Dropdowns = React.lazy(() => import('./views/buttons/dropdowns/Dropdowns'))
 
 //Forms
@@ -77,6 +80,9 @@ const routes = [
   { path: '/buttons/buttons', name: 'Buttons', element: Buttons },
   { path: '/buttons/dropdowns', name: 'Dropdowns', element: Dropdowns },
   { path: '/buttons/button-groups', name: 'Button Groups', element: ButtonGroups },
+  { path: '/buttons/look-teatcher', name: 'Acompanhamento', element: LookTeacher },
+  { path: '/buttons/teatcher-portal', name: 'Portal do Professor', element: TeacherPortal },
+  { path: '/buttons/time-controler', name: 'Controle de Carga Horária', element: TimeControler },
   { path: '/charts', name: 'Charts', element: Charts },
   { path: '/forms', name: 'Forms', element: FormControl, exact: true },
   { path: '/forms/form-control', name: 'Form Control', element: FormControl },

@@ -1,166 +1,160 @@
-import React from 'react'
-import {
-  CCard,
-  CCardBody,
-  CCardHeader,
-  CCol,
-  CFormInput,
-  CFormLabel,
-  CFormFloating,
-  CFormSelect,
-  CFormTextarea,
-  CRow,
-} from '@coreui/react'
-import { DocsComponents, DocsExample } from 'src/components'
+import React, { useEffect, useState } from 'react'
+import { CCard, CCardBody, CCardHeader, CCol, CContainer, CRow } from '@coreui/react'
+import supabase from '../../../supaBaseClient'
+import ModalVisualizarDocumento from './ModalVisualizarDocumento'
+import ModalFiltrosBoletins from './ModalFiltrosBoletins'
+import { PaginationWrapper, ModalConfirmacao } from '../../../components'
 
-const FloatingLabels = () => {
+const BoletinsDocumentos = () => {
+  const [documentos, setDocumentos] = useState([])
+  const [documentoSelecionado, setDocumentoSelecionado] = useState(null)
+  const [showConfirm, setShowConfirm] = useState(false)
+  const [documentoParaExcluir, setDocumentoParaExcluir] = useState(null)
+  const [filters, setFilters] = useState({})
+
+  useEffect(() => {
+    fetchDocumentos()
+  }, [])
+
+  const fetchDocumentos = async (filtros = {}) => {
+    let query = supabase.from('documentos_alunos').select(`
+      id,
+      aluno:nome,
+      tipo,
+      titulo,
+      arquivo_url,
+      data_envio
+    `)
+
+    if (filtros.tipo) query = query.eq('tipo', filtros.tipo)
+    if (filtros.search) query = query.ilike('titulo', `%${filtros.search}%`)
+    if (filtros.startDate) query = query.gte('data_envio', filtros.startDate)
+    if (filtros.endDate) query = query.lte('data_envio', filtros.endDate)
+
+    const { data, error } = await query
+    if (error) {
+      console.error('Erro ao buscar documentos:', error)
+    } else {
+      setDocumentos(data || [])
+    }
+  }
+
+  const abrirModalVisualizar = (documento) => {
+    setDocumentoSelecionado(documento)
+  }
+
+  const confirmarExclusao = (documento) => {
+    setDocumentoParaExcluir(documento)
+    setShowConfirm(true)
+  }
+
+  const handleConfirmDelete = async () => {
+    if (documentoParaExcluir) {
+      const { error } = await supabase.from('documentos_alunos').delete().eq('id', documentoParaExcluir.id)
+      if (!error) {
+        setDocumentos((prev) => prev.filter((d) => d.id !== documentoParaExcluir.id))
+      }
+    }
+    setShowConfirm(false)
+  }
+
+  const handleFiltrar = (filtros) => {
+    setFilters(filtros)
+    fetchDocumentos(filtros)
+  }
+
   return (
     <CRow>
       <CCol xs={12}>
-        <DocsComponents href="forms/floating-labels/" />
-        <CCard className="mb-4">
-          <CCardHeader>
-            <strong>React Floating labels</strong>
-          </CCardHeader>
+        <CCardHeader className="my-4">
+          <strong>Acesso a Boletins e Documentos</strong>
+        </CCardHeader>
+
+        <CContainer className="px-4">
+          <ModalFiltrosBoletins onFiltrar={handleFiltrar} />
+        </CContainer>
+
+        <CCard className="my-4">
           <CCardBody>
-            <p className="text-body-secondary small">
-              Wrap a pair of <code>&lt;CFormInput&gt;</code> and <code>&lt;CFormLabel&gt;</code>{' '}
-              elements in <code>CFormFloating</code> to enable floating labels with textual form
-              fields. A <code>placeholder</code> is required on each <code>&lt;CFormInput&gt;</code>{' '}
-              as our method of CSS-only floating labels uses the <code>:placeholder-shown</code>{' '}
-              pseudo-element. Also note that the <code>&lt;CFormInput&gt;</code> must come first so
-              we can utilize a sibling selector (e.g., <code>~</code>).
-            </p>
-            <DocsExample href="forms/floating-labels">
-              <CFormFloating className="mb-3">
-                <CFormInput type="email" id="floatingInput" placeholder="name@example.com" />
-                <CFormLabel htmlFor="floatingInput">Email address</CFormLabel>
-              </CFormFloating>
-              <CFormFloating>
-                <CFormInput type="password" id="floatingPassword" placeholder="Password" />
-                <CFormLabel htmlFor="floatingPassword">Password</CFormLabel>
-              </CFormFloating>
-            </DocsExample>
-            <p className="text-body-secondary small">
-              When there&#39;s a <code>value</code> already defined, <code>&lt;CFormLabel&gt;</code>
-              s will automatically adjust to their floated position.
-            </p>
-            <DocsExample href="forms/floating-labels">
-              <CFormFloating>
-                <CFormInput
-                  type="email"
-                  id="floatingInputValue"
-                  placeholder="name@example.com"
-                  defaultValue="test@example.com"
-                />
-                <CFormLabel htmlFor="floatingInputValue">Input with value</CFormLabel>
-              </CFormFloating>
-            </DocsExample>
-          </CCardBody>
-        </CCard>
-      </CCol>
-      <CCol xs={12}>
-        <CCard className="mb-4">
-          <CCardHeader>
-            <strong>React Floating labels</strong> <small>Textareas</small>
-          </CCardHeader>
-          <CCardBody>
-            <p className="text-body-secondary small">
-              By default, <code>&lt;CFormTextarea&gt;</code>s will be the same height as{' '}
-              <code>&lt;CFormInput&gt;</code>s.
-            </p>
-            <DocsExample href="forms/floating-labels#textareas">
-              <CFormFloating>
-                <CFormTextarea
-                  id="floatingTextarea"
-                  placeholder="Leave a comment here"
-                ></CFormTextarea>
-                <CFormLabel htmlFor="floatingTextarea">Comments</CFormLabel>
-              </CFormFloating>
-            </DocsExample>
-            <p className="text-body-secondary small">
-              To set a custom height on your <code>&lt;CFormTextarea;&gt;</code>, do not use the{' '}
-              <code>rows</code> attribute. Instead, set an explicit <code>height</code> (either
-              inline or via custom CSS).
-            </p>
-            <DocsExample href="forms/floating-labels#textareas">
-              <CFormFloating>
-                <CFormTextarea
-                  placeholder="Leave a comment here"
-                  id="floatingTextarea2"
-                  style={{ height: '100px' }}
-                ></CFormTextarea>
-                <CFormLabel htmlFor="floatingTextarea2">Comments</CFormLabel>
-              </CFormFloating>
-            </DocsExample>
-          </CCardBody>
-        </CCard>
-      </CCol>
-      <CCol xs={12}>
-        <CCard className="mb-4">
-          <CCardHeader>
-            <strong>React Floating labels</strong> <small>Selects</small>
-          </CCardHeader>
-          <CCardBody>
-            <p className="text-body-secondary small">
-              Other than <code>&lt;CFormInput&gt;</code>, floating labels are only available on{' '}
-              <code>&lt;CFormSelect&gt;</code>s. They work in the same way, but unlike{' '}
-              <code>&lt;CFormInput&gt;</code>s, they&#39;ll always show the{' '}
-              <code>&lt;CFormLabel&gt;</code> in its floated state.{' '}
-              <strong>
-                Selects with <code>size</code> and <code>multiple</code> are not supported.
-              </strong>
-            </p>
-            <DocsExample href="forms/floating-labels#selects">
-              <CFormFloating>
-                <CFormSelect id="floatingSelect" aria-label="Floating label select example">
-                  <option>Open this select menu</option>
-                  <option value="1">One</option>
-                  <option value="2">Two</option>
-                  <option value="3">Three</option>
-                </CFormSelect>
-                <CFormLabel htmlFor="floatingSelect">Works with selects</CFormLabel>
-              </CFormFloating>
-            </DocsExample>
-          </CCardBody>
-        </CCard>
-      </CCol>
-      <CCol xs={12}>
-        <CCard className="mb-4">
-          <CCardHeader>
-            <strong>React Floating labels</strong> <small>Layout</small>
-          </CCardHeader>
-          <CCardBody>
-            <p className="text-body-secondary small">
-              When working with the CoreUI for Bootstrap grid system, be sure to place form elements
-              within column classes.
-            </p>
-            <DocsExample href="forms/floating-labels#layout">
-              <CRow xs={{ gutter: 2 }}>
-                <CCol md>
-                  <CFormFloating>
-                    <CFormInput
-                      type="email"
-                      id="floatingInputGrid"
-                      placeholder="name@example.com"
-                      defaultValue="email@example.com"
-                    />
-                    <CFormLabel htmlFor="floatingInputGrid">Email address</CFormLabel>
-                  </CFormFloating>
-                </CCol>
-                <CCol md>
-                  <CFormFloating>
-                    <CFormSelect id="floatingSelectGrid" aria-label="Floating label select example">
-                      <option>Open this select menu</option>
-                      <option value="1">One</option>
-                      <option value="2">Two</option>
-                      <option value="3">Three</option>
-                    </CFormSelect>
-                    <CFormLabel htmlFor="floatingSelectGrid">Works with selects</CFormLabel>
-                  </CFormFloating>
-                </CCol>
-              </CRow>
-            </DocsExample>
+            <PaginationWrapper data={documentos} itemsPerPage={5}>
+              {(paginaAtual) => (
+                <table className="table table-bordered table-striped">
+                  <thead className="table-dark">
+                    <tr>
+                      <th>#</th>
+                      <th>Aluno</th>
+                      <th>Tipo</th>
+                      <th>Título</th>
+                      <th>Data de Envio</th>
+                      <th>Ações</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {paginaAtual.map((doc) => (
+                      <tr key={doc.id}>
+                        <td>{doc.id}</td>
+                        <td>{doc.aluno?.nome}</td>
+                        <td>{doc.tipo}</td>
+                        <td>{doc.titulo}</td>
+                        <td>{new Date(doc.data_envio).toLocaleDateString()}</td>
+                        <td>
+                          <div className="dropdown">
+                            <button
+                              className="btn btn-secondary btn-sm dropdown-toggle"
+                              type="button"
+                              data-bs-toggle="dropdown"
+                              aria-expanded="false"
+                            >
+                              Ações
+                            </button>
+                            <ul className="dropdown-menu">
+                              <li>
+                                <button
+                                  className="dropdown-item btn-sm"
+                                  onClick={() => abrirModalVisualizar(doc)}
+                                >
+                                  <i className="fa fa-eye"></i> Visualizar
+                                </button>
+                              </li>
+                              <li>
+                                <button
+                                  className="dropdown-item btn-sm text-danger"
+                                  onClick={() => confirmarExclusao(doc)}
+                                >
+                                  <i className="fa fa-trash"></i> Excluir
+                                </button>
+                              </li>
+                              <li>
+                                <a
+                                  className="dropdown-item btn-sm"
+                                  href={doc.arquivo_url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                >
+                                  <i className="fa fa-download"></i> Baixar
+                                </a>
+                              </li>
+                            </ul>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </PaginationWrapper>
+
+            {/* Modal de visualização */}
+            <ModalVisualizarDocumento documento={documentoSelecionado} />
+
+            {/* Modal de confirmação de exclusão */}
+            <ModalConfirmacao
+              show={showConfirm}
+              onClose={() => setShowConfirm(false)}
+              onConfirm={handleConfirmDelete}
+              title="Excluir Documento"
+              message={`Tem certeza que deseja excluir o documento "${documentoParaExcluir?.titulo}"?`}
+            />
           </CCardBody>
         </CCard>
       </CCol>
@@ -168,4 +162,4 @@ const FloatingLabels = () => {
   )
 }
 
-export default FloatingLabels
+export default BoletinsDocumentos

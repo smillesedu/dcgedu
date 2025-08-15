@@ -1,182 +1,233 @@
-import React from 'react'
-import { CCard, CCardBody, CCardHeader, CCol, CProgress, CProgressBar, CRow } from '@coreui/react'
-import { DocsComponents, DocsExample } from 'src/components'
+import React, { useEffect, useState } from 'react'
+import { CCard, CCardBody, CCardHeader, CCol, CContainer, CRow } from '@coreui/react'
+import 'bootstrap/dist/js/bootstrap.bundle.min.js'
+import supabase from '../../../supaBaseClient'
+import { AppBreadcrumb, ModalConfirmacao, PaginationWrapper } from '../../../components'
+import ModalFiltrosTransferencia from './ModalFiltrosTransferencia'
+import ModalTransferencia from './ModalTransferencia'
 
-const Progress = () => {
+const Transferencias = () => {
+  const [pessoas, setPessoas] = useState([])
+  const [pessoaSelecionada, setPessoaSelecionada] = useState(null)
+  const [showConfirm, setShowConfirm] = useState(false)
+  const [historico, setHistorico] = useState([])
+  const [filters, setFilters] = useState({})
+
+  // Busca histórico com filtros
+  const buscarHistorico = async (filtros = {}) => {
+    let query = supabase.from('transferencias').select(`
+      id,
+      tipo,
+      nome_pessoa,
+      de_turma,
+      para_turma,
+      de_curso,
+      para_curso,
+      de_unidade,
+      para_unidade,
+      data_transferencia
+    `)
+
+    if (filtros.tipo) query = query.eq('tipo', filtros.tipo)
+    if (filtros.search) query = query.ilike('nome_pessoa', `%${filtros.search}%`)
+    if (filtros.startDate) query = query.gte('data_transferencia', filtros.startDate)
+    if (filtros.endDate) query = query.lte('data_transferencia', filtros.endDate)
+
+    const { data, error } = await query
+    if (error) {
+      console.error('Erro ao buscar histórico:', error)
+      return
+    }
+    setHistorico(data)
+  }
+
+  // Abre modal de filtros do histórico
+  const abrirModalHistorico = () => {
+    const modal = new bootstrap.Modal(document.getElementById('modalFiltroTransferencias'))
+    modal.show()
+  }
+
+  // Aplica filtros
+  const handleFiltrar = (filtros) => {
+    setFilters(filtros)
+    fetchPessoas(filtros)
+    buscarHistorico(filtros)
+  }
+
+  // Busca pessoas (alunos e professores)
+  const fetchPessoas = async (filtros = {}) => {
+    let query = supabase.from('pessoas') // tabela unificada ou VIEW
+      .select(`
+        id,
+        nome,
+        tipo,
+        turma_atual:turmas(nome),
+        curso_atual:cursos(nome),
+        unidade_atual:unidades(nome)
+      `)
+
+    if (filtros.tipo) query = query.eq('tipo', filtros.tipo)
+    if (filtros.search) query = query.ilike('nome', `%${filtros.search}%`)
+
+    const { data, error } = await query
+    if (error) {
+      console.error('Erro ao buscar pessoas:', error)
+    } else {
+      setPessoas(data || [])
+    }
+  }
+
+  useEffect(() => {
+    fetchPessoas()
+  }, [])
+
+  const abrirModalTransferencia = (pessoa) => {
+    setPessoaSelecionada(pessoa)
+    const modal = new bootstrap.Modal(document.getElementById('modalTransferencia'))
+    modal.show()
+  }
+
   return (
     <CRow>
       <CCol xs={12}>
-        <DocsComponents href="components/progress/" />
-        <CCard className="mb-4">
-          <CCardHeader>
-            <strong>React Progress</strong> <small>Basic example</small>
-          </CCardHeader>
+        <CCardHeader className="my-4">
+          <strong>Gestão de Transferências Internas e Externas</strong>
+        </CCardHeader>
+
+        <CContainer className="px-4">
+          <button className="btn btn-outline-info mb-3" onClick={abrirModalHistorico}>
+            <i className="fa fa-history"></i> Ver Histórico
+          </button>
+        </CContainer>
+
+        {/* Histórico */}
+        {historico.length > 0 && (
+          <CCard className="mb-4">
+            <CCardHeader>
+              <strong>Histórico de Transferências</strong>
+            </CCardHeader>
+            <CCardBody>
+              <table className="table table-striped table-bordered">
+                <thead className="table-dark">
+                  <tr>
+                    <th>ID</th>
+                    <th>Tipo</th>
+                    <th>Nome</th>
+                    <th>De Turma</th>
+                    <th>Para Turma</th>
+                    <th>De Curso</th>
+                    <th>Para Curso</th>
+                    <th>De Unidade</th>
+                    <th>Para Unidade</th>
+                    <th>Data</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {historico.map((h) => (
+                    <tr key={h.id}>
+                      <td>{h.id}</td>
+                      <td>{h.tipo}</td>
+                      <td>{h.nome_pessoa}</td>
+                      <td>{h.de_turma || '-'}</td>
+                      <td>{h.para_turma || '-'}</td>
+                      <td>{h.de_curso || '-'}</td>
+                      <td>{h.para_curso || '-'}</td>
+                      <td>{h.de_unidade || '-'}</td>
+                      <td>{h.para_unidade || '-'}</td>
+                      <td>{new Date(h.data_transferencia).toLocaleDateString()}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </CCardBody>
+          </CCard>
+        )}
+
+        {/* Lista principal */}
+        <CCard className="my-4">
           <CCardBody>
-            <p className="text-body-secondary small">
-              Progress components are built with two HTML elements, some CSS to set the width, and a
-              few attributes. We don&#39;tuse{' '}
-              <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/progress">
-                the HTML5 <code>&lt;progress&gt;</code> element
-              </a>
-              , ensuring you can stack progress bars, animate them, and place text labels over them.
-            </p>
-            <DocsExample href="components/progress">
-              <CProgress className="mb-3">
-                <CProgressBar value={0} />
-              </CProgress>
-              <CProgress className="mb-3">
-                <CProgressBar value={25} />
-              </CProgress>
-              <CProgress className="mb-3">
-                <CProgressBar value={50} />
-              </CProgress>
-              <CProgress className="mb-3">
-                <CProgressBar value={75} />
-              </CProgress>
-              <CProgress className="mb-3">
-                <CProgressBar value={100} />
-              </CProgress>
-            </DocsExample>
-          </CCardBody>
-        </CCard>
-      </CCol>
-      <CCol xs={12}>
-        <CCard className="mb-4">
-          <CCardHeader>
-            <strong>React Progress</strong> <small>Labels</small>
-          </CCardHeader>
-          <CCardBody>
-            <p className="text-body-secondary small">
-              Add labels to your progress bars by placing text within the{' '}
-              <code>&lt;CProgressBar&gt;</code>.
-            </p>
-            <DocsExample href="components/progress#labels">
-              <CProgress className="mb-3">
-                <CProgressBar value={25}>25%</CProgressBar>
-              </CProgress>
-            </DocsExample>
-          </CCardBody>
-        </CCard>
-      </CCol>
-      <CCol xs={12}>
-        <CCard className="mb-4">
-          <CCardHeader>
-            <strong>React Progress</strong> <small>Height</small>
-          </CCardHeader>
-          <CCardBody>
-            <p className="text-body-secondary small">
-              We only set a <code>height</code> value on the <code>&lt;CProgress&gt;</code>, so if
-              you change that value the inner <code>&lt;CProgressBar&gt;</code> will automatically
-              resize accordingly.
-            </p>
-            <DocsExample href="components/progress#height">
-              <CProgress height={1} className="mb-3">
-                <CProgressBar value={25}></CProgressBar>
-              </CProgress>
-              <CProgress height={20} className="mb-3">
-                <CProgressBar value={25}></CProgressBar>
-              </CProgress>
-            </DocsExample>
-          </CCardBody>
-        </CCard>
-      </CCol>
-      <CCol xs={12}>
-        <CCard className="mb-4">
-          <CCardHeader>
-            <strong>React Progress</strong> <small>Backgrounds</small>
-          </CCardHeader>
-          <CCardBody>
-            <p className="text-body-secondary small">
-              Use <code>color</code> prop to change the appearance of individual progress bars.
-            </p>
-            <DocsExample href="components/progress#backgrounds">
-              <CProgress className="mb-3">
-                <CProgressBar color="success" value={25} />
-              </CProgress>
-              <CProgress className="mb-3">
-                <CProgressBar color="info" value={50} />
-              </CProgress>
-              <CProgress className="mb-3">
-                <CProgressBar color="warning" value={75} />
-              </CProgress>
-              <CProgress className="mb-3">
-                <CProgressBar color="danger" value={100} />
-              </CProgress>
-            </DocsExample>
-          </CCardBody>
-        </CCard>
-      </CCol>
-      <CCol xs={12}>
-        <CCard className="mb-4">
-          <CCardHeader>
-            <strong>React Progress</strong> <small>Multiple bars</small>
-          </CCardHeader>
-          <CCardBody>
-            <p className="text-body-secondary small">
-              Include multiple progress bars in a progress component if you need.
-            </p>
-            <DocsExample href="components/progress#multiple-bars">
-              <CProgress className="mb-3">
-                <CProgressBar value={15} />
-                <CProgressBar color="success" value={30} />
-                <CProgressBar color="info" value={20} />
-              </CProgress>
-            </DocsExample>
-          </CCardBody>
-        </CCard>
-      </CCol>
-      <CCol xs={12}>
-        <CCard className="mb-4">
-          <CCardHeader>
-            <strong>React Progress</strong> <small>Striped</small>
-          </CCardHeader>
-          <CCardBody>
-            <p className="text-body-secondary small">
-              Add <code>variant=&#34;striped&#34;</code> to any <code>&lt;CProgressBar&gt;</code> to
-              apply a stripe via CSS gradient over the progress bar&#39;s background color.
-            </p>
-            <DocsExample href="components/progress#striped">
-              <CProgress className="mb-3">
-                <CProgressBar color="success" variant="striped" value={25} />
-              </CProgress>
-              <CProgress className="mb-3">
-                <CProgressBar color="info" variant="striped" value={50} />
-              </CProgress>
-              <CProgress className="mb-3">
-                <CProgressBar color="warning" variant="striped" value={75} />
-              </CProgress>
-              <CProgress className="mb-3">
-                <CProgressBar color="danger" variant="striped" value={100} />
-              </CProgress>
-            </DocsExample>
-          </CCardBody>
-        </CCard>
-      </CCol>
-      <CCol xs={12}>
-        <CCard className="mb-4">
-          <CCardHeader>
-            <strong>React Progress</strong> <small>Animated stripes</small>
-          </CCardHeader>
-          <CCardBody>
-            <p className="text-body-secondary small">
-              The striped gradient can also be animated. Add <code>animated</code> property to{' '}
-              <code>&lt;CProgressBar&gt;</code> to animate the stripes right to left via CSS3
-              animations.
-            </p>
-            <DocsExample href="components/progress#animated-stripes">
-              <CProgress className="mb-3">
-                <CProgressBar color="success" variant="striped" animated value={25} />
-              </CProgress>
-              <CProgress className="mb-3">
-                <CProgressBar color="info" variant="striped" animated value={50} />
-              </CProgress>
-              <CProgress className="mb-3">
-                <CProgressBar color="warning" variant="striped" animated value={75} />
-              </CProgress>
-              <CProgress className="mb-3">
-                <CProgressBar color="danger" variant="striped" animated value={100} />
-              </CProgress>
-            </DocsExample>
+            <PaginationWrapper data={pessoas} itemsPerPage={5}>
+              {(paginaAtual) => (
+                <table className="table table-bordered table-striped">
+                  <thead className="table-dark">
+                    <tr>
+                      <th>#</th>
+                      <th>Nome</th>
+                      <th>Tipo</th>
+                      <th>Turma Atual</th>
+                      <th>Curso Atual</th>
+                      <th>Unidade Atual</th>
+                      <th>Ações</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {paginaAtual.map((pessoa) => (
+                      <tr key={pessoa.id}>
+                        <td>{pessoa.id}</td>
+                        <td>{pessoa.nome}</td>
+                        <td>{pessoa.tipo}</td>
+                        <td>{pessoa.turma_atual?.nome || '-'}</td>
+                        <td>{pessoa.curso_atual?.nome || '-'}</td>
+                        <td>{pessoa.unidade_atual?.nome || '-'}</td>
+                        <td>
+                          <div className="dropdown">
+                            <button
+                              className="btn btn-secondary btn-sm dropdown-toggle"
+                              type="button"
+                              id={`dropdownMenu-${pessoa.id}`}
+                              data-bs-toggle="dropdown"
+                              aria-expanded="false"
+                            >
+                              Ações
+                            </button>
+                            <ul
+                              className="dropdown-menu"
+                              aria-labelledby={`dropdownMenu-${pessoa.id}`}
+                            >
+                              <li>
+                                <button
+                                  className="dropdown-item btn-sm"
+                                  onClick={() => abrirModalTransferencia(pessoa)}
+                                >
+                                  <i className="fa fa-exchange"></i> Fazer Transferência
+                                </button>
+                              </li>
+                              <li>
+                                <button
+                                  className="dropdown-item btn-sm"
+                                  onClick={() => abrirModalHistorico()}
+                                >
+                                  <i className="fa fa-history"></i> Ver Histórico
+                                </button>
+                              </li>
+                            </ul>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </PaginationWrapper>
+
+            {/* Modal de Transferência */}
+            <ModalTransferencia
+              id="modalTransferencia"
+              pessoa={pessoaSelecionada}
+              onSalvo={() => fetchPessoas()}
+            />
+
+            {/* Modal de Filtros para Histórico */}
+            <ModalFiltrosTransferencia id="modalFiltroTransferencias" onFiltrar={handleFiltrar} />
+
+            {/* Modal de Confirmação */}
+            <ModalConfirmacao
+              show={showConfirm}
+              onClose={() => setShowConfirm(false)}
+              onConfirm={() => {}}
+              title="Excluir Registro"
+              message={`Tem certeza que deseja excluir este registro?`}
+            />
           </CCardBody>
         </CCard>
       </CCol>
@@ -184,4 +235,4 @@ const Progress = () => {
   )
 }
 
-export default Progress
+export default Transferencias

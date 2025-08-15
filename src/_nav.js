@@ -43,7 +43,7 @@ const _nav = [
   //   to: '/theme/typography',
   //   icon: <CIcon icon={cilPencil} customClassName="nav-icon" />,
   // },
-    {
+  {
     component: CNavItem,
     name: 'Analises',
     to: '/charts',
@@ -51,7 +51,7 @@ const _nav = [
   },
   {
     component: CNavTitle,
-    name: 'Principal'
+    name: 'Principal',
   },
   {
     component: CNavGroup,
@@ -66,50 +66,49 @@ const _nav = [
       },
       {
         name: 'Matrícula e Rematrícula',
-                component: CNavItem,
+        component: CNavItem,
         to: '/base/carousels',
       },
-            {
+      {
         component: CNavItem,
         name: 'Histórico Escolar e Boletins',
         to: '/base/cards',
       },
-       {
+      {
         component: CNavItem,
         to: '/base/collapses',
         name: 'Emissão de Documentos',
       },
-       {
+      {
         name: 'Gestão de Turma',
         component: CNavItem,
         to: '/base/list-groups',
       },
-       {
+      {
         component: CNavItem,
         to: '/base/navs',
         name: 'Gestão de Notas',
       },
-       {
+      {
         name: 'Gestão de Frequência',
         component: CNavItem,
         to: '/base/paginations',
       },
-       {
+      {
         component: CNavItem,
         to: '/base/placeholders',
         name: 'Gestão de Calendário Acadêmico',
       },
-       {
+      {
         component: CNavItem,
         to: '/base/popovers',
         name: 'Gestão de Aulas',
       },
-       {
+      {
         component: CNavItem,
         to: '/base/progress',
         name: 'Transferência interna e externa de alunos',
       },
-      
     ],
   },
   {
@@ -123,38 +122,37 @@ const _nav = [
         name: 'Gestão de Professores',
         to: '/buttons/buttons',
       },
-       {
+      {
         component: CNavItem,
         name: 'Atribuição de Disciplinas a Professores',
         to: '/buttons/dropdowns',
       },
+      // {
+      //   component: CNavItem,
+      //   name: 'Gestão de Equipe Administrativa',
+      //   to: '/buttons/button-groups',
+      // },
+
       {
         component: CNavItem,
         name: 'Gestão de Equipe Administrativa',
         to: '/buttons/button-groups',
       },
-      
-       {
-        component: CNavItem,
-        name: 'Gestão de Equipe Administrativa',
-        to: '/buttons/button-groups',
-      },
-       {
+      {
         component: CNavItem,
         name: 'Controle de Carga horária',
-        to: '/buttons/button-groups',
+        to: '/buttons/time-controler',
       },
-       {
+      {
         component: CNavItem,
-        name: 'Acompanhamento de Desem,penho Docente',
-        to: '/buttons/button-groups',
+        name: 'Desempenho do Docente',
+        to: '/buttons/look-teatcher',
       },
-       {
+      {
         component: CNavItem,
         name: 'Portal do Professor',
-        to: '/buttons/button-groups',
+        to: '/buttons/teatcher-portal',
       },
-      
     ],
   },
   {
@@ -182,7 +180,7 @@ const _nav = [
         name: 'Matrícula e Rematrícula',
         to: '/forms/input-group',
       },
-     
+
       {
         component: CNavItem,
         name: 'Cronograma do Aluno',
@@ -216,7 +214,7 @@ const _nav = [
         name: 'Desempenho do Aluno',
         to: '/icons/coreui-icons',
       },
-       {
+      {
         component: CNavItem,
         name: 'Notificações e cominicados da escola',
         to: '/icons/coreui-icons',
@@ -263,11 +261,10 @@ const _nav = [
         name: 'Relatórios Gerenciais e Estatísticos',
         to: '/notifications/toasts',
       },
-      
     ],
   },
 
-    {
+  {
     component: CNavGroup,
     name: 'Gestão Financeira',
     icon: <CIcon icon={cilBell} customClassName="nav-icon" />,
@@ -297,21 +294,20 @@ const _nav = [
         name: 'Relatório Financeiro',
         to: '/notifications/toasts',
       },
-        {
+      {
         component: CNavItem,
         name: 'Desconto, Bolsas e Bolsas Parciais',
         to: '/notifications/toasts',
       },
-        {
+      {
         component: CNavItem,
         name: 'Integração com Gateway de Pagamento',
         to: '/notifications/toasts',
       },
-      
     ],
   },
 
-   {
+  {
     component: CNavGroup,
     name: 'Gestão de Avaliação',
     icon: <CIcon icon={cilBell} customClassName="nav-icon" />,
@@ -331,11 +327,10 @@ const _nav = [
         name: 'Recuperação e Avaliação Final',
         to: '/notifications/modals',
       },
-     
     ],
   },
 
-   {
+  {
     component: CNavGroup,
     name: 'Documentação e Registros',
     icon: <CIcon icon={cilBell} customClassName="nav-icon" />,
@@ -355,18 +350,17 @@ const _nav = [
         name: 'Histórico da Escola',
         to: '/notifications/modals',
       },
-       {
+      {
         component: CNavItem,
         name: 'Declaração de Frequência',
         to: '/notifications/modals',
       },
 
-       {
+      {
         component: CNavItem,
         name: 'Gestão de Arquivos',
         to: '/notifications/modals',
       },
-     
     ],
   },
   // {
@@ -452,7 +446,7 @@ const _nav = [
     ],
   },
 
-    {
+  {
     component: CNavGroup,
     name: 'Pages',
     icon: <CIcon icon={cilStar} customClassName="nav-icon" />,

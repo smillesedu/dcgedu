@@ -1,397 +1,190 @@
-import React from 'react'
-import { CButton, CCard, CCardBody, CCardHeader, CCol, CRow } from '@coreui/react'
-import CIcon from '@coreui/icons-react'
-import { cilBell } from '@coreui/icons'
-import { DocsComponents, DocsExample } from 'src/components'
+import React, { useEffect, useState } from 'react'
+import { CCard, CCardBody, CCardHeader, CCol, CRow, CContainer } from '@coreui/react'
+import supabase from '../../../supaBaseClient'
+import ModalProfessor from './ModalProfessor'
+import ModalFiltrosProfessores from './ModalFiltrosProfessores'
+import { PaginationWrapper, ModalConfirmacao } from '../../../components'
 
-const Buttons = () => {
+const GestaoProfessores = () => {
+  const [professores, setProfessores] = useState([])
+  const [professorEditando, setProfessorEditando] = useState(null)
+  const [professorParaExcluir, setProfessorParaExcluir] = useState(null)
+  const [showConfirm, setShowConfirm] = useState(false)
+
+  useEffect(() => {
+    fetchProfessores()
+  }, [])
+
+  const fetchProfessores = async (filters = {}) => {
+    let query = supabase.from('professores').select(`
+      id,
+      nome,
+      email,
+      telefone,
+      especialidade,
+      status,
+      unidade:unidades(nome),
+      endereco:enderecos (
+        rua,
+        casa_numero,
+        bairro,
+        municipio,
+        provincia
+      )
+    `)
+
+    if (filters.keyFilter && filters.search) {
+      query = query.ilike(filters.keyFilter, `%${filters.search}%`)
+    }
+    if (filters.orderBy) {
+      query = query.order(filters.orderBy, { ascending: true })
+    }
+
+    const { data, error } = await query
+    if (error) {
+      console.error('Erro ao buscar professores:', error)
+    } else {
+      setProfessores(data || [])
+    }
+  }
+
+  const abrirModalNovo = () => {
+    setProfessorEditando(null)
+  }
+
+  const abrirModalEditar = (prof) => {
+    setProfessorEditando(prof)
+  }
+
+  const confirmarExclusao = (prof) => {
+    setProfessorParaExcluir(prof)
+    setShowConfirm(true)
+  }
+
+  const handleConfirmDelete = async () => {
+    if (professorParaExcluir) {
+      const { error } = await supabase
+        .from('professores')
+        .delete()
+        .eq('id', professorParaExcluir.id)
+      if (!error) {
+        setProfessores((prev) => prev.filter((p) => p.id !== professorParaExcluir.id))
+      }
+    }
+    setShowConfirm(false)
+  }
+
+  const handleFiltrar = (filters) => {
+    fetchProfessores(filters)
+  }
+
   return (
     <CRow>
       <CCol xs={12}>
-        <DocsComponents href="components/buttons/" />
-        <CCard className="mb-4">
-          <CCardHeader>
-            <strong>React Button</strong>
-          </CCardHeader>
+        <CCardHeader className="my-4">
+          <strong>Gestão de Professores</strong>
+        </CCardHeader>
+
+        <CContainer className="px-4">
+          <ModalFiltrosProfessores onFiltrar={handleFiltrar} />
+        </CContainer>
+
+        <CRow className="my-4">
+          <CCol md={8}></CCol>
+          <CCol xs={6} md={4} className="d-flex justify-content-end gap-2">
+            <button
+              className="btn btn-success"
+              data-bs-toggle="modal"
+              data-bs-target="#modalProfessor"
+              onClick={abrirModalNovo}
+            >
+              Registrar Professor
+            </button>
+          </CCol>
+        </CRow>
+
+        <CCard className="my-4">
           <CCardBody>
-            <p className="text-body-secondary small">
-              CoreUI includes a bunch of predefined buttons components, each serving its own
-              semantic purpose. Buttons show what action will happen when the user clicks or touches
-              it. CoreUI buttons are used to initialize operations, both in the background or
-              foreground of an experience.
-            </p>
-            <DocsExample href="components/buttons">
-              {['normal', 'active', 'disabled'].map((state, index) => (
-                <CRow className="align-items-center mb-3" key={index}>
-                  <CCol xs={12} xl={2} className="mb-3 mb-xl-0">
-                    {state.charAt(0).toUpperCase() + state.slice(1)}
-                  </CCol>
-                  <CCol xs>
-                    {[
-                      'primary',
-                      'secondary',
-                      'success',
-                      'danger',
-                      'warning',
-                      'info',
-                      'light',
-                      'dark',
-                    ].map((color, index) => (
-                      <CButton
-                        color={color}
-                        key={index}
-                        active={state === 'active'}
-                        disabled={state === 'disabled'}
-                      >
-                        {color.charAt(0).toUpperCase() + color.slice(1)}
-                      </CButton>
+            <PaginationWrapper data={professores} itemsPerPage={5}>
+              {(paginaAtual) => (
+                <table className="table table-bordered table-striped">
+                  <thead className="table-dark">
+                    <tr>
+                      <th>#</th>
+                      <th>Nome</th>
+                      <th>Email</th>
+                      <th>Telefone</th>
+                      <th>Especialidade</th>
+                      <th>Status</th>
+                      <th>Unidade</th>
+                      <th>Endereço</th>
+                      <th>Ações</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {paginaAtual.map((prof) => (
+                      <tr key={prof.id}>
+                        <td>{prof.id}</td>
+                        <td>{prof.nome}</td>
+                        <td>{prof.email}</td>
+                        <td>{prof.telefone}</td>
+                        <td>{prof.especialidade}</td>
+                        <td>{prof.status ?? '-'}</td>
+                        <td>{prof.unidade?.nome ?? '-'}</td>
+                        <td>
+                          {prof.endereco
+                            ? `${prof.endereco.rua ?? ''}, Nº ${prof.endereco.casa_numero ?? ''}, ${prof.endereco.bairro ?? ''}`
+                            : '-'}
+                        </td>
+                        <td>
+                          <div className="dropdown">
+                            <button
+                              className="btn btn-secondary btn-sm dropdown-toggle"
+                              type="button"
+                              data-bs-toggle="dropdown"
+                            >
+                              Ações
+                            </button>
+                            <ul className="dropdown-menu">
+                              <li>
+                                <button
+                                  className="dropdown-item btn-sm"
+                                  data-bs-toggle="modal"
+                                  data-bs-target="#modalProfessor"
+                                  onClick={() => abrirModalEditar(prof)}
+                                >
+                                  <i className="fa fa-edit"></i> Editar
+                                </button>
+                              </li>
+                              <li>
+                                <button
+                                  className="dropdown-item btn-sm text-danger"
+                                  onClick={() => confirmarExclusao(prof)}
+                                >
+                                  <i className="fa fa-trash"></i> Excluir
+                                </button>
+                              </li>
+                            </ul>
+                          </div>
+                        </td>
+                      </tr>
                     ))}
-                    <CButton color="link">Link</CButton>
-                  </CCol>
-                </CRow>
-              ))}
-            </DocsExample>
-          </CCardBody>
-        </CCard>
-      </CCol>
-      <CCol xs={12}>
-        <CCard className="mb-4">
-          <CCardHeader>
-            <strong>React Button</strong> <small>with icons</small>
-          </CCardHeader>
-          <CCardBody>
-            <p className="text-body-secondary small">
-              You can combine button with our <a href="https://coreui.io/icons/">CoreUI Icons</a>.
-            </p>
-            <DocsExample href="components/buttons">
-              {['normal', 'active', 'disabled'].map((state, index) => (
-                <CRow className="align-items-center mb-3" key={index}>
-                  <CCol xs={12} xl={2} className="mb-3 mb-xl-0">
-                    {state.charAt(0).toUpperCase() + state.slice(1)}
-                  </CCol>
-                  <CCol xs>
-                    {[
-                      'primary',
-                      'secondary',
-                      'success',
-                      'danger',
-                      'warning',
-                      'info',
-                      'light',
-                      'dark',
-                    ].map((color, index) => (
-                      <CButton
-                        color={color}
-                        key={index}
-                        active={state === 'active'}
-                        disabled={state === 'disabled'}
-                      >
-                        <CIcon icon={cilBell} className="me-2" />
-                        {color.charAt(0).toUpperCase() + color.slice(1)}
-                      </CButton>
-                    ))}
-                    <CButton color="link">
-                      <CIcon icon={cilBell} className="me-2" />
-                      Link
-                    </CButton>
-                  </CCol>
-                </CRow>
-              ))}
-            </DocsExample>
-          </CCardBody>
-        </CCard>
-      </CCol>
-      <CCol xs={12}>
-        <CCard className="mb-4">
-          <CCardHeader>
-            <strong>React Button</strong> <small>Button components</small>
-          </CCardHeader>
-          <CCardBody>
-            <p className="text-body-secondary small">
-              The <code>&lt;CButton&gt;</code> component are designed for{' '}
-              <code>&lt;button&gt;</code> , <code>&lt;a&gt;</code> or <code>&lt;input&gt;</code>{' '}
-              elements (though some browsers may apply a slightly different rendering).
-            </p>
-            <p className="text-body-secondary small">
-              If you&#39;re using <code>&lt;CButton&gt;</code> component as <code>&lt;a&gt;</code>{' '}
-              elements that are used to trigger functionality ex. collapsing content, these links
-              should be given a <code>role=&#34;button&#34;</code> to adequately communicate their
-              meaning to assistive technologies such as screen readers.
-            </p>
-            <DocsExample href="components/buttons#button-components">
-              <CButton as="a" color="primary" href="#" role="button">
-                Link
-              </CButton>
-              <CButton type="submit" color="primary">
-                Button
-              </CButton>
-              <CButton as="input" type="button" color="primary" value="Input" />
-              <CButton as="input" type="submit" color="primary" value="Submit" />
-              <CButton as="input" type="reset" color="primary" value="Reset" />
-            </DocsExample>
-          </CCardBody>
-        </CCard>
-      </CCol>
-      <CCol xs={12}>
-        <CCard className="mb-4">
-          <CCardHeader>
-            <strong>React Button</strong> <small>outline</small>
-          </CCardHeader>
-          <CCardBody>
-            <p className="text-body-secondary small">
-              If you need a button, but without the strong background colors. Set{' '}
-              <code>variant=&#34;outline&#34;</code> prop to remove all background colors.
-            </p>
-            <DocsExample href="components/buttons#outline-buttons">
-              {['normal', 'active', 'disabled'].map((state, index) => (
-                <CRow className="align-items-center mb-3" key={index}>
-                  <CCol xs={12} xl={2} className="mb-3 mb-xl-0">
-                    {state.charAt(0).toUpperCase() + state.slice(1)}
-                  </CCol>
-                  <CCol xs>
-                    {[
-                      'primary',
-                      'secondary',
-                      'success',
-                      'danger',
-                      'warning',
-                      'info',
-                      'light',
-                      'dark',
-                    ].map((color, index) => (
-                      <CButton
-                        color={color}
-                        variant="outline"
-                        key={index}
-                        active={state === 'active'}
-                        disabled={state === 'disabled'}
-                      >
-                        {color.charAt(0).toUpperCase() + color.slice(1)}
-                      </CButton>
-                    ))}
-                  </CCol>
-                </CRow>
-              ))}
-            </DocsExample>
-          </CCardBody>
-        </CCard>
-      </CCol>
-      <CCol xs={12}>
-        <CCard className="mb-4">
-          <CCardHeader>
-            <strong>React Button</strong> <small>ghost</small>
-          </CCardHeader>
-          <CCardBody>
-            <p className="text-body-secondary small">
-              If you need a ghost variant of button, set <code>variant=&#34;ghost&#34;</code> prop
-              to remove all background colors.
-            </p>
-            <DocsExample href="components/buttons#ghost-buttons">
-              {['normal', 'active', 'disabled'].map((state, index) => (
-                <CRow className="align-items-center mb-3" key={index}>
-                  <CCol xs={12} xl={2} className="mb-3 mb-xl-0">
-                    {state.charAt(0).toUpperCase() + state.slice(1)}
-                  </CCol>
-                  <CCol xs>
-                    {[
-                      'primary',
-                      'secondary',
-                      'success',
-                      'danger',
-                      'warning',
-                      'info',
-                      'light',
-                      'dark',
-                    ].map((color, index) => (
-                      <CButton
-                        color={color}
-                        variant="ghost"
-                        key={index}
-                        active={state === 'active'}
-                        disabled={state === 'disabled'}
-                      >
-                        {color.charAt(0).toUpperCase() + color.slice(1)}
-                      </CButton>
-                    ))}
-                  </CCol>
-                </CRow>
-              ))}
-            </DocsExample>
-          </CCardBody>
-        </CCard>
-      </CCol>
-      <CCol xs={12}>
-        <CCard className="mb-4">
-          <CCardHeader>
-            <strong>React Button</strong> <small>Sizes</small>
-          </CCardHeader>
-          <CCardBody>
-            <p className="text-body-secondary small">
-              Larger or smaller buttons? Add <code>size=&#34;lg&#34;</code> or{' '}
-              <code>size=&#34;sm&#34;</code> for additional sizes.
-            </p>
-            <DocsExample href="components/buttons#sizes">
-              <CButton color="primary" size="lg">
-                Large button
-              </CButton>
-              <CButton color="secondary" size="lg">
-                Large button
-              </CButton>
-            </DocsExample>
-            <DocsExample href="components/buttons#sizes">
-              <CButton color="primary" size="sm">
-                Small button
-              </CButton>
-              <CButton color="secondary" size="sm">
-                Small button
-              </CButton>
-            </DocsExample>
-          </CCardBody>
-        </CCard>
-      </CCol>
-      <CCol xs={12}>
-        <CCard className="mb-4">
-          <CCardHeader>
-            <strong>React Button</strong> <small>Pill</small>
-          </CCardHeader>
-          <CCardBody>
-            <DocsExample href="components/buttons#pill-buttons">
-              {[
-                'primary',
-                'secondary',
-                'success',
-                'danger',
-                'warning',
-                'info',
-                'light',
-                'dark',
-              ].map((color, index) => (
-                <CButton color={color} shape="rounded-pill" key={index}>
-                  {color.charAt(0).toUpperCase() + color.slice(1)}
-                </CButton>
-              ))}
-            </DocsExample>
-          </CCardBody>
-        </CCard>
-      </CCol>
-      <CCol xs={12}>
-        <CCard className="mb-4">
-          <CCardHeader>
-            <strong>React Button</strong> <small>Square</small>
-          </CCardHeader>
-          <CCardBody>
-            <DocsExample href="components/buttons#square">
-              {[
-                'primary',
-                'secondary',
-                'success',
-                'danger',
-                'warning',
-                'info',
-                'light',
-                'dark',
-              ].map((color, index) => (
-                <CButton color={color} shape="rounded-0" key={index}>
-                  {color.charAt(0).toUpperCase() + color.slice(1)}
-                </CButton>
-              ))}
-            </DocsExample>
-          </CCardBody>
-        </CCard>
-      </CCol>
-      <CCol xs={12}>
-        <CCard className="mb-4">
-          <CCardHeader>
-            <strong>React Button</strong> <small>Disabled state</small>
-          </CCardHeader>
-          <CCardBody>
-            <p className="text-body-secondary small">
-              Add the <code>disabled</code> boolean prop to any <code>&lt;CButton&gt;</code>{' '}
-              component to make buttons look inactive. Disabled button has{' '}
-              <code>pointer-events: none</code> applied to, disabling hover and active states from
-              triggering.
-            </p>
-            <DocsExample href="components/buttons#disabled-state">
-              <CButton color="primary" size="lg" disabled>
-                Primary button
-              </CButton>
-              <CButton color="secondary" size="lg" disabled>
-                Button
-              </CButton>
-            </DocsExample>
-            <p className="text-body-secondary small">
-              Disabled buttons using the <code>&lt;a&gt;</code> component act a little different:
-            </p>
-            <p className="text-body-secondary small">
-              <code>&lt;a&gt;</code>s don&#39;tsupport the <code>disabled</code> attribute, so
-              CoreUI has to add <code>.disabled</code> className to make buttons look inactive.
-              CoreUI also has to add to the disabled button component{' '}
-              <code>aria-disabled=&#34;true&#34;</code> attribute to show the state of the component
-              to assistive technologies.
-            </p>
-            <DocsExample href="components/buttons#disabled-state">
-              <CButton as="a" href="#" color="primary" size="lg" disabled>
-                Primary link
-              </CButton>
-              <CButton as="a" href="#" color="secondary" size="lg" disabled>
-                Link
-              </CButton>
-            </DocsExample>
-          </CCardBody>
-        </CCard>
-      </CCol>
-      <CCol xs={12}>
-        <CCard className="mb-4">
-          <CCardHeader>
-            <strong>React Button</strong> <small>Block buttons</small>
-          </CCardHeader>
-          <CCardBody>
-            <p className="text-body-secondary small">
-              Create buttons that span the full width of a parent—by using utilities.
-            </p>
-            <DocsExample href="components/buttons#block-buttons">
-              <div className="d-grid gap-2">
-                <CButton color="primary">Button</CButton>
-                <CButton color="primary">Button</CButton>
-              </div>
-            </DocsExample>
-            <p className="text-body-secondary small">
-              Here we create a responsive variation, starting with vertically stacked buttons until
-              the <code>md</code> breakpoint, where <code>.d-md-block</code> replaces the{' '}
-              <code>.d-grid</code> class, thus nullifying the <code>gap-2</code> utility. Resize
-              your browser to see them change.
-            </p>
-            <DocsExample href="components/buttons#block-buttons">
-              <div className="d-grid gap-2 d-md-block">
-                <CButton color="primary">Button</CButton>
-                <CButton color="primary">Button</CButton>
-              </div>
-            </DocsExample>
-            <p className="text-body-secondary small">
-              You can adjust the width of your block buttons with grid column width classes. For
-              example, for a half-width &#34;block button&#34;, use <code>.col-6</code>. Center it
-              horizontally with <code>.mx-auto</code>, too.
-            </p>
-            <DocsExample href="components/buttons#block-buttons">
-              <div className="d-grid gap-2 col-6 mx-auto">
-                <CButton color="primary">Button</CButton>
-                <CButton color="primary">Button</CButton>
-              </div>
-            </DocsExample>
-            <p className="text-body-secondary small">
-              Additional utilities can be used to adjust the alignment of buttons when horizontal.
-              Here we&#39;ve taken our previous responsive example and added some flex utilities and
-              a margin utility on the button to right align the buttons when they&#39;re no longer
-              stacked.
-            </p>
-            <DocsExample href="components/buttons#block-buttons">
-              <div className="d-grid gap-2 d-md-flex justify-content-md-end">
-                <CButton color="primary" className="me-md-2">
-                  Button
-                </CButton>
-                <CButton color="primary">Button</CButton>
-              </div>
-            </DocsExample>
+                  </tbody>
+                </table>
+              )}
+            </PaginationWrapper>
+
+            <ModalProfessor
+              professorEditando={professorEditando}
+              onSalvo={() => fetchProfessores()}
+            />
+            <ModalConfirmacao
+              show={showConfirm}
+              onClose={() => setShowConfirm(false)}
+              onConfirm={handleConfirmDelete}
+              title="Excluir Professor"
+              message={`Tem certeza que deseja excluir o professor "${professorParaExcluir?.nome}"?`}
+            />
           </CCardBody>
         </CCard>
       </CCol>
@@ -399,4 +192,4 @@ const Buttons = () => {
   )
 }
 
-export default Buttons
+export default GestaoProfessores
