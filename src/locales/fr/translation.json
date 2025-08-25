@@ -1,0 +1,34 @@
+{
+  "welcome": "Bienvenue dans l'application",
+  "login": "Se connecter",
+  "logout": "Se déconnecter",
+  "language": "Langue",
+  "header": {
+    "home": "Accueil",
+    "courses": "Cours",
+    "teachers": "Enseignants",
+    "portfolio": "Portefeuille",
+    "testimonial": "Témoignages",
+    "partners": "Entreprises & Partenariats",
+    "contact": "Contact",
+    "executive": "Exécutif"
+  },
+  "banner": {
+    "title": "Bénéficiez de 30% de réduction sur votre première inscription",
+    "subtitle": "Apprenez avec des mentors issus d'entreprises internationales",
+    "description": "Développez vos compétences avec nos cours et nos mentors issus d'entreprises de renommée mondiale.",
+    "highlight1": "Étudiez à votre rythme avec des horaires flexibles",
+    "highlight2": "Parcours d'apprentissage personnalisés",
+    "highlight3": "Rejoignez notre communauté de réussite"
+  },
+  "partners": {
+    "title": "Entreprises et partenaires qui nous font confiance"
+  },
+  "coursesSection": {
+    "explore": "Explorer les cours",
+    "popular": "Cours populaires",
+    "bestSeller": "Meilleures ventes",
+    "classes": "Cours",
+    "students": "Étudiants"
+  }
+}

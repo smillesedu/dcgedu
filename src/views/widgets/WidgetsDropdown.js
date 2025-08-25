@@ -41,7 +41,7 @@ const WidgetsDropdown = (props) => {
     <CRow className={props.className} xs={{ gutter: 4 }}>
       <CCol sm={6} xl={4} xxl={3}>
         <CWidgetStatsA
-          color="primary"
+          color="dark"
           value={
             <>
               26K{' '}
@@ -131,7 +131,7 @@ const WidgetsDropdown = (props) => {
       </CCol>
       <CCol sm={6} xl={4} xxl={3}>
         <CWidgetStatsA
-          color="info"
+          color="dark"
           value={
             <>
               $6.200{' '}
@@ -220,7 +220,7 @@ const WidgetsDropdown = (props) => {
       </CCol>
       <CCol sm={6} xl={4} xxl={3}>
         <CWidgetStatsA
-          color="warning"
+          color="dark"
           value={
             <>
               2.49%{' '}
@@ -292,7 +292,7 @@ const WidgetsDropdown = (props) => {
       </CCol>
       <CCol sm={6} xl={4} xxl={3}>
         <CWidgetStatsA
-          color="danger"
+          color="dark"
           value={
             <>
               44K{' '}

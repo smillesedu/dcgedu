@@ -6,7 +6,6 @@ import ModalAluno from './ModalAluno'
 import ModalFiltros from './ModalFiltros'
 import { AppBreadcrumb, ModalConfirmacao, PaginationWrapper } from '../../../components'
 
-
 const Accordion = () => {
   const [alunos, setAlunos] = useState([])
   const [alunoEditando, setAlunoEditando] = useState(null)

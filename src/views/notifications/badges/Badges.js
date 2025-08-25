@@ -1,125 +1,168 @@
-import React from 'react'
-import { CButton, CCard, CCardBody, CCardHeader, CCol, CBadge, CRow } from '@coreui/react'
-import { DocsComponents, DocsExample } from 'src/components'
+import React, { useEffect, useState } from 'react'
+import supabase from '../../../supaBaseClient'
+import ModalCadastroParametro from './ModalCadastroParametro'
+import { PaginationWrapper, ModalConfirmacao } from '../../../components'
 
-const Badges = () => {
+const ParametrosRegrasAcademicas = () => {
+  const [parametros, setParametros] = useState([])
+  const [filtros, setFiltros] = useState({ nome: '', tipo: '' })
+  const [parametroEditando, setParametroEditando] = useState(null)
+  const [showConfirm, setShowConfirm] = useState(false)
+  const [parametroParaExcluir, setParametroParaExcluir] = useState(null)
+
+  useEffect(() => {
+    fetchParametros()
+  }, [])
+
+  const fetchParametros = async () => {
+    let query = supabase.from('parametros_regras').select('*').order('nome', { ascending: true })
+
+    if (filtros.nome) query = query.ilike('nome', `%${filtros.nome}%`)
+    if (filtros.tipo) query = query.ilike('tipo', `%${filtros.tipo}%`)
+
+    const { data, error } = await query
+    if (!error) setParametros(data)
+  }
+
+  const confirmarExclusao = (parametro) => {
+    setParametroParaExcluir(parametro)
+    setShowConfirm(true)
+  }
+
+  const handleConfirmDelete = async () => {
+    if (parametroParaExcluir) {
+      await supabase.from('parametros_regras').delete().eq('id', parametroParaExcluir.id)
+      fetchParametros()
+    }
+    setShowConfirm(false)
+  }
+
   return (
-    <CRow>
-      <CCol xs={12}>
-        <DocsComponents href="components/badge/" />
-      </CCol>
-      <CCol lg={6}>
-        <CCard className="mb-4">
-          <CCardHeader>
-            <strong>React Badges</strong> <small>Dismissing</small>
-          </CCardHeader>
-          <CCardBody>
-            <p className="text-body-secondary small">
-              Bootstrap badge scale to suit the size of the parent element by using relative font
-              sizing and <code>em</code> units.
-            </p>
-            <DocsExample href="components/badge">
-              <h1>
-                Example heading <CBadge color="secondary">New</CBadge>
-              </h1>
-              <h2>
-                Example heading <CBadge color="secondary">New</CBadge>
-              </h2>
-              <h3>
-                Example heading <CBadge color="secondary">New</CBadge>
-              </h3>
-              <h4>
-                Example heading <CBadge color="secondary">New</CBadge>
-              </h4>
-              <h5>
-                Example heading <CBadge color="secondary">New</CBadge>
-              </h5>
-              <h6>
-                Example heading <CBadge color="secondary">New</CBadge>
-              </h6>
-            </DocsExample>
-            <p className="text-body-secondary small">
-              Badges can be used as part of links or buttons to provide a counter.
-            </p>
-            <DocsExample href="components/badge">
-              <CButton color="primary">
-                Notifications <CBadge color="secondary">4</CBadge>
-              </CButton>
-            </DocsExample>
-            <p className="text-body-secondary small">
-              Remark that depending on how you use them, badges may be complicated for users of
-              screen readers and related assistive technologies.
-            </p>
-            <p className="text-body-secondary small">
-              Unless the context is clear, consider including additional context with a visually
-              hidden piece of additional text.
-            </p>
-            <DocsExample href="components/badge">
-              <CButton color="primary">
-                Profile <CBadge color="secondary">9</CBadge>
-                <span className="visually-hidden">unread messages</span>
-              </CButton>
-            </DocsExample>
-          </CCardBody>
-        </CCard>
-      </CCol>
-      <CCol lg={6}>
-        <CCard className="mb-4">
-          <CCardHeader>
-            <strong>React Badges</strong> <small>Contextual variations</small>
-          </CCardHeader>
-          <CCardBody>
-            <p className="text-body-secondary small">
-              Add any of the below-mentioned <code>color</code> props to modify the presentation of
-              a badge.
-            </p>
-            <DocsExample href="components/badge#contextual-variations">
-              <CBadge color="primary">primary</CBadge>
-              <CBadge color="success">success</CBadge>
-              <CBadge color="danger">danger</CBadge>
-              <CBadge color="warning">warning</CBadge>
-              <CBadge color="info">info</CBadge>
-              <CBadge color="light">light</CBadge>
-              <CBadge color="dark">dark</CBadge>
-            </DocsExample>
-          </CCardBody>
-        </CCard>
-        <CCard className="mb-4">
-          <CCardHeader>
-            <strong>React Badges</strong> <small>Pill badges</small>
-          </CCardHeader>
-          <CCardBody>
-            <p className="text-body-secondary small">
-              Apply the <code>shape=&#34;rounded-pill&#34;</code> prop to make badges rounded.
-            </p>
-            <DocsExample href="components/badge#pill-badges">
-              <CBadge color="primary" shape="rounded-pill">
-                primary
-              </CBadge>
-              <CBadge color="success" shape="rounded-pill">
-                success
-              </CBadge>
-              <CBadge color="danger" shape="rounded-pill">
-                danger
-              </CBadge>
-              <CBadge color="warning" shape="rounded-pill">
-                warning
-              </CBadge>
-              <CBadge color="info" shape="rounded-pill">
-                info
-              </CBadge>
-              <CBadge color="light" shape="rounded-pill">
-                light
-              </CBadge>
-              <CBadge color="dark" shape="rounded-pill">
-                dark
-              </CBadge>
-            </DocsExample>
-          </CCardBody>
-        </CCard>
-      </CCol>
-    </CRow>
+    <div>
+      <h4 className="mb-4">Parâmetros e Regras Acadêmicas</h4>
+
+      {/* Filtros */}
+      <div className="card mb-3">
+        <div className="card-header">
+          <strong>Filtros</strong>
+        </div>
+        <div className="card-body">
+          <div className="row g-3">
+            <div className="col-md-5">
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Nome do Parâmetro"
+                value={filtros.nome}
+                onChange={(e) => setFiltros({ ...filtros, nome: e.target.value })}
+              />
+            </div>
+            <div className="col-md-5">
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Tipo (Ex: Regra, Limite, Data...)"
+                value={filtros.tipo}
+                onChange={(e) => setFiltros({ ...filtros, tipo: e.target.value })}
+              />
+            </div>
+            <div className="col-md-2">
+              <button className="btn btn-primary w-100" onClick={fetchParametros}>
+                Filtrar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Botão Novo Parâmetro */}
+      <div className="mb-3 text-end">
+        <button
+          className="btn btn-success"
+          data-bs-toggle="modal"
+          data-bs-target="#modalCadastroParametro"
+          onClick={() => setParametroEditando(null)}
+        >
+          Novo Parâmetro
+        </button>
+      </div>
+
+      {/* Tabela */}
+      <div className="card">
+        <div className="card-body">
+          <PaginationWrapper data={parametros} itemsPerPage={5}>
+            {(paginaAtual) => (
+              <table className="table table-bordered table-striped">
+                <thead className="table-dark">
+                  <tr>
+                    <th>#</th>
+                    <th>Nome</th>
+                    <th>Tipo</th>
+                    <th>Descrição</th>
+                    <th>Valor</th>
+                    <th>Ações</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {paginaAtual.map((p) => (
+                    <tr key={p.id}>
+                      <td>{p.id}</td>
+                      <td>{p.nome}</td>
+                      <td>{p.tipo}</td>
+                      <td>{p.descricao}</td>
+                      <td>{p.valor}</td>
+                      <td>
+                        <div className="dropdown">
+                          <button
+                            className="btn btn-secondary btn-sm dropdown-toggle"
+                            data-bs-toggle="dropdown"
+                          >
+                            Ações
+                          </button>
+                          <ul className="dropdown-menu">
+                            <li>
+                              <button
+                                className="dropdown-item"
+                                data-bs-toggle="modal"
+                                data-bs-target="#modalCadastroParametro"
+                                onClick={() => setParametroEditando(p)}
+                              >
+                                Editar
+                              </button>
+                            </li>
+                            <li>
+                              <button
+                                className="dropdown-item text-danger"
+                                onClick={() => confirmarExclusao(p)}
+                              >
+                                Excluir
+                              </button>
+                            </li>
+                          </ul>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+          </PaginationWrapper>
+        </div>
+      </div>
+
+      {/* Modal Cadastro */}
+      <ModalCadastroParametro parametroEditando={parametroEditando} onSalvo={fetchParametros} />
+
+      {/* Modal Confirmação */}
+      <ModalConfirmacao
+        show={showConfirm}
+        onClose={() => setShowConfirm(false)}
+        onConfirm={handleConfirmDelete}
+        title="Excluir Parâmetro"
+        message={`Tem certeza que deseja excluir o parâmetro "${parametroParaExcluir?.nome}"?`}
+      />
+    </div>
   )
 }
 
-export default Badges
+export default ParametrosRegrasAcademicas

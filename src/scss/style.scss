@@ -77,3 +77,67 @@ body {
   position: relative;
   box-shadow: none;
 }
+
+
+
+:root {
+  --background: 240 10% 3.9%;
+  --foreground: 0 0% 98%;
+  --card: 240 10% 3.9%;
+  --card-foreground: 0 0% 98%;
+  --primary: 221.2 83.2% 53.3%;
+  --secondary: 240 3.7% 15.9%;
+  --destructive: 0 62.8% 30.6%;
+  --border: 240 3.7% 15.9%;
+  --radius: 0.75rem;
+}
+
+.light {
+  --background: 0 0% 100%;
+  --foreground: 240 10% 3.9%;
+  --card: 0 0% 100%;
+  --card-foreground: 240 10% 3.9%;
+}
+
+.theme-blue {
+  --primary: 221.2 83.2% 53.3%;
+}
+
+.theme-green {
+  --primary: 142.1 76.2% 36.3%;
+}
+
+.theme-orange {
+  --primary: 24.6 95% 53.1%;
+}
+
+
+
+
+
+@mixin bg-primary {
+  background-color: hsl(var(--primary));
+}
+
+@mixin text-primary {
+  color: hsl(var(--primary));
+}
+
+@mixin border-primary {
+  border-color: hsl(var(--primary));
+}
+
+
+
+.button {
+  @include bg-primary;
+  @include text-primary;
+  border-radius: var(--radius);
+  padding: 0.5rem 1rem;
+  transition: all 0.3s ease;
+
+  &:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+  }
+}

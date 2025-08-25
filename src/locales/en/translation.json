@@ -1,0 +1,34 @@
+{
+  "welcome": "Welcome to the application",
+  "login": "Login",
+  "logout": "Logout",
+  "language": "Language",
+  "header": {
+    "home": "Home",
+    "courses": "Courses",
+    "teachers": "Teachers",
+    "portfolio": "Portfolio",
+    "testimonial": "Testimonial",
+    "partners": "Companies & Partnerships",
+    "contact": "Contact",
+    "executive": "Executive"
+  },
+  "banner": {
+    "title": "Get 30% off on your first enrollment",
+    "subtitle": "Learn with mentors from world-class companies",
+    "description": "Build skills with our courses and mentor from world-class companies.",
+    "highlight1": "Study at your own pace with flexible schedules",
+    "highlight2": "Personalized learning paths",
+    "highlight3": "Join our thriving success community"
+  },
+  "partners": {
+    "title": "Companies and partners who trust us"
+  },
+  "coursesSection": {
+    "explore": "Explore courses",
+    "popular": "Popular courses",
+    "bestSeller": "Best seller",
+    "classes": "Classes",
+    "students": "Students"
+  }
+}

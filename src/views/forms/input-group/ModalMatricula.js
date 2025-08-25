@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import {
   CModal,
   CModalHeader,
-  CModalTitle,
   CModalBody,
   CModalFooter,
   CButton,
@@ -11,92 +10,88 @@ import {
 } from '@coreui/react'
 import supabase from '../../../supaBaseClient'
 
-const ModalMatricula = ({ alunoEditando, turmas, cursos, onSalvo }) => {
-  const [aluno, setAluno] = useState({
-    nome: '',
-    email: '',
-    telefone: '',
-    turma_id: '',
-    curso_id: '',
-    status: 'ativo',
+const ModalMatricula = ({ onClose, onSalvo, alunoEditando }) => {
+  const [cursos, setCursos] = useState([])
+  const [disciplinas, setDisciplinas] = useState([])
+  const [form, setForm] = useState({
+    aluno_id: alunoEditando?.id || '',
+    curso_id: alunoEditando?.curso_id || '',
+    disciplina_id: alunoEditando?.disciplina_id || '',
+    data_matricula: alunoEditando?.data_matricula || '',
   })
 
   useEffect(() => {
-    if (alunoEditando) {
-      setAluno({
-        nome: alunoEditando.nome || '',
-        email: alunoEditando.email || '',
-        telefone: alunoEditando.telefone || '',
-        turma_id: alunoEditando.turma?.id || '',
-        curso_id: alunoEditando.curso?.id || '',
-        status: alunoEditando.status || 'ativo',
-      })
-    } else {
-      setAluno({
-        nome: '',
-        email: '',
-        telefone: '',
-        turma_id: '',
-        curso_id: '',
-        status: 'ativo',
-      })
+    const fetchCursos = async () => {
+      const { data } = await supabase.from('cursos').select('id,nome')
+      setCursos(data || [])
     }
-  }, [alunoEditando])
+    const fetchDisciplinas = async () => {
+      const { data } = await supabase.from('disciplinas').select('id,nome')
+      setDisciplinas(data || [])
+    }
+    fetchCursos()
+    fetchDisciplinas()
+  }, [])
 
   const handleChange = (e) => {
-    setAluno({ ...aluno, [e.target.name]: e.target.value })
+    setForm({ ...form, [e.target.name]: e.target.value })
   }
 
   const handleSalvar = async () => {
-    if (alunoEditando) {
-      const { error } = await supabase.from('alunos').update(aluno).eq('id', alunoEditando.id)
-      if (!error) onSalvo()
+    const { error } = await supabase.from('matriculas').upsert(form)
+    if (!error) {
+      onSalvo()
+      onClose()
     } else {
-      const { error } = await supabase.from('alunos').insert(aluno)
-      if (!error) onSalvo()
+      console.error(error)
     }
   }
 
   return (
-    <CModal visible={true} onClose={onSalvo}>
-      <CModalHeader>
-        <CModalTitle>{alunoEditando ? 'Editar Matrícula' : 'Nova Matrícula'}</CModalTitle>
-      </CModalHeader>
+    <CModal visible={true} onClose={onClose}>
+      <CModalHeader>{alunoEditando ? 'Editar Matrícula' : 'Nova Matrícula'}</CModalHeader>
       <CModalBody>
-        <CFormInput label="Nome" name="nome" value={aluno.nome} onChange={handleChange} />
         <CFormInput
-          label="Email"
-          name="email"
-          type="email"
-          value={aluno.email}
+          type="text"
+          label="Aluno"
+          name="aluno_id"
+          value={form.aluno_id}
           onChange={handleChange}
+          placeholder="ID do Aluno"
         />
-        <CFormInput
-          label="Telefone"
-          name="telefone"
-          value={aluno.telefone}
-          onChange={handleChange}
-        />
-        <CFormSelect label="Curso" name="curso_id" value={aluno.curso_id} onChange={handleChange}>
-          <option value="">Selecione</option>
+        <CFormSelect name="curso_id" value={form.curso_id} onChange={handleChange} className="mt-2">
+          <option value="">Selecione o Curso</option>
           {cursos.map((c) => (
             <option key={c.id} value={c.id}>
               {c.nome}
             </option>
           ))}
         </CFormSelect>
-        <CFormSelect label="Turma" name="turma_id" value={aluno.turma_id} onChange={handleChange}>
-          <option value="">Selecione</option>
-          {turmas.map((t) => (
-            <option key={t.id} value={t.id}>
-              {t.nome}
+        <CFormSelect
+          name="disciplina_id"
+          value={form.disciplina_id}
+          onChange={handleChange}
+          className="mt-2"
+        >
+          <option value="">Selecione a Disciplina</option>
+          {disciplinas.map((d) => (
+            <option key={d.id} value={d.id}>
+              {d.nome}
             </option>
           ))}
         </CFormSelect>
+        <CFormInput
+          type="date"
+          label="Data da Matrícula"
+          name="data_matricula"
+          value={form.data_matricula}
+          onChange={handleChange}
+          className="mt-2"
+        />
       </CModalBody>
       <CModalFooter>
-        <CButton color="secondary" onClick={onSalvo}>
-          Fechar
+        <CButton color="secondary" onClick={onClose}>
+          Cancelar
         </CButton>
         <CButton color="primary" onClick={handleSalvar}>
           Salvar

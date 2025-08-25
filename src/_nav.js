@@ -186,11 +186,6 @@ const _nav = [
         name: 'Cronograma do Aluno',
         to: '/forms/range',
       },
-      {
-        component: CNavItem,
-        name: 'Chat',
-        to: '/forms/select',
-      },
       // {
       //   component: CNavItem,
       //   name: 'Layout',
@@ -217,7 +212,7 @@ const _nav = [
       {
         component: CNavItem,
         name: 'Notificações e cominicados da escola',
-        to: '/icons/coreui-icons',
+        to: '/icons/notification',
       },
       {
         component: CNavItem,
@@ -259,7 +254,7 @@ const _nav = [
       {
         component: CNavItem,
         name: 'Relatórios Gerenciais e Estatísticos',
-        to: '/notifications/toasts',
+        to: '/notifications/relatorio-gerais',
       },
     ],
   },
@@ -272,37 +267,37 @@ const _nav = [
       {
         component: CNavItem,
         name: 'Controle de Mensalidades e Cobranças',
-        to: '/notifications/alerts',
+        to: '/gestao-financeira/controle-mensalidades',
       },
       {
         component: CNavItem,
-        name: 'Parâmetos e Regras Acadêmicas',
-        to: '/notifications/badges',
+        name: 'Regras de Pagamento e Faturação',
+        to: '/gestao-financeira/parametros-regras-academicas',
       },
       {
         component: CNavItem,
         name: 'Emissão de Faturas e Recibos',
-        to: '/notifications/modals',
+        to: '/gestao-financeira/emissao-faturas-recibos',
       },
       {
         component: CNavItem,
         name: 'Controle de inadimplência',
-        to: '/notifications/toasts',
+        to: '/gestao-financeira/controle-inadimplencia',
       },
       {
         component: CNavItem,
         name: 'Relatório Financeiro',
-        to: '/notifications/toasts',
+        to: '/gestao-financeira/relatorio-financeiro',
       },
       {
         component: CNavItem,
-        name: 'Desconto, Bolsas e Bolsas Parciais',
-        to: '/notifications/toasts',
+        name: 'Descontos e Bolsas',
+        to: '/gestao-financeira/descontos-bolsas',
       },
       {
         component: CNavItem,
-        name: 'Integração com Gateway de Pagamento',
-        to: '/notifications/toasts',
+        name: 'Pagamentos e Faturação',
+        to: '/gestao-financeira/pagamento-faturacao',
       },
     ],
   },
@@ -332,37 +327,113 @@ const _nav = [
 
   {
     component: CNavGroup,
-    name: 'Documentação e Registros',
+    name: 'Vendas e Comercial',
     icon: <CIcon icon={cilBell} customClassName="nav-icon" />,
     items: [
       {
         component: CNavItem,
-        name: 'Emissão de Boletin',
-        to: '/notifications/alerts',
+        name: 'Gestão de Leads e Oportunidades',
+        to: '/comercial/gestao-leads',
       },
       {
         component: CNavItem,
-        name: 'Atestado de Matrícula',
-        to: '/notifications/badges',
+        name: 'Funil de Vendas',
+        to: '/comercial/funil-vendas',
       },
       {
         component: CNavItem,
-        name: 'Histórico da Escola',
-        to: '/notifications/modals',
+        name: 'Propostas Comerciais e Ofertas',
+        to: '/comercial/propostas-ofertas',
       },
       {
         component: CNavItem,
-        name: 'Declaração de Frequência',
-        to: '/notifications/modals',
+        name: 'Relatórios Comerciais',
+        to: '/comercial/relatorios-comercial',
       },
-
       {
         component: CNavItem,
-        name: 'Gestão de Arquivos',
-        to: '/notifications/modals',
+        name: 'Equipe Comercial',
+        to: '/comercial/equipe-comercial',
       },
     ],
   },
+
+  {
+    component: CNavGroup,
+    name: 'Recursos Humanos',
+    icon: <CIcon icon={cilBell} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Cargos e Funções',
+        to: '/rh/cargos',
+      },
+      {
+        component: CNavItem,
+        name: 'Departamentos',
+        to: '/rh/departamentos',
+      },
+      {
+        component: CNavItem,
+        name: 'Funcionarios',
+        to: '/rh/funcionarios',
+      },
+      {
+        component: CNavItem,
+        name: 'Folha de Pagamento',
+        to: '/rh/folha-pagamento',
+      },
+      {
+        component: CNavItem,
+        name: 'Recibo de Pagamento',
+        to: '/rh/recibos-pagamento',
+      },
+      {
+        component: CNavItem,
+        name: 'Presenças e Faltas',
+        to: '/rh/presencas',
+      },
+      {
+        component: CNavItem,
+        name: 'Relatório de Presenças',
+        to: '/rh/relatorio-presencas',
+      },
+    ],
+  },
+
+  // {
+  //   component: CNavGroup,
+  //   name: 'Documentação e Registros',
+  //   icon: <CIcon icon={cilBell} customClassName="nav-icon" />,
+  //   items: [
+  //     {
+  //       component: CNavItem,
+  //       name: 'Emissão de Boletin',
+  //       to: '/notifications/alerts',
+  //     },
+  //     {
+  //       component: CNavItem,
+  //       name: 'Atestado de Matrícula',
+  //       to: '/notifications/badges',
+  //     },
+  //     {
+  //       component: CNavItem,
+  //       name: 'Histórico da Escola',
+  //       to: '/notifications/modals',
+  //     },
+  //     {
+  //       component: CNavItem,
+  //       name: 'Declaração de Frequência',
+  //       to: '/notifications/modals',
+  //     },
+
+  //     {
+  //       component: CNavItem,
+  //       name: 'Gestão de Arquivos',
+  //       to: '/notifications/modals',
+  //     },
+  //   ],
+  // },
   // {
   //   component: CNavItem,
   //   name: 'Widgets',
@@ -379,106 +450,116 @@ const _nav = [
   },
   {
     component: CNavGroup,
-    name: 'Comunicação',
+    name: 'Configurações e Integrações',
     icon: <CIcon icon={cilStar} customClassName="nav-icon" />,
     items: [
       {
         component: CNavItem,
-        name: 'Envio de mensagense notificações para alunos, responsáveis e professores',
-        to: '/login',
+        name: 'Configurações Gerais',
+        to: '/config/config-geral',
       },
       {
         component: CNavItem,
-        name: 'Avisos  Gerais',
-        to: '/register',
+        name: 'Integrações',
+        to: '/config/integracoes',
       },
       {
         component: CNavItem,
-        name: 'Integração com Apps',
-        to: '/404',
+        name: 'Parâmetro Acadêmico',
+        to: '/config/parametros-academico',
       },
       {
         component: CNavItem,
-        name: 'Chat',
-        to: '/500',
+        name: 'Parâmetro Financeiro',
+        to: '/config/parametros-finaceiros',
+      },
+      {
+        component: CNavItem,
+        name: 'Personalização',
+        to: '/config/personalizacao',
+      },
+      {
+        component: CNavItem,
+        name: 'Perfil do Usuário',
+        to: '/config/user-profile',
       },
     ],
   },
 
-  {
-    component: CNavGroup,
-    name: 'Arquivos e Marerias Didáticos',
-    icon: <CIcon icon={cilStar} customClassName="nav-icon" />,
-    items: [
-      {
-        component: CNavItem,
-        name: 'Upload e Download de Arquivos',
-        to: '/login',
-      },
-      {
-        component: CNavItem,
-        name: 'Register',
-        to: '/register',
-      },
-      {
-        component: CNavItem,
-        name: 'Error 404',
-        to: '/404',
-      },
-      {
-        component: CNavItem,
-        name: 'Error 500',
-        to: '/500',
-      },
-    ],
-  },
+  // {
+  //   component: CNavGroup,
+  //   name: 'Arquivos e Marerias Didáticos',
+  //   icon: <CIcon icon={cilStar} customClassName="nav-icon" />,
+  //   items: [
+  //     {
+  //       component: CNavItem,
+  //       name: 'Upload e Download de Arquivos',
+  //       to: '/login',
+  //     },
+  //     {
+  //       component: CNavItem,
+  //       name: 'Register',
+  //       to: '/register',
+  //     },
+  //     {
+  //       component: CNavItem,
+  //       name: 'Error 404',
+  //       to: '/404',
+  //     },
+  //     {
+  //       component: CNavItem,
+  //       name: 'Error 500',
+  //       to: '/500',
+  //     },
+  //   ],
+  // },
 
-  {
-    component: CNavGroup,
-    name: 'Relatórios e Indicadores',
-    icon: <CIcon icon={cilStar} customClassName="nav-icon" />,
-    items: [
-      {
-        component: CNavItem,
-        name: 'Relatórios',
-        to: '/login',
-      },
-    ],
-  },
+  // {
+  //   component: CNavGroup,
+  //   name: 'Relatórios e Indicadores',
+  //   icon: <CIcon icon={cilStar} customClassName="nav-icon" />,
+  //   items: [
+  //     {
+  //       component: CNavItem,
+  //       name: 'Relatórios',
+  //       to: '/login',
+  //     },
+  //   ],
+  // },
 
-  {
-    component: CNavGroup,
-    name: 'Pages',
-    icon: <CIcon icon={cilStar} customClassName="nav-icon" />,
-    items: [
-      {
-        component: CNavItem,
-        name: 'login',
-        to: '/login',
-      },
-      {
-        component: CNavItem,
-        name: 'Register',
-        to: '/register',
-      },
-      {
-        component: CNavItem,
-        name: 'Error 404',
-        to: '/404',
-      },
-      {
-        component: CNavItem,
-        name: 'Error 500',
-        to: '/500',
-      },
-    ],
-  },
-  {
-    component: CNavItem,
-    name: 'Docs',
-    href: 'https://coreui.io/react/docs/templates/installation/',
-    icon: <CIcon icon={cilDescription} customClassName="nav-icon" />,
-  },
+  // {
+  //   component: CNavGroup,
+  //   name: 'Pages',
+  //   icon: <CIcon icon={cilStar} customClassName="nav-icon" />,
+  //   items: [
+  //     {
+  //       component: CNavItem,
+  //       name: 'login',
+  //       to: '/login',
+  //     },
+  //     {
+  //       component: CNavItem,
+  //       name: 'Register',
+  //       to: '/register',
+  //     },
+  //     {
+  //       component: CNavItem,
+  //       name: 'Error 404',
+  //       to: '/404',
+  //     },
+  //     {
+  //       component: CNavItem,
+  //       name: 'Error 500',
+  //       to: '/500',
+  //     },
+  //   ],
+  // },
+  // {
+  //   component: CNavItem,
+  //   name: 'Docs',
+  //   href: 'https://coreui.io/react/docs/templates/installation/',
+  //   icon: <CIcon icon={cilDescription} customClassName="nav-icon" />,
+  // },
 ]
 
 export default _nav

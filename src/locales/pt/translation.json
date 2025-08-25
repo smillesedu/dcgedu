@@ -1,0 +1,34 @@
+{
+  "welcome": "Bem-vindo à aplicação",
+  "login": "Entrar",
+  "logout": "Sair",
+  "language": "Idioma",
+  "header": {
+    "home": "Início",
+    "courses": "Cursos",
+    "teachers": "Professores",
+    "portfolio": "Portfólio",
+    "testimonial": "Depoimentos",
+    "partners": "Empresas & Parcerias",
+    "contact": "Contato",
+    "executive": "Executive"
+  },
+  "banner": {
+    "title": "30% de desconto na primeira matrícula",
+    "subtitle": "Aprenda com mentores de empresas globais",
+    "description": "Desenvolva habilidades com nossos cursos e mentores de empresas de renome mundial.",
+    "highlight1": "Estude no seu ritmo, com horários flexíveis",
+    "highlight2": "Trilhas de aprendizado personalizadas",
+    "highlight3": "Faça parte da nossa comunidade de sucesso"
+  },
+  "partners": {
+    "title": "Empresas e parceiros que confiam em nós"
+  },
+  "coursesSection": {
+    "explore": "Explorar cursos",
+    "popular": "Cursos populares",
+    "bestSeller": "Mais vendidos",
+    "classes": "Aulas",
+    "students": "Estudantes"
+  }
+}

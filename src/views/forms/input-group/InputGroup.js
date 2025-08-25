@@ -1,74 +1,58 @@
-import React, { useEffect, useState } from 'react'
-import { CCard, CCardBody, CCardHeader, CCol, CContainer, CRow } from '@coreui/react'
+import React, { useState, useEffect } from 'react'
+import { CCard, CCardBody, CCardHeader, CCol, CContainer, CRow, CButton } from '@coreui/react'
 import supabase from '../../../supaBaseClient'
-import FiltroMatricula from './FiltroMatricula'
 import ModalMatricula from './ModalMatricula'
+import FiltroMatricula from './FiltroMatricula'
 import { PaginationWrapper, ModalConfirmacao } from '../../../components'
 
 const MatriculaAluno = () => {
-  const [alunos, setAlunos] = useState([])
-  const [turmas, setTurmas] = useState([])
-  const [cursos, setCursos] = useState([])
-  const [alunoSelecionado, setAlunoSelecionado] = useState(null)
+  const [matriculas, setMatriculas] = useState([])
+  const [showModal, setShowModal] = useState(false)
+  const [matriculaEditando, setMatriculaEditando] = useState(null)
   const [showConfirm, setShowConfirm] = useState(false)
-  const [alunoParaExcluir, setAlunoParaExcluir] = useState(null)
+  const [matriculaParaExcluir, setMatriculaParaExcluir] = useState(null)
 
-  useEffect(() => {
-    fetchAlunos()
-    fetchDadosAuxiliares()
-  }, [])
-
-  const fetchAlunos = async (filters = {}) => {
-    let query = supabase.from('alunos').select(`
+  const fetchMatriculas = async (filters = {}) => {
+    let query = supabase.from('matriculas').select(`
       id,
-      nome,
-      data_nascimento,
-      email,
-      telefone,
-      status,
-      turma:turmas(nome),
-      curso:cursos(nome)
+      aluno_id,
+      curso:cursos(nome),
+      disciplina:disciplinas(nome),
+      data_matricula
     `)
 
-    if (filters.turma) query = query.eq('turma', filters.turma)
-    if (filters.curso) query = query.eq('curso', filters.curso)
-    if (filters.search) query = query.ilike('nome', `%${filters.search}%`)
+    if (filters.search) query = query.ilike('aluno_id', `%${filters.search}%`)
+    if (filters.curso) query = query.eq('curso_id', filters.curso)
+    if (filters.disciplina) query = query.eq('disciplina_id', filters.disciplina)
 
     const { data, error } = await query
-    if (error) {
-      console.error('Erro ao buscar alunos:', error)
-    } else {
-      setAlunos(data || [])
-    }
+    if (!error) setMatriculas(data || [])
+    else console.error(error)
   }
 
-  const fetchDadosAuxiliares = async () => {
-    const { data: turmasData } = await supabase.from('turmas').select('*')
-    setTurmas(turmasData || [])
+  useEffect(() => {
+    fetchMatriculas()
+  }, [])
 
-    const { data: cursosData } = await supabase.from('cursos').select('*')
-    setCursos(cursosData || [])
+  const abrirModalNovo = () => {
+    setMatriculaEditando(null)
+    setShowModal(true)
   }
 
-  const handleFiltrar = (filters) => {
-    fetchAlunos(filters)
+  const abrirModalEditar = (matricula) => {
+    setMatriculaEditando(matricula)
+    setShowModal(true)
   }
 
-  const abrirModalMatricula = (aluno = null) => {
-    setAlunoSelecionado(aluno)
-  }
-
-  const confirmarExclusao = (aluno) => {
-    setAlunoParaExcluir(aluno)
+  const confirmarExclusao = (matricula) => {
+    setMatriculaParaExcluir(matricula)
     setShowConfirm(true)
   }
 
   const handleConfirmDelete = async () => {
-    if (alunoParaExcluir) {
-      const { error } = await supabase.from('alunos').delete().eq('id', alunoParaExcluir.id)
-      if (!error) {
-        setAlunos((prev) => prev.filter((a) => a.id !== alunoParaExcluir.id))
-      }
+    if (matriculaParaExcluir) {
+      await supabase.from('matriculas').delete().eq('id', matriculaParaExcluir.id)
+      setMatriculas((prev) => prev.filter((m) => m.id !== matriculaParaExcluir.id))
     }
     setShowConfirm(false)
   }
@@ -77,55 +61,42 @@ const MatriculaAluno = () => {
     <CRow>
       <CCol xs={12}>
         <CCardHeader className="my-4">
-          <strong>Matrícula e Rematrícula de Alunos</strong>
+          <strong>Matrícula e Rematrícula</strong>
         </CCardHeader>
 
         <CContainer className="px-4">
-          <FiltroMatricula turmas={turmas} cursos={cursos} onFiltrar={handleFiltrar} />
+          <FiltroMatricula onFiltrar={fetchMatriculas} />
         </CContainer>
 
-        <CRow className="my-4">
-          <CCol xs={12} className="d-flex justify-content-end">
-            <button
-              className="btn btn-success"
-              data-bs-toggle="modal"
-              data-bs-target="#modalMatricula"
-              onClick={() => abrirModalMatricula(null)}
-            >
-              Nova Matrícula / Rematrícula
-            </button>
-          </CCol>
-        </CRow>
+        <div className="my-3 d-flex justify-content-end">
+          <CButton color="success" onClick={abrirModalNovo}>
+            Nova Matrícula
+          </CButton>
+        </div>
 
         <CCard className="my-4">
           <CCardBody>
-            <PaginationWrapper data={alunos} itemsPerPage={5}>
+            <PaginationWrapper data={matriculas} itemsPerPage={5}>
               {(paginaAtual) => (
                 <table className="table table-bordered table-striped">
                   <thead className="table-dark">
                     <tr>
                       <th>#</th>
-                      <th>Nome</th>
-                      <th>Data de Nascimento</th>
-                      <th>Email</th>
-                      <th>Telefone</th>
+                      <th>Aluno</th>
                       <th>Curso</th>
-                      <th>Turma</th>
-                      <th>Status</th>
+                      <th>Disciplina</th>
+                      <th>Data Matrícula</th>
                       <th>Ações</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {paginaAtual.map((aluno) => (
-                      <tr key={aluno.id}>
-                        <td>{aluno.id}</td>
-                        <td>{aluno.nome}</td>
-                        <td>{aluno.data_nascimento}</td>
-                        <td>{aluno.email}</td>
-                        <td>{aluno.telefone}</td>
-                        <td>{aluno.curso?.nome || '-'}</td>
-                        <td>{aluno.turma?.nome || '-'}</td>
-                        <td>{aluno.status ?? '-'}</td>
+                    {paginaAtual.map((m) => (
+                      <tr key={m.id}>
+                        <td>{m.id}</td>
+                        <td>{m.aluno_id}</td>
+                        <td>{m.curso?.nome || '-'}</td>
+                        <td>{m.disciplina?.nome || '-'}</td>
+                        <td>{m.data_matricula}</td>
                         <td>
                           <div className="dropdown">
                             <button
@@ -138,18 +109,16 @@ const MatriculaAluno = () => {
                             <ul className="dropdown-menu">
                               <li>
                                 <button
-                                  className="dropdown-item btn-sm"
-                                  data-bs-toggle="modal"
-                                  data-bs-target="#modalMatricula"
-                                  onClick={() => abrirModalMatricula(aluno)}
+                                  className="dropdown-item"
+                                  onClick={() => abrirModalEditar(m)}
                                 >
-                                  Editar Matrícula
+                                  Editar
                                 </button>
                               </li>
                               <li>
                                 <button
-                                  className="dropdown-item btn-sm text-danger"
-                                  onClick={() => confirmarExclusao(aluno)}
+                                  className="dropdown-item text-danger"
+                                  onClick={() => confirmarExclusao(m)}
                                 >
                                   Excluir
                                 </button>
@@ -164,19 +133,20 @@ const MatriculaAluno = () => {
               )}
             </PaginationWrapper>
 
-            <ModalMatricula
-              alunoEditando={alunoSelecionado}
-              turmas={turmas}
-              cursos={cursos}
-              onSalvo={() => fetchAlunos()}
-            />
+            {showModal && (
+              <ModalMatricula
+                alunoEditando={matriculaEditando}
+                onClose={() => setShowModal(false)}
+                onSalvo={() => fetchMatriculas()}
+              />
+            )}
 
             <ModalConfirmacao
               show={showConfirm}
               onClose={() => setShowConfirm(false)}
               onConfirm={handleConfirmDelete}
               title="Excluir Matrícula"
-              message={`Tem certeza que deseja excluir o registro do aluno "${alunoParaExcluir?.nome}"?`}
+              message={`Deseja realmente excluir esta matrícula?`}
             />
           </CCardBody>
         </CCard>

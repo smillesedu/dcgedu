@@ -1,0 +1,34 @@
+{
+  "welcome": "Willkommen in der Anwendung",
+  "login": "Einloggen",
+  "logout": "Ausloggen",
+  "language": "Sprache",
+  "header": {
+    "home": "Startseite",
+    "courses": "Kurse",
+    "teachers": "Lehrer",
+    "portfolio": "Portfolio",
+    "testimonial": "Referenzen",
+    "partners": "Unternehmen & Partnerschaften",
+    "contact": "Kontakt",
+    "executive": "Exekutiv"
+  },
+  "banner": {
+    "title": "Erhalte 30% Rabatt auf deine erste Anmeldung",
+    "subtitle": "Lerne mit Mentoren aus internationalen Top-Unternehmen",
+    "description": "Baue Fähigkeiten mit unseren Kursen und Mentoren aus weltweit führenden Unternehmen auf.",
+    "highlight1": "Lerne in deinem Tempo mit flexiblen Zeiten",
+    "highlight2": "Individuelle Lernpfade",
+    "highlight3": "Werde Teil unserer erfolgreichen Community"
+  },
+  "partners": {
+    "title": "Unternehmen und Partner, die uns vertrauen"
+  },
+  "coursesSection": {
+    "explore": "Kurse erkunden",
+    "popular": "Beliebte Kurse",
+    "bestSeller": "Bestseller",
+    "classes": "Kurse",
+    "students": "Studierende"
+  }
+}

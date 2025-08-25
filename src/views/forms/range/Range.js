@@ -1,78 +1,103 @@
-import React from 'react'
-import { CCard, CCardBody, CCardHeader, CCol, CFormLabel, CFormRange, CRow } from '@coreui/react'
-import { DocsComponents, DocsExample } from 'src/components'
+import React, { useState, useEffect } from 'react'
+import { CCard, CCardBody, CCardHeader, CCol, CContainer, CRow } from '@coreui/react'
+import supabase from '../../../supaBaseClient'
+import FiltroCronograma from './FiltroCronograma'
+import ModalEventoCronograma from './ModalEventoCronograma'
+import { PaginationWrapper } from '../../../components'
 
-const Range = () => {
+const CronogramaAluno = () => {
+  const [eventos, setEventos] = useState([])
+  const [eventoSelecionado, setEventoSelecionado] = useState(null)
+  const [showModal, setShowModal] = useState(false)
+
+  const fetchEventos = async (filters = {}) => {
+    let query = supabase.from('cronograma').select(`
+      id,
+      curso:cursos(nome),
+      disciplina:disciplinas(nome),
+      data_evento,
+      hora_inicio,
+      hora_fim,
+      descricao
+    `)
+
+    if (filters.curso) query = query.eq('curso_id', filters.curso)
+    if (filters.disciplina) query = query.eq('disciplina_id', filters.disciplina)
+    if (filters.data_inicio) query = query.gte('data_evento', filters.data_inicio)
+    if (filters.data_fim) query = query.lte('data_evento', filters.data_fim)
+
+    const { data, error } = await query
+    if (!error) setEventos(data || [])
+    else console.error(error)
+  }
+
+  useEffect(() => {
+    fetchEventos()
+  }, [])
+
+  const abrirModal = (evento) => {
+    setEventoSelecionado(evento)
+    setShowModal(true)
+  }
+
   return (
     <CRow>
       <CCol xs={12}>
-        <DocsComponents href="forms/range/" />
-        <CCard className="mb-4">
-          <CCardHeader>
-            <strong>React Range</strong> <small></small>
-          </CCardHeader>
+        <CCardHeader className="my-4">
+          <strong>Cronograma do Aluno</strong>
+        </CCardHeader>
+
+        <CContainer className="px-4">
+          <FiltroCronograma onFiltrar={fetchEventos} />
+        </CContainer>
+
+        <CCard className="my-4">
           <CCardBody>
-            <p className="text-body-secondary small">
-              Create custom <code>&lt;input type=&#34;range&#34;&gt;</code> controls with{' '}
-              <code>&lt;CFormRange&gt;</code>.
-            </p>
-            <DocsExample href="forms/range" tabContentClassName="bg-opacity-10">
-              <CFormLabel htmlFor="customRange1">Example range</CFormLabel>
-              <CFormRange id="customRange1" />
-            </DocsExample>
-          </CCardBody>
-        </CCard>
-      </CCol>
-      <CCol xs={12}>
-        <CCard className="mb-4">
-          <CCardHeader>
-            <strong>React Range</strong> <small>Disabled</small>
-          </CCardHeader>
-          <CCardBody>
-            <p className="text-body-secondary small">
-              Add the <code>disabled</code> boolean attribute on an input to give it a grayed out
-              appearance and remove pointer events.
-            </p>
-            <DocsExample href="forms/range#disabled" tabContentClassName="bg-opacity-10">
-              <CFormLabel htmlFor="disabledRange">Disabled range</CFormLabel>
-              <CFormRange id="disabledRange" disabled />
-            </DocsExample>
-          </CCardBody>
-        </CCard>
-      </CCol>
-      <CCol xs={12}>
-        <CCard className="mb-4">
-          <CCardHeader>
-            <strong>React Range</strong> <small>Min and max</small>
-          </CCardHeader>
-          <CCardBody>
-            <p className="text-body-secondary small">
-              Range inputs have implicit values for <code>min</code> and <code>max</code>—
-              <code>0</code> and <code>100</code>, respectively. You may specify new values for
-              those using the <code>min</code> and <code>max</code> attributes.
-            </p>
-            <DocsExample href="forms/range#min-and-max" tabContentClassName="bg-opacity-10">
-              <CFormLabel htmlFor="customRange2">Example range</CFormLabel>
-              <CFormRange min={0} max={5} defaultValue="3" id="customRange2" />
-            </DocsExample>
-          </CCardBody>
-        </CCard>
-      </CCol>
-      <CCol xs={12}>
-        <CCard className="mb-4">
-          <CCardHeader>
-            <strong>React Range</strong> <small>Steps</small>
-          </CCardHeader>
-          <CCardBody>
-            <p className="text-body-secondary small">
-              By default, range inputs &#34;snap&#34; to integer values. To change this, you can
-              specify a <code>step</code> value. In the example below, we double the number of steps
-              by using <code>step=&#34;0.5&#34;</code>.
-            </p>
-            <DocsExample href="forms/range#steps" tabContentClassName="bg-opacity-10">
-              <CFormLabel htmlFor="customRange3">Example range</CFormLabel>
-              <CFormRange min={0} max={5} step={0.5} defaultValue="3" id="customRange3" />
-            </DocsExample>
+            <PaginationWrapper data={eventos} itemsPerPage={5}>
+              {(paginaAtual) => (
+                <table className="table table-bordered table-striped">
+                  <thead className="table-dark">
+                    <tr>
+                      <th>#</th>
+                      <th>Curso</th>
+                      <th>Disciplina</th>
+                      <th>Data</th>
+                      <th>Hora</th>
+                      <th>Ações</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {paginaAtual.map((evento) => (
+                      <tr key={evento.id}>
+                        <td>{evento.id}</td>
+                        <td>{evento.curso?.nome || '-'}</td>
+                        <td>{evento.disciplina?.nome || '-'}</td>
+                        <td>{evento.data_evento}</td>
+                        <td>
+                          {evento.hora_inicio} - {evento.hora_fim}
+                        </td>
+                        <td>
+                          <button
+                            className="btn btn-primary btn-sm"
+                            onClick={() => abrirModal(evento)}
+                          >
+                            Ver Detalhes
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </PaginationWrapper>
+
+            {showModal && (
+              <ModalEventoCronograma
+                show={showModal}
+                evento={eventoSelecionado}
+                onClose={() => setShowModal(false)}
+              />
+            )}
           </CCardBody>
         </CCard>
       </CCol>
@@ -80,4 +105,4 @@ const Range = () => {
   )
 }
 
-export default Range
+export default CronogramaAluno
