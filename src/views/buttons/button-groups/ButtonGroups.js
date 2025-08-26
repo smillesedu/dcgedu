@@ -24,7 +24,7 @@ const GestaoEquipeAdministrativa = () => {
         telefone,
         status,
         unidade:unidades ( id, nome ),
-        endereco:enderecos (
+        enderecos:enderecos (
           rua,
           casa_numero,
           bairro,
@@ -148,8 +148,8 @@ const GestaoEquipeAdministrativa = () => {
                         <td>{m.unidade?.nome || '-'}</td>
                         <td>{m.status === '1' || m.status === 1 ? 'Ativo' : 'Inativo'}</td>
                         <td>
-                          {m.endereco
-                            ? `${m.endereco.rua ?? ''}, Nº ${m.endereco.casa_numero ?? ''}, ${m.endereco.bairro ?? ''} - ${m.endereco.municipio ?? ''}/${m.endereco.provincia ?? ''}`
+                          {m.enderecos
+                            ? `${m.enderecos.rua ?? ''}, Nº ${m.enderecos.casa_numero ?? ''}, ${m.enderecos.bairro ?? ''} - ${m.enderecos.municipio ?? ''}/${m.enderecos.provincia ?? ''}`
                             : '-'}
                         </td>
                         <td>

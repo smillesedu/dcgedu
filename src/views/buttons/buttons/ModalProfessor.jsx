@@ -28,11 +28,11 @@ const ModalProfessor = ({ professorEditando, onSalvo }) => {
         especialidade: professorEditando.especialidade || '',
         status: professorEditando.status || 'Ativo',
         unidade_id: professorEditando.unidade?.id || '',
-        rua: professorEditando.endereco?.rua || '',
-        casa_numero: professorEditando.endereco?.casa_numero || '',
-        bairro: professorEditando.endereco?.bairro || '',
-        municipio: professorEditando.endereco?.municipio || '',
-        provincia: professorEditando.endereco?.provincia || '',
+        rua: professorEditando.enderecos?.rua || '',
+        casa_numero: professorEditando.enderecos?.casa_numero || '',
+        bairro: professorEditando.enderecos?.bairro || '',
+        municipio: professorEditando.enderecos?.municipio || '',
+        provincia: professorEditando.enderecos?.provincia || '',
       })
     } else {
       resetForm()

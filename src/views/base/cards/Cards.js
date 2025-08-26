@@ -42,7 +42,7 @@ const HistoricoEscolarPage = () => {
   }
 
   const onFiltrar = (filters) => {
-    let filtradas = [...historicos] // aqui assume que seu estado com todos os registros é 'historicos'
+    let filtradas = [...historicos]
 
     // Filtro por intervalo de anos
     if (filters.startDate) {

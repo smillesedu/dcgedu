@@ -107,7 +107,7 @@ export default function ModalAluno({ alunoEditando, onSalvo }) {
     let enderecoId = null
     if (Object.values(novoEndereco).some((v) => v.trim() !== '')) {
       const { data: endData, error: endError } = await supabase
-        .from('endereco')
+        .from('enderecos')
         .insert([novoEndereco])
         .select('id')
         .single()

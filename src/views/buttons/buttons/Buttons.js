@@ -24,7 +24,7 @@ const GestaoProfessores = () => {
       especialidade,
       status,
       unidade:unidades(nome),
-      endereco:enderecos (
+      enderecos:enderecos (
         rua,
         casa_numero,
         bairro,
@@ -132,8 +132,8 @@ const GestaoProfessores = () => {
                         <td>{prof.status ?? '-'}</td>
                         <td>{prof.unidade?.nome ?? '-'}</td>
                         <td>
-                          {prof.endereco
-                            ? `${prof.endereco.rua ?? ''}, Nº ${prof.endereco.casa_numero ?? ''}, ${prof.endereco.bairro ?? ''}`
+                          {prof.enderecos
+                            ? `${prof.enderecos.rua ?? ''}, Nº ${prof.enderecos.casa_numero ?? ''}, ${prof.enderecos.bairro ?? ''}`
                             : '-'}
                         </td>
                         <td>

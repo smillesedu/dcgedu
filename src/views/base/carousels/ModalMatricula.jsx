@@ -4,9 +4,15 @@ import supabase from '../../../supaBaseClient'
 export default function ModalMatricula({ matriculaEditando, onSalvo }) {
   const [alunos, setAlunos] = useState([])
   const [cursos, setCursos] = useState([])
+  const [turmas, setTurmas] = useState([])
+
   const [alunoId, setAlunoId] = useState('')
   const [cursoId, setCursoId] = useState('')
+  const [turmaId, setTurmaId] = useState('')
   const [dataMatricula, setDataMatricula] = useState('')
+
+  const [professor, setProfessor] = useState(null)
+  const [disciplina, setDisciplina] = useState(null)
 
   // Carregar alunos e cursos
   useEffect(() => {
@@ -24,12 +30,37 @@ export default function ModalMatricula({ matriculaEditando, onSalvo }) {
     if (!error) setCursos(data)
   }
 
+  const fetchTurmas = async (cursoId) => {
+    if (!cursoId) return
+    const { data, error } = await supabase
+      .from('turmas')
+      .select(`
+        id,
+        nome,
+        professor:professores (
+          id,
+          nome,
+          disciplina:disciplinas ( id, nome )
+        )
+      `)
+      .eq('curso_id', cursoId)
+
+    if (!error) setTurmas(data || [])
+  }
+
   // Preencher se for edição
   useEffect(() => {
     if (matriculaEditando) {
       setAlunoId(matriculaEditando.aluno_id)
       setCursoId(matriculaEditando.curso_id)
+      setTurmaId(matriculaEditando.turma_id)
       setDataMatricula(matriculaEditando.data_matricula || '')
+
+      // preencher professor/disciplina caso já tenha
+      if (matriculaEditando.turma) {
+        setProfessor(matriculaEditando.turma.professor)
+        setDisciplina(matriculaEditando.turma.professor?.disciplina)
+      }
     } else {
       resetForm()
     }
@@ -38,7 +69,10 @@ export default function ModalMatricula({ matriculaEditando, onSalvo }) {
   const resetForm = () => {
     setAlunoId('')
     setCursoId('')
+    setTurmaId('')
     setDataMatricula('')
+    setProfessor(null)
+    setDisciplina(null)
   }
 
   const salvarMatricula = async (e) => {
@@ -47,6 +81,7 @@ export default function ModalMatricula({ matriculaEditando, onSalvo }) {
     const payload = {
       aluno_id: alunoId,
       curso_id: cursoId,
+      turma_id: turmaId,
       data_matricula: dataMatricula || new Date().toISOString().split('T')[0],
     }
 
@@ -70,6 +105,27 @@ export default function ModalMatricula({ matriculaEditando, onSalvo }) {
     modal.hide()
     resetForm()
   }
+
+  // Quando mudar curso → carregar turmas
+  useEffect(() => {
+    if (cursoId) {
+      fetchTurmas(cursoId)
+    } else {
+      setTurmas([])
+    }
+  }, [cursoId])
+
+  // Quando mudar turma → setar professor/disciplina
+  useEffect(() => {
+    const turmaSelecionada = turmas.find((t) => t.id === turmaId)
+    if (turmaSelecionada) {
+      setProfessor(turmaSelecionada.professor)
+      setDisciplina(turmaSelecionada.professor?.disciplina)
+    } else {
+      setProfessor(null)
+      setDisciplina(null)
+    }
+  }, [turmaId, turmas])
 
   return (
     <div className="modal fade" id="modalMatricula" tabIndex="-1">
@@ -118,6 +174,46 @@ export default function ModalMatricula({ matriculaEditando, onSalvo }) {
                     </option>
                   ))}
                 </select>
+              </div>
+
+              {/* Seleção de turma */}
+              <div className="mb-3">
+                <label className="form-label">Turma</label>
+                <select
+                  className="form-select"
+                  value={turmaId}
+                  onChange={(e) => setTurmaId(e.target.value)}
+                  required
+                >
+                  <option value="">Selecione...</option>
+                  {turmas.map((t) => (
+                    <option key={t.id} value={t.id}>
+                      {t.nome}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Professor (auto-preenchido) */}
+              <div className="mb-3">
+                <label className="form-label">Professor</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={professor?.nome || ''}
+                  disabled
+                />
+              </div>
+
+              {/* Disciplina (auto-preenchida) */}
+              <div className="mb-3">
+                <label className="form-label">Disciplina</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={disciplina?.nome || ''}
+                  disabled
+                />
               </div>
 
               {/* Data da matrícula */}

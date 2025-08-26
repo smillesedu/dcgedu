@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { CCard, CCardBody, CCardHeader, CCol, CContainer, CRow } from '@coreui/react'
 import supabase from '../../../supaBaseClient'
 import { AppBreadcrumb, ModalConfirmacao, PaginationWrapper } from '../../../components'
-import ModalFiltros from './ModalFiltros' // importe o filtro adaptado
+import ModalFiltros from './ModalFiltros'
+import ModalMatricula from './ModalMatricula'
 
 const MatriculasPage = () => {
   const [matriculas, setMatriculas] = useState([])
@@ -41,6 +42,7 @@ const MatriculasPage = () => {
       setMatriculasFiltradas(data || [])
     }
   }
+
 
   const onFiltrar = (filters) => {
     let filtradas = [...matriculas]
@@ -100,8 +102,16 @@ const MatriculasPage = () => {
   return (
     <CRow>
       <CCol xs={12}>
-        <CCardHeader className="my-4">
+        <CCardHeader className="my-4 d-flex justify-content-between align-items-center">
           <strong>Matrícula e Rematrícula</strong>
+          {/* Botão para abrir o modal */}
+          <button
+            className="btn btn-primary btn-sm"
+            data-bs-toggle="modal"
+            data-bs-target="#modalMatricula"
+          >
+            <i className="fa fa-plus"></i> Nova Matrícula
+          </button>
         </CCardHeader>
 
         <CContainer className="px-4">
@@ -110,6 +120,7 @@ const MatriculasPage = () => {
 
         <CCard className="my-4">
           <CCardBody>
+            {/* tabela de matrículas */}
             <PaginationWrapper data={matriculasFiltradas} itemsPerPage={5}>
               {(paginaAtual) => (
                 <table className="table table-bordered table-striped">
@@ -149,7 +160,7 @@ const MatriculasPage = () => {
                               <li>
                                 <button
                                   className="dropdown-item btn-sm"
-                                  onClick={() => {/* lógica para editar */}}
+                                  onClick={() => {/* lógica editar depois */}}
                                 >
                                   <i className="fa fa-edit"></i> Editar
                                 </button>
@@ -179,6 +190,9 @@ const MatriculasPage = () => {
               title="Excluir Matrícula"
               message={`Tem certeza que deseja excluir a matrícula do aluno "${matriculaParaExcluir?.aluno?.nome}"?`}
             />
+
+            {/* Renderizar o modal de matrícula aqui */}
+            <ModalMatricula onSalvo={fetchMatriculas} />
           </CCardBody>
         </CCard>
       </CCol>

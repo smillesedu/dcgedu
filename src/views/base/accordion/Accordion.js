@@ -41,7 +41,7 @@ const Accordion = () => {
         email,
         telefone,
         status,
-        endereco:endereco (
+        enderecos:enderecos (
           casa_numero,
           rua,
           bairro,
@@ -161,8 +161,8 @@ const Accordion = () => {
                         <td>{aluno.telefone}</td>
                         <td>{aluno.status ?? '-'}</td>
                         <td>
-                          {aluno.endereco
-                            ? `${aluno.endereco.rua ?? ''}, Nº ${aluno.endereco.casa_numero ?? ''}, ${aluno.endereco.bairro ?? ''}`
+                          {aluno.enderecos
+                            ? `${aluno.enderecos.rua ?? ''}, Nº ${aluno.enderecos.casa_numero ?? ''}, ${aluno.enderecos.bairro ?? ''}`
                             : '-'}
                         </td>
                         <td>{aluno?.responsavel?.nome || '-'}</td>

@@ -35,11 +35,11 @@ const ModalEquipeAdm = ({ membroEditando, onSalvo }) => {
         telefone: membroEditando.telefone || '',
         status: String(membroEditando.status ?? '1'),
         unidade_id: membroEditando.unidade?.id ?? null,
-        rua: membroEditando.endereco?.rua || '',
-        casa_numero: membroEditando.endereco?.casa_numero || '',
-        bairro: membroEditando.endereco?.bairro || '',
-        municipio: membroEditando.endereco?.municipio || '',
-        provincia: membroEditando.endereco?.provincia || '',
+        rua: membroEditando.enderecos?.rua || '',
+        casa_numero: membroEditando.enderecos?.casa_numero || '',
+        bairro: membroEditando.enderecos?.bairro || '',
+        municipio: membroEditando.enderecos?.municipio || '',
+        provincia: membroEditando.enderecos?.provincia || '',
       })
     } else {
       setForm((prev) => ({
