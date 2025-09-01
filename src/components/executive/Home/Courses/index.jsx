@@ -6,8 +6,17 @@ import 'slick-carousel/slick/slick-theme.css'
 import { Icon } from '@iconify/react'
 import { courseData } from '../../../../app/api/data'
 import { getImagePrefix } from '../../../../utils/util'
+import CourseModal from './CurseModal'
 
 const Courses = () => {
+  const [selectedCourse, setSelectedCourse] = React.useState(null)
+  const [isModalOpen, setIsModalOpen] = React.useState(false)
+
+  const openCourse = (course) => {
+    setSelectedCourse(course)
+    setIsModalOpen(true)
+  }
+
   const { t } = useTranslation();
   const settings = {
     dots: false,
@@ -89,7 +98,7 @@ const Courses = () => {
 
         <Slider {...settings}>
           {courseData.map((items, i) => (
-            <div key={i}>
+            <div key={i} onClick={() => openCourse(items)} className="cursor-pointer">
               <div className="bg-white m-3 mb-12 px-3 pt-3 pb-12 shadow-course-shadow rounded-2xl h-full">
                 <div className="relative rounded-3xl">
                   <img
@@ -143,6 +152,13 @@ const Courses = () => {
             </div>
           ))}
         </Slider>
+
+        {/* Modal de detalhes */}
+        <CourseModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          course={selectedCourse}
+        />
       </div>
     </section>
   )

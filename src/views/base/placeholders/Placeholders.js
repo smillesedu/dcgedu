@@ -25,7 +25,7 @@ const GestaoCalendarioPage = () => {
 
   // Buscar eventos do banco
   const fetchEventos = async (filtros = {}) => {
-    let query = supabase.from('eventos').select('*')
+    let query = supabase.from('eventos_calendario').select('*')
 
     if (filtros.tipo) query = query.eq('tipo', filtros.tipo)
     if (filtros.turma) query = query.eq('turma_id', filtros.turma)

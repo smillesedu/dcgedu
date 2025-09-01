@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { CCard, CCardBody, CCardHeader, CCol, CContainer, CRow } from '@coreui/react'
-import 'bootstrap/dist/js/bootstrap.bundle.min.js'
+import { CCard, CCardBody, CCardHeader, CCol, CContainer, CRow, CButton } from '@coreui/react'
 import supabase from '../../../supaBaseClient'
-import { AppBreadcrumb, ModalConfirmacao, PaginationWrapper } from '../../../components'
+import { ModalConfirmacao, PaginationWrapper } from '../../../components'
 import ModalFiltrosTransferencia from './ModalFiltrosTransferencia'
 import ModalTransferencia from './ModalTransferencia'
 
@@ -11,20 +10,18 @@ const Transferencias = () => {
   const [pessoaSelecionada, setPessoaSelecionada] = useState(null)
   const [showConfirm, setShowConfirm] = useState(false)
   const [historico, setHistorico] = useState([])
+  const [showModalFiltro, setShowModalFiltro] = useState(false)
   const [filters, setFilters] = useState({})
 
-  // Busca histórico com filtros
+  // Buscar histórico
   const buscarHistorico = async (filtros = {}) => {
     let query = supabase.from('transferencias').select(`
       id,
       tipo,
       nome_pessoa,
-      de_turma,
-      para_turma,
-      de_curso,
-      para_curso,
-      de_unidade,
-      para_unidade,
+      de_turma, para_turma,
+      de_curso, para_curso,
+      de_unidade, para_unidade,
       data_transferencia
     `)
 
@@ -36,35 +33,19 @@ const Transferencias = () => {
     const { data, error } = await query
     if (error) {
       console.error('Erro ao buscar histórico:', error)
-      return
+    } else {
+      setHistorico(data || [])
     }
-    setHistorico(data)
   }
 
-  // Abre modal de filtros do histórico
-  const abrirModalHistorico = () => {
-    const modal = new bootstrap.Modal(document.getElementById('modalFiltroTransferencias'))
-    modal.show()
-  }
-
-  // Aplica filtros
-  const handleFiltrar = (filtros) => {
-    setFilters(filtros)
-    fetchPessoas(filtros)
-    buscarHistorico(filtros)
-  }
-
-  // Busca pessoas (alunos e professores)
+  // Buscar pessoas
   const fetchPessoas = async (filtros = {}) => {
-    let query = supabase.from('pessoas') // tabela unificada ou VIEW
-      .select(`
-        id,
-        nome,
-        tipo,
-        turma_atual:turmas(nome),
-        curso_atual:cursos(nome),
-        unidade_atual:unidades(nome)
-      `)
+    let query = supabase.from('pessoas').select(`
+      id, nome, tipo,
+      turma_atual:turmas(nome),
+      curso_atual:cursos(nome),
+      unidade_atual:unidades(nome)
+    `)
 
     if (filtros.tipo) query = query.eq('tipo', filtros.tipo)
     if (filtros.search) query = query.ilike('nome', `%${filtros.search}%`)
@@ -81,23 +62,23 @@ const Transferencias = () => {
     fetchPessoas()
   }, [])
 
-  const abrirModalTransferencia = (pessoa) => {
-    setPessoaSelecionada(pessoa)
-    const modal = new bootstrap.Modal(document.getElementById('modalTransferencia'))
-    modal.show()
+  const handleFiltrar = (filtros) => {
+    setFilters(filtros)
+    fetchPessoas(filtros)
+    buscarHistorico(filtros)
   }
 
   return (
     <CRow>
       <CCol xs={12}>
         <CCardHeader className="my-4">
-          <strong>Gestão de Transferências Internas e Externas</strong>
+          <strong>Gestão de Transferências</strong>
         </CCardHeader>
 
-        <CContainer className="px-4">
-          <button className="btn btn-outline-info mb-3" onClick={abrirModalHistorico}>
-            <i className="fa fa-history"></i> Ver Histórico
-          </button>
+        <CContainer className="px-4 mb-3">
+          <CButton color="info" onClick={() => setShowModalFiltro(true)}>
+            <i className="fa fa-filter"></i> Filtros e Histórico
+          </CButton>
         </CContainer>
 
         {/* Histórico */}
@@ -107,7 +88,7 @@ const Transferencias = () => {
               <strong>Histórico de Transferências</strong>
             </CCardHeader>
             <CCardBody>
-              <table className="table table-striped table-bordered">
+              <table className="table table-bordered table-striped">
                 <thead className="table-dark">
                   <tr>
                     <th>ID</th>
@@ -143,8 +124,8 @@ const Transferencias = () => {
           </CCard>
         )}
 
-        {/* Lista principal */}
-        <CCard className="my-4">
+        {/* Pessoas */}
+        <CCard>
           <CCardBody>
             <PaginationWrapper data={pessoas} itemsPerPage={5}>
               {(paginaAtual) => (
@@ -161,47 +142,22 @@ const Transferencias = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {paginaAtual.map((pessoa) => (
-                      <tr key={pessoa.id}>
-                        <td>{pessoa.id}</td>
-                        <td>{pessoa.nome}</td>
-                        <td>{pessoa.tipo}</td>
-                        <td>{pessoa.turma_atual?.nome || '-'}</td>
-                        <td>{pessoa.curso_atual?.nome || '-'}</td>
-                        <td>{pessoa.unidade_atual?.nome || '-'}</td>
+                    {paginaAtual.map((p) => (
+                      <tr key={p.id}>
+                        <td>{p.id}</td>
+                        <td>{p.nome}</td>
+                        <td>{p.tipo}</td>
+                        <td>{p.turma_atual?.nome || '-'}</td>
+                        <td>{p.curso_atual?.nome || '-'}</td>
+                        <td>{p.unidade_atual?.nome || '-'}</td>
                         <td>
-                          <div className="dropdown">
-                            <button
-                              className="btn btn-secondary btn-sm dropdown-toggle"
-                              type="button"
-                              id={`dropdownMenu-${pessoa.id}`}
-                              data-bs-toggle="dropdown"
-                              aria-expanded="false"
-                            >
-                              Ações
-                            </button>
-                            <ul
-                              className="dropdown-menu"
-                              aria-labelledby={`dropdownMenu-${pessoa.id}`}
-                            >
-                              <li>
-                                <button
-                                  className="dropdown-item btn-sm"
-                                  onClick={() => abrirModalTransferencia(pessoa)}
-                                >
-                                  <i className="fa fa-exchange"></i> Fazer Transferência
-                                </button>
-                              </li>
-                              <li>
-                                <button
-                                  className="dropdown-item btn-sm"
-                                  onClick={() => abrirModalHistorico()}
-                                >
-                                  <i className="fa fa-history"></i> Ver Histórico
-                                </button>
-                              </li>
-                            </ul>
-                          </div>
+                          <CButton
+                            size="sm"
+                            color="primary"
+                            onClick={() => setPessoaSelecionada(p)}
+                          >
+                            <i className="fa fa-exchange"></i> Transferir
+                          </CButton>
                         </td>
                       </tr>
                     ))}
@@ -209,27 +165,29 @@ const Transferencias = () => {
                 </table>
               )}
             </PaginationWrapper>
-
-            {/* Modal de Transferência */}
-            <ModalTransferencia
-              id="modalTransferencia"
-              pessoa={pessoaSelecionada}
-              onSalvo={() => fetchPessoas()}
-            />
-
-            {/* Modal de Filtros para Histórico */}
-            <ModalFiltrosTransferencia id="modalFiltroTransferencias" onFiltrar={handleFiltrar} />
-
-            {/* Modal de Confirmação */}
-            <ModalConfirmacao
-              show={showConfirm}
-              onClose={() => setShowConfirm(false)}
-              onConfirm={() => {}}
-              title="Excluir Registro"
-              message={`Tem certeza que deseja excluir este registro?`}
-            />
           </CCardBody>
         </CCard>
+
+        {/* Modais */}
+        <ModalTransferencia
+          pessoa={pessoaSelecionada}
+          onClose={() => setPessoaSelecionada(null)}
+          onSalvo={() => fetchPessoas(filters)}
+        />
+
+        <ModalFiltrosTransferencia
+          visible={showModalFiltro}
+          onClose={() => setShowModalFiltro(false)}
+          onFiltrar={handleFiltrar}
+        />
+
+        <ModalConfirmacao
+          show={showConfirm}
+          onClose={() => setShowConfirm(false)}
+          onConfirm={() => { }}
+          title="Excluir Registro"
+          message="Tem certeza que deseja excluir este registro?"
+        />
       </CCol>
     </CRow>
   )

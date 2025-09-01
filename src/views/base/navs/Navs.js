@@ -11,6 +11,17 @@ const GestaoNotas = () => {
   const [notaEditando, setNotaEditando] = useState(null)
   const [showConfirm, setShowConfirm] = useState(false)
   const [notaParaExcluir, setNotaParaExcluir] = useState(null)
+  const [showModal, setShowModal] = useState(false)
+
+  const abrirModalNovaNota = () => {
+    setNotaEditando(null)
+    setShowModal(true)
+  }
+
+  const abrirModalEditarNota = (nota) => {
+    setNotaEditando(nota)
+    setShowModal(true)
+  }
 
   useEffect(() => {
     fetchAvaliacoes()
@@ -62,8 +73,8 @@ const GestaoNotas = () => {
     else setNotas(data || [])
   }
 
-  const abrirModalNovaNota = () => setNotaEditando(null)
-  const abrirModalEditarNota = (nota) => setNotaEditando(nota)
+  // const abrirModalNovaNota = () => setNotaEditando(null)
+  // const abrirModalEditarNota = (nota) => setNotaEditando(nota)
 
   const confirmarExclusao = (nota) => {
     setNotaParaExcluir(nota)
@@ -95,8 +106,6 @@ const GestaoNotas = () => {
           <CCol xs={6} md={4} className="d-flex justify-content-end gap-2">
             <button
               className="btn btn-success"
-              data-bs-toggle="modal"
-              data-bs-target="#modalNota"
               onClick={abrirModalNovaNota}
             >
               Lançar Nota
@@ -142,8 +151,6 @@ const GestaoNotas = () => {
                               <li>
                                 <button
                                   className="dropdown-item"
-                                  data-bs-toggle="modal"
-                                  data-bs-target="#modalNota"
                                   onClick={() => abrirModalEditarNota(n)}
                                 >
                                   <i className="fa fa-edit"></i> Editar
@@ -167,7 +174,12 @@ const GestaoNotas = () => {
               )}
             </PaginationWrapper>
 
-            <ModalNota notaEditando={notaEditando} onSalvo={() => fetchNotas()} />
+            <ModalNota
+              visible={showModal}
+              setVisible={setShowModal}
+              notaEditando={notaEditando}
+              onSalvo={() => fetchNotas()}
+            />
             <ModalConfirmacao
               show={showConfirm}
               onClose={() => setShowConfirm(false)}

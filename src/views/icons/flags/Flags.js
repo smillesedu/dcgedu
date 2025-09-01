@@ -92,8 +92,6 @@ const SolicitacaoDocumentosMatricula = () => {
 
   return (
     <CContainer className="px-4">
-      <AppBreadcrumb />
-
       <CCard className="my-4">
         <CCardHeader>
           <strong>Solicitar Documento ou Matrícula</strong>

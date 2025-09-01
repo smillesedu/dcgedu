@@ -18,8 +18,9 @@ const EmissaoDocumentosPage = () => {
     let query = supabase.from('alunos').select(`
       id,
       nome,
-      matricula,
-      turma:turmas ( id, nome ),
+      matricula_id,
+      matricula:matricula_id ( id ),
+      turma:turma_id ( id, nome ),
       status
     `)
 
@@ -93,7 +94,7 @@ const EmissaoDocumentosPage = () => {
                         <tr key={aluno.id}>
                           <td>{aluno.id}</td>
                           <td>{aluno.nome}</td>
-                          <td>{aluno.matricula}</td>
+                          <td>{aluno.matricula?.id}</td>
                           <td>{aluno.turma?.nome ?? '-'}</td>
                           <td>{aluno.status ?? '-'}</td>
                           <td>

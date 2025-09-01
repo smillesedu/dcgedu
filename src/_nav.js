@@ -65,9 +65,34 @@ const _nav = [
         to: '/base/accordion',
       },
       {
+        name: 'Gestão de Turma',
+        component: CNavItem,
+        to: '/base/list-groups',
+      },
+      {
+        name: 'Gestão de Cursos',
+        component: CNavItem,
+        to: '/base/cursos-groups',
+      },
+      {
+        component: CNavItem,
+        to: '/base/popovers',
+        name: 'Gestão de Aulas',
+      },
+      {
         name: 'Matrícula e Rematrícula',
         component: CNavItem,
         to: '/base/carousels',
+      },
+      {
+        component: CNavItem,
+        name: 'Gestão de Professores',
+        to: '/buttons/buttons',
+      },
+      {
+        component: CNavItem,
+        name: 'Atribuição de Disciplinas a Professores',
+        to: '/buttons/dropdowns',
       },
       {
         component: CNavItem,
@@ -78,11 +103,6 @@ const _nav = [
         component: CNavItem,
         to: '/base/collapses',
         name: 'Emissão de Documentos',
-      },
-      {
-        name: 'Gestão de Turma',
-        component: CNavItem,
-        to: '/base/list-groups',
       },
       {
         component: CNavItem,
@@ -99,15 +119,38 @@ const _nav = [
         to: '/base/placeholders',
         name: 'Gestão de Calendário Acadêmico',
       },
+
+    ],
+  },
+  {
+    component: CNavGroup,
+    name: 'Gestão Escolar/Administração',
+    icon: <CIcon icon={cilBell} customClassName="nav-icon" />,
+    items: [
       {
         component: CNavItem,
-        to: '/base/popovers',
-        name: 'Gestão de Aulas',
+        name: 'Gestão de Unidade Escolares',
+        to: '/notifications/alerts',
       },
       {
         component: CNavItem,
-        to: '/base/progress',
-        name: 'Transferência interna e externa de alunos',
+        name: 'Parâmetos e Regras Acadêmicas',
+        to: '/notifications/badges',
+      },
+      {
+        component: CNavItem,
+        name: 'Cadastro de Feriados e Datas letivas',
+        to: '/notifications/modals',
+      },
+      {
+        component: CNavItem,
+        name: 'Controle de Disciplinas',
+        to: '/notifications/toasts',
+      },
+      {
+        component: CNavItem,
+        name: 'Relatórios Gerenciais e Estatísticos',
+        to: '/notifications/relatorio-gerais',
       },
     ],
   },
@@ -117,16 +160,7 @@ const _nav = [
     to: '/buttons',
     icon: <CIcon icon={cilCursor} customClassName="nav-icon" />,
     items: [
-      {
-        component: CNavItem,
-        name: 'Gestão de Professores',
-        to: '/buttons/buttons',
-      },
-      {
-        component: CNavItem,
-        name: 'Atribuição de Disciplinas a Professores',
-        to: '/buttons/dropdowns',
-      },
+
       // {
       //   component: CNavItem,
       //   name: 'Gestão de Equipe Administrativa',
@@ -140,6 +174,11 @@ const _nav = [
       },
       {
         component: CNavItem,
+        to: '/base/progress',
+        name: 'Transferência interna e externa de alunos',
+      },
+      {
+        component: CNavItem,
         name: 'Controle de Carga horária',
         to: '/buttons/time-controler',
       },
@@ -148,16 +187,12 @@ const _nav = [
         name: 'Desempenho do Docente',
         to: '/buttons/look-teatcher',
       },
-      {
-        component: CNavItem,
-        name: 'Portal do Professor',
-        to: '/buttons/teatcher-portal',
-      },
+
     ],
   },
   {
     component: CNavGroup,
-    name: 'Portal do Aluno',
+    name: 'Portal',
     icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
     items: [
       {
@@ -185,6 +220,11 @@ const _nav = [
         component: CNavItem,
         name: 'Cronograma do Aluno',
         to: '/forms/range',
+      },
+      {
+        component: CNavItem,
+        name: 'Portal do Professor',
+        to: '/buttons/teatcher-portal',
       },
       // {
       //   component: CNavItem,
@@ -226,38 +266,7 @@ const _nav = [
       },
     ],
   },
-  {
-    component: CNavGroup,
-    name: 'Gestão Escolar/Administração',
-    icon: <CIcon icon={cilBell} customClassName="nav-icon" />,
-    items: [
-      {
-        component: CNavItem,
-        name: 'Gestão de Unidade Escolares',
-        to: '/notifications/alerts',
-      },
-      {
-        component: CNavItem,
-        name: 'Parâmetos e Regras Acadêmicas',
-        to: '/notifications/badges',
-      },
-      {
-        component: CNavItem,
-        name: 'Cadastro de Feriados e Datas letivas',
-        to: '/notifications/modals',
-      },
-      {
-        component: CNavItem,
-        name: 'Controle de Disciplinas',
-        to: '/notifications/toasts',
-      },
-      {
-        component: CNavItem,
-        name: 'Relatórios Gerenciais e Estatísticos',
-        to: '/notifications/relatorio-gerais',
-      },
-    ],
-  },
+
 
   {
     component: CNavGroup,

@@ -14,10 +14,14 @@ import {
   CRow,
   CCol,
   CSpinner,
+  CFormInput,
+  CFormSelect,
 } from '@coreui/react'
 import supabase from '../../../supaBaseClient'
 import ModalRegistrarPagamento from './ModalRegistrarPagamento'
 import ModalEnviarCobranca from './ModalEnviarCobranca'
+
+import { useFatura } from '../hooks/useFatura' 
 
 const ControleMensalidades = () => {
   const [mensalidades, setMensalidades] = useState([])
@@ -25,6 +29,11 @@ const ControleMensalidades = () => {
   const [showPagamento, setShowPagamento] = useState(false)
   const [showCobranca, setShowCobranca] = useState(false)
   const [mensalidadeSelecionada, setMensalidadeSelecionada] = useState(null)
+  const { gerarFatura, previewFatura } = useFatura()
+
+
+  const [filtroNome, setFiltroNome] = useState('')
+  const [filtroStatus, setFiltroStatus] = useState('')
 
   useEffect(() => {
     buscarMensalidades()
@@ -33,9 +42,8 @@ const ControleMensalidades = () => {
   const buscarMensalidades = async () => {
     setLoading(true)
     const { data, error } = await supabase
-      .from('financeiro_mensalidades')
-      .select(
-        `
+      .from('financeiro') // 👈 ajusta aqui se a tabela for mesmo "financeiro"
+      .select(`
         id,
         aluno_id,
         alunos ( nome ),
@@ -43,8 +51,7 @@ const ControleMensalidades = () => {
         valor,
         pago,
         data_pagamento
-      `,
-      )
+      `)
       .order('mes_referencia', { ascending: false })
 
     if (!error) {
@@ -53,7 +60,7 @@ const ControleMensalidades = () => {
     setLoading(false)
   }
 
-  const abrirPagamento = (mensalidade) => {
+  const abrirPagamento = (mensalidade = null) => {
     setMensalidadeSelecionada(mensalidade)
     setShowPagamento(true)
   }
@@ -63,14 +70,49 @@ const ControleMensalidades = () => {
     setShowCobranca(true)
   }
 
+  const listaFiltrada = mensalidades.filter((m) => {
+    let ok = true
+    if (filtroNome) {
+      ok = ok && m.alunos?.nome?.toLowerCase().includes(filtroNome.toLowerCase())
+    }
+    if (filtroStatus) {
+      ok = ok && (filtroStatus === 'pago' ? m.pago : !m.pago)
+    }
+    return ok
+  })
+
   return (
     <CRow>
       <CCol xs={12}>
         <CCard className="my-4">
-          <CCardHeader>
+          <CCardHeader className="d-flex justify-content-between align-items-center">
             <strong>Controle de Mensalidades e Cobranças</strong>
+            <CButton color="primary" onClick={() => abrirPagamento()}>
+              Novo Pagamento
+            </CButton>
           </CCardHeader>
           <CCardBody>
+            {/* 🔎 Filtros */}
+            <CRow className="mb-3">
+              <CCol md={6}>
+                <CFormInput
+                  placeholder="Filtrar por aluno..."
+                  value={filtroNome}
+                  onChange={(e) => setFiltroNome(e.target.value)}
+                />
+              </CCol>
+              <CCol md={4}>
+                <CFormSelect
+                  value={filtroStatus}
+                  onChange={(e) => setFiltroStatus(e.target.value)}
+                >
+                  <option value="">Todos</option>
+                  <option value="pago">Pago</option>
+                  <option value="pendente">Pendente</option>
+                </CFormSelect>
+              </CCol>
+            </CRow>
+
             {loading ? (
               <div className="text-center p-4">
                 <CSpinner />
@@ -89,7 +131,7 @@ const ControleMensalidades = () => {
                   </CTableRow>
                 </CTableHead>
                 <CTableBody>
-                  {mensalidades.map((m, idx) => (
+                    {listaFiltrada.map((m, idx) => (
                     <CTableRow key={m.id}>
                       <CTableHeaderCell>{idx + 1}</CTableHeaderCell>
                       <CTableDataCell>{m.alunos?.nome}</CTableDataCell>
@@ -112,6 +154,12 @@ const ControleMensalidades = () => {
                             <CButton color="warning" size="sm" onClick={() => abrirCobranca(m)}>
                               Enviar Cobrança
                             </CButton>
+                              <CButton color="info" size="sm" onClick={() => gerarFatura(m)}>
+                                📄 Gerar PDF
+                              </CButton>{' '}
+                              <CButton color="secondary" size="sm" onClick={() => previewFatura(m)}>
+                                👁️ Pré-visualizar
+                              </CButton>
                           </>
                         )}
                       </CTableDataCell>

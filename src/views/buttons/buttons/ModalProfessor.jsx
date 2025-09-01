@@ -17,9 +17,11 @@ const ModalProfessor = ({ professorEditando, onSalvo }) => {
   })
 
   const [unidades, setUnidades] = useState([])
+  const [cursos, setCursos] = useState([])
 
   useEffect(() => {
     fetchUnidades()
+    fetchCursos()
     if (professorEditando) {
       setFormData({
         nome: professorEditando.nome || '',
@@ -28,6 +30,7 @@ const ModalProfessor = ({ professorEditando, onSalvo }) => {
         especialidade: professorEditando.especialidade || '',
         status: professorEditando.status || 'Ativo',
         unidade_id: professorEditando.unidade?.id || '',
+        curso_id: professorEditando.curso?.id || '',
         rua: professorEditando.enderecos?.rua || '',
         casa_numero: professorEditando.enderecos?.casa_numero || '',
         bairro: professorEditando.enderecos?.bairro || '',
@@ -43,6 +46,10 @@ const ModalProfessor = ({ professorEditando, onSalvo }) => {
     const { data, error } = await supabase.from('unidades').select('id, nome')
     if (!error) setUnidades(data)
   }
+  const fetchCursos = async () => {
+    const { data, error } = await supabase.from('cursos').select('id, nome')
+    if (!error) setCursos(data)
+  }
 
   const resetForm = () => {
     setFormData({
@@ -52,6 +59,7 @@ const ModalProfessor = ({ professorEditando, onSalvo }) => {
       especialidade: '',
       status: 'Ativo',
       unidade_id: '',
+      curso_id: '',
       rua: '',
       casa_numero: '',
       bairro: '',
@@ -97,6 +105,7 @@ const ModalProfessor = ({ professorEditando, onSalvo }) => {
       especialidade: formData.especialidade,
       status: formData.status,
       unidade_id: formData.unidade_id,
+      curso_id: formData.curso_id,
       endereco_id,
     }
 
@@ -189,6 +198,22 @@ const ModalProfessor = ({ professorEditando, onSalvo }) => {
                 >
                   <option value="">Selecione</option>
                   {unidades.map((u) => (
+                    <option key={u.id} value={u.id}>
+                      {u.nome}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="col-md-6">
+                <label>Curso</label>
+                <select
+                  name="curso_id"
+                  className="form-select"
+                  value={formData.curso_id}
+                  onChange={handleChange}
+                >
+                  <option value="">Selecione</option>
+                  {cursos.map((u) => (
                     <option key={u.id} value={u.id}>
                       {u.nome}
                     </option>

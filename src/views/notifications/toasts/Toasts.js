@@ -99,6 +99,7 @@ const ControleDisciplinas = () => {
                     <th>Nome</th>
                     <th>Código</th>
                     <th>Carga Horária</th>
+                    <th>Descrição</th>
                     <th>Ações</th>
                   </tr>
                 </thead>
@@ -109,6 +110,7 @@ const ControleDisciplinas = () => {
                       <td>{d.nome}</td>
                       <td>{d.codigo}</td>
                       <td>{d.carga_horaria}h</td>
+                      <td>{d.descricao}</td>
                       <td>
                         <div className="dropdown">
                           <button

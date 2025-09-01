@@ -36,17 +36,17 @@ const RelatoriosGerenciais = () => {
 
     const { data: alunosData } = await supabase
       .from('alunos')
-      .select('id, nome, status, curso_id')
+      .select('id, nome, status, turma_id')
       .order('nome', { ascending: true })
 
     const { data: profData } = await supabase
       .from('professores')
-      .select('id, nome, disciplina')
+      .select('id, nome, curso_id')
       .order('nome', { ascending: true })
 
     const { data: freqData } = await supabase
       .from('frequencias')
-      .select('id, aluno_id, turma_id, presente')
+      .select('id, aluno_id, turma_id, status')
 
     const { data: finData } = await supabase.from('financeiro').select('id, aluno_id, valor, pago')
 

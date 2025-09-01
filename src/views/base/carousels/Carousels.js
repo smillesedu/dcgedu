@@ -19,21 +19,25 @@ const MatriculasPage = () => {
     const { data, error } = await supabase
       .from('matriculas')
       .select(`
-        id,
-        data_matricula,
-        aluno:alunos ( id, nome ),
-        turma:turmas (
-          id,
-          nome,
-          curso:cursos ( nome, descricao ),
-          professor:professores (
-            nome,
-            email,
-            telefone,
-            disciplina:disciplinas ( nome )
-          )
-        )
-      `)
+    id,
+    data_matricula,
+    aluno:alunos!matriculas_aluno_id_fkey (
+      id,
+      nome
+    ),
+    turma:turmas (
+      id,
+      nome,
+      curso:cursos ( nome, descricao ),
+      professor:professores (
+        nome,
+        email,
+        telefone,
+        curso:cursos ( nome )
+      )
+    )
+  `)
+
 
     if (error) {
       console.error('Erro ao buscar matrículas:', error)
@@ -144,7 +148,7 @@ const MatriculasPage = () => {
                         <td>{m.turma?.nome ?? '-'}</td>
                         <td>{m.turma?.curso?.nome ?? '-'}</td>
                         <td>{m.turma?.professor?.nome ?? '-'}</td>
-                        <td>{m.turma?.professor?.disciplina?.nome ?? '-'}</td>
+                        <td>{m.turma?.professor?.curso?.nome ?? '-'}</td>
                         <td>{m.data_matricula}</td>
                         <td>
                           <div className="dropdown">
@@ -160,7 +164,7 @@ const MatriculasPage = () => {
                               <li>
                                 <button
                                   className="dropdown-item btn-sm"
-                                  onClick={() => {/* lógica editar depois */}}
+                                  onClick={() => {/* lógica editar depois */ }}
                                 >
                                   <i className="fa fa-edit"></i> Editar
                                 </button>

@@ -19,7 +19,7 @@ const BoletinsDocumentos = () => {
   const fetchDocumentos = async (filtros = {}) => {
     let query = supabase.from('documentos_alunos').select(`
       id,
-      aluno:nome,
+      aluno:aluno_id(nome),
       tipo,
       titulo,
       arquivo_url,

@@ -8,7 +8,7 @@ const ModalEvento = ({ show, onClose, evento, onSalvo }) => {
   const [form, setForm] = useState({
     titulo: '',
     tipo: 'Aula',
-    turma_id: '',
+    turma_id: null,
     data_inicio: '',
     data_fim: '',
     descricao: '',
@@ -27,11 +27,11 @@ const ModalEvento = ({ show, onClose, evento, onSalvo }) => {
   const handleSave = async () => {
     if (form.id) {
       // Editar evento
-      const { error } = await supabase.from('eventos').update(form).eq('id', form.id)
+      const { error } = await supabase.from('eventos_calendario').update(form).eq('id', form.id)
       if (error) console.error(error)
     } else {
       // Criar evento
-      const { error } = await supabase.from('eventos').insert([form])
+      const { error } = await supabase.from('eventos_calendario').insert([form])
       if (error) console.error(error)
     }
     onSalvo()

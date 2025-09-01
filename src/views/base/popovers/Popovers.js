@@ -20,7 +20,18 @@ const GestaoAulasPage = () => {
   }, [])
 
   const fetchAulas = async (filters = {}) => {
-    let query = supabase.from('aulas').select('*')
+    let query = supabase.from('aulas').select(`
+      id,
+      hora_inicio,
+      hora_fim,
+      sala,
+      status,
+      data_aula,
+      turmas:turma_id(id,nome),
+      professor:professor_id(id,nome),
+      disciplinas:disciplina_id(id,nome)
+    `) // <-- removi a vírgula aqui
+
     if (filters.turma_id) query = query.eq('turma_id', filters.turma_id)
     if (filters.disciplina_id) query = query.eq('disciplina_id', filters.disciplina_id)
     if (filters.professor_id) query = query.eq('professor_id', filters.professor_id)
@@ -30,6 +41,7 @@ const GestaoAulasPage = () => {
     if (error) console.error(error)
     else setAulas(data)
   }
+
 
   const fetchSelects = async () => {
     const { data: turmas } = await supabase.from('turmas').select('*')
@@ -83,9 +95,9 @@ const GestaoAulasPage = () => {
               {aulas.map((aula) => (
                 <tr key={aula.id}>
                   <td>{aula.id}</td>
-                  <td>{aula.turma_id}</td>
-                  <td>{aula.disciplina_id}</td>
-                  <td>{aula.professor_id}</td>
+                  <td>{aula.turmas?.nome}</td>
+                  <td>{aula.disciplinas?.nome}</td>
+                  <td>{aula.professor?.nome}</td>
                   <td>{aula.data_aula}</td>
                   <td>
                     {aula.hora_inicio} - {aula.hora_fim}

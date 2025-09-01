@@ -238,7 +238,7 @@ const DesempenhoAlunoResponsavel = ({ responsavelIdProp = null }) => {
     // relação responsaveis_alunos (assumida: tabela com responsavel_id, aluno_id)
     const { data, error } = await supabase
       .from('responsaveis_alunos')
-      .select('aluno:alunos(id,nome)')
+      .select('aluno:aluno_id(id,nome)')
       .eq('responsavel_id', respId)
 
     if (error) {

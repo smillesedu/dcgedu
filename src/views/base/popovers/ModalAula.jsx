@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import {
+  CCol,
   CModal,
   CModalHeader,
   CModalBody,

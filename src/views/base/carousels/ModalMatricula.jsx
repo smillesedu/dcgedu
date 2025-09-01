@@ -12,7 +12,7 @@ export default function ModalMatricula({ matriculaEditando, onSalvo }) {
   const [dataMatricula, setDataMatricula] = useState('')
 
   const [professor, setProfessor] = useState(null)
-  const [disciplina, setDisciplina] = useState(null)
+  const [cursoProfessor, setCursoProfessor] = useState(null)
 
   // Carregar alunos e cursos
   useEffect(() => {
@@ -37,10 +37,10 @@ export default function ModalMatricula({ matriculaEditando, onSalvo }) {
       .select(`
         id,
         nome,
-        professor:professores (
+        professor:professor_id(
           id,
           nome,
-          disciplina:disciplinas ( id, nome )
+          curso:curso_id(id, nome)
         )
       `)
       .eq('curso_id', cursoId)
@@ -56,10 +56,9 @@ export default function ModalMatricula({ matriculaEditando, onSalvo }) {
       setTurmaId(matriculaEditando.turma_id)
       setDataMatricula(matriculaEditando.data_matricula || '')
 
-      // preencher professor/disciplina caso já tenha
       if (matriculaEditando.turma) {
         setProfessor(matriculaEditando.turma.professor)
-        setDisciplina(matriculaEditando.turma.professor?.disciplina)
+        setCursoProfessor(matriculaEditando.turma.professor?.curso)
       }
     } else {
       resetForm()
@@ -72,7 +71,7 @@ export default function ModalMatricula({ matriculaEditando, onSalvo }) {
     setTurmaId('')
     setDataMatricula('')
     setProfessor(null)
-    setDisciplina(null)
+    setCursoProfessor(null)
   }
 
   const salvarMatricula = async (e) => {
@@ -115,15 +114,15 @@ export default function ModalMatricula({ matriculaEditando, onSalvo }) {
     }
   }, [cursoId])
 
-  // Quando mudar turma → setar professor/disciplina
+  // Quando mudar turma → setar professor/curso dele
   useEffect(() => {
-    const turmaSelecionada = turmas.find((t) => t.id === turmaId)
+    const turmaSelecionada = turmas.find((t) => String(t.id) === String(turmaId))
     if (turmaSelecionada) {
       setProfessor(turmaSelecionada.professor)
-      setDisciplina(turmaSelecionada.professor?.disciplina)
+      setCursoProfessor(turmaSelecionada.professor?.curso)
     } else {
       setProfessor(null)
-      setDisciplina(null)
+      setCursoProfessor(null)
     }
   }, [turmaId, turmas])
 
@@ -205,13 +204,13 @@ export default function ModalMatricula({ matriculaEditando, onSalvo }) {
                 />
               </div>
 
-              {/* Disciplina (auto-preenchida) */}
+              {/* Curso do professor (auto-preenchido) */}
               <div className="mb-3">
-                <label className="form-label">Disciplina</label>
+                <label className="form-label">Curso do Professor</label>
                 <input
                   type="text"
                   className="form-control"
-                  value={disciplina?.nome || ''}
+                  value={cursoProfessor?.nome || ''}
                   disabled
                 />
               </div>

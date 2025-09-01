@@ -12,8 +12,7 @@ import {
 } from '@coreui/react'
 import supabase from '../../../supaBaseClient'
 
-const ModalNota = ({ notaEditando, onSalvo }) => {
-  const [visible, setVisible] = useState(false)
+const ModalNota = ({ visible, setVisible, notaEditando, onSalvo }) => {
   const [avaliacoes, setAvaliacoes] = useState([])
   const [alunos, setAlunos] = useState([])
 
@@ -38,6 +37,8 @@ const ModalNota = ({ notaEditando, onSalvo }) => {
         observacao: notaEditando.observacao || '',
       })
       setVisible(true)
+    } else {
+      setFormData({ aluno_id: '', avaliacao_id: '', nota: '', observacao: '' })
     }
   }, [notaEditando])
 
@@ -86,7 +87,7 @@ const ModalNota = ({ notaEditando, onSalvo }) => {
 
   return (
     <>
-      <CModal id="modalNota" visible={visible} onClose={() => setVisible(false)}>
+      <CModal visible={visible} onClose={() => setVisible(false)}>
         <CModalHeader>
           <CModalTitle>{notaEditando ? 'Editar Nota' : 'Nova Nota'}</CModalTitle>
         </CModalHeader>
