@@ -16,12 +16,36 @@ import {
   CSpinner,
   CFormInput,
   CFormSelect,
+  CDropdown,
+  CDropdownToggle,
+  CDropdownMenu,
+  CDropdownItem,
 } from '@coreui/react'
 import supabase from '../../../supaBaseClient'
 import ModalRegistrarPagamento from './ModalRegistrarPagamento'
 import ModalEnviarCobranca from './ModalEnviarCobranca'
+import { useFatura } from '../hooks/useFatura'
 
-import { useFatura } from '../hooks/useFatura' 
+const mesesNomes = {
+  1: "Janeiro",
+  2: "Fevereiro",
+  3: "Março",
+  4: "Abril",
+  5: "Maio",
+  6: "Junho",
+  7: "Julho",
+  8: "Agosto",
+  9: "Setembro",
+  10: "Outubro",
+  11: "Novembro",
+  12: "Dezembro",
+}
+
+const formatarData = (dataStr) => {
+  if (!dataStr) return "-"
+  const data = new Date(dataStr)
+  return data.toLocaleDateString('pt-PT')
+}
 
 const ControleMensalidades = () => {
   const [mensalidades, setMensalidades] = useState([])
@@ -30,7 +54,6 @@ const ControleMensalidades = () => {
   const [showCobranca, setShowCobranca] = useState(false)
   const [mensalidadeSelecionada, setMensalidadeSelecionada] = useState(null)
   const { gerarFatura, previewFatura } = useFatura()
-
 
   const [filtroNome, setFiltroNome] = useState('')
   const [filtroStatus, setFiltroStatus] = useState('')
@@ -42,13 +65,20 @@ const ControleMensalidades = () => {
   const buscarMensalidades = async () => {
     setLoading(true)
     const { data, error } = await supabase
-      .from('financeiro') // 👈 ajusta aqui se a tabela for mesmo "financeiro"
+      .from('financeiro_pagamentos')
       .select(`
         id,
         aluno_id,
         alunos ( nome ),
+        pagador,
+        tipo,
+        metodo_pagamento,
+        valor_unitario,
+        quantidade,
+        desconto,
+        total,
+        ano_referencia,
         mes_referencia,
-        valor,
         pago,
         data_pagamento
       `)
@@ -119,14 +149,21 @@ const ControleMensalidades = () => {
               </div>
             ) : (
               <CTable striped hover responsive>
-                <CTableHead>
+                  <CTableHead color="light">
                   <CTableRow>
                     <CTableHeaderCell>#</CTableHeaderCell>
                     <CTableHeaderCell>Aluno</CTableHeaderCell>
-                    <CTableHeaderCell>Mês Ref.</CTableHeaderCell>
-                    <CTableHeaderCell>Valor</CTableHeaderCell>
-                    <CTableHeaderCell>Status</CTableHeaderCell>
+                      <CTableHeaderCell>Pagador</CTableHeaderCell>
+                      <CTableHeaderCell>Tipo</CTableHeaderCell>
+                      <CTableHeaderCell>Método</CTableHeaderCell>
+                      <CTableHeaderCell>Valor Unit.</CTableHeaderCell>
+                      <CTableHeaderCell>Qtd</CTableHeaderCell>
+                      <CTableHeaderCell>Desconto</CTableHeaderCell>
+                      <CTableHeaderCell>Total</CTableHeaderCell>
+                      <CTableHeaderCell>Ano Ref.</CTableHeaderCell>
+                      <CTableHeaderCell>Mês Ref.</CTableHeaderCell>
                     <CTableHeaderCell>Data Pagamento</CTableHeaderCell>
+                      <CTableHeaderCell>Status</CTableHeaderCell>
                     <CTableHeaderCell>Ações</CTableHeaderCell>
                   </CTableRow>
                 </CTableHead>
@@ -135,8 +172,41 @@ const ControleMensalidades = () => {
                     <CTableRow key={m.id}>
                       <CTableHeaderCell>{idx + 1}</CTableHeaderCell>
                       <CTableDataCell>{m.alunos?.nome}</CTableDataCell>
-                      <CTableDataCell>{m.mes_referencia}</CTableDataCell>
-                      <CTableDataCell>R$ {m.valor.toFixed(2)}</CTableDataCell>
+                      <CTableDataCell>{m.pagador || '-'}</CTableDataCell>
+                      <CTableDataCell>{m.tipo || '-'}</CTableDataCell>
+                      <CTableDataCell>{m.metodo_pagamento || '-'}</CTableDataCell>
+                      <CTableDataCell>
+                        {m.valor_unitario?.toLocaleString('pt-PT', {
+                          style: 'currency',
+                          currency: 'AOA',
+                        })}
+                      </CTableDataCell>
+                      <CTableDataCell>{m.quantidade}</CTableDataCell>
+                      <CTableDataCell>
+                        {m.desconto?.toLocaleString('pt-PT', {
+                          style: 'currency',
+                          currency: 'AOA',
+                        })}
+                      </CTableDataCell>
+                      <CTableDataCell>
+                        <strong>
+                          {m.total?.toLocaleString('pt-PT', {
+                            style: 'currency',
+                            currency: 'AOA',
+                          })}
+                        </strong>
+                      </CTableDataCell>
+                      <CTableDataCell>{m.ano_referencia}</CTableDataCell>
+                      <CTableDataCell>
+                        {m.mes_referencia
+                          ? m.mes_referencia
+                            .replace(/[\[\]]/g, "")
+                            .split(",")
+                            .map((num) => mesesNomes[num.trim()])
+                            .join(", ")
+                          : "-"}
+                      </CTableDataCell>
+                      <CTableDataCell>{formatarData(m.data_pagamento)}</CTableDataCell>
                       <CTableDataCell>
                         {m.pago ? (
                           <CBadge color="success">Pago</CBadge>
@@ -144,24 +214,30 @@ const ControleMensalidades = () => {
                           <CBadge color="danger">Pendente</CBadge>
                         )}
                       </CTableDataCell>
-                      <CTableDataCell>{m.data_pagamento || '-'}</CTableDataCell>
                       <CTableDataCell>
-                        {!m.pago && (
-                          <>
-                            <CButton color="success" size="sm" onClick={() => abrirPagamento(m)}>
-                              Registrar Pagamento
-                            </CButton>{' '}
-                            <CButton color="warning" size="sm" onClick={() => abrirCobranca(m)}>
-                              Enviar Cobrança
-                            </CButton>
-                              <CButton color="info" size="sm" onClick={() => gerarFatura(m)}>
-                                📄 Gerar PDF
-                              </CButton>{' '}
-                              <CButton color="secondary" size="sm" onClick={() => previewFatura(m)}>
-                                👁️ Pré-visualizar
-                              </CButton>
-                          </>
-                        )}
+                        <CDropdown>
+                          <CDropdownToggle color="secondary" size="sm">
+                            Ações
+                          </CDropdownToggle>
+                          <CDropdownMenu>
+                            {!m.pago && (
+                              <>
+                                <CDropdownItem onClick={() => abrirPagamento(m)}>
+                                  💰 Registrar Pagamento
+                                </CDropdownItem>
+                                <CDropdownItem onClick={() => abrirCobranca(m)}>
+                                  📩 Enviar Cobrança
+                                </CDropdownItem>
+                              </>
+                            )}
+                            <CDropdownItem onClick={() => gerarFatura(m)}>
+                              📄 Gerar PDF
+                            </CDropdownItem>
+                            <CDropdownItem onClick={() => previewFatura(m)}>
+                              👁️ Pré-visualizar
+                            </CDropdownItem>
+                          </CDropdownMenu>
+                        </CDropdown>
                       </CTableDataCell>
                     </CTableRow>
                   ))}

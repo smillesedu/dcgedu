@@ -29,8 +29,8 @@ const HeaderLink = ({ item }) => {
 
   return (
     <div className="relative" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-      <a
-        href={item.href}
+      <Link
+        to={item.href}
         className={`text-lg flex hover:text-black capitalized relative ${
           isActive
             ? 'text-black after:absolute after:w-8 after:h-1 after:bg-primary after:rounded-full after:-bottom-1'
@@ -50,7 +50,7 @@ const HeaderLink = ({ item }) => {
             />
           </svg>
         )}
-      </a>
+      </Link>
 
       {submenuOpen && (
         <div
@@ -61,9 +61,9 @@ const HeaderLink = ({ item }) => {
           {item.submenu?.map((subItem, index) => {
             const isSubItemActive = pathname === subItem.href
             return (
-              <a
+              <Link
                 key={index}
-                href={subItem.href}
+                to={subItem.href}
                 className={`block px-4 py-2 ${
                   isSubItemActive
                     ? 'bg-primary text-white'
@@ -71,7 +71,7 @@ const HeaderLink = ({ item }) => {
                 }`}
               >
                 {t(item.label)}
-              </a>
+              </Link>
             )
           })}
         </div>

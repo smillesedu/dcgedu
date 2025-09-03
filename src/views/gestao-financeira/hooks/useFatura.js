@@ -14,9 +14,8 @@ export const useFatura = () => {
   const previewFatura = (mensalidade) => {
     const doc = gerarFaturaPDF(mensalidade)
     const blob = doc.output("bloburl")
-    window.open(blob, "_blank") // abre em nova aba
+    window.open(blob, "_blank")
   }
-
 
   return { gerarFatura, previewFatura }
 }

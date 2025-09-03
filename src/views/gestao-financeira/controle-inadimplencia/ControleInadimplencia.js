@@ -16,8 +16,9 @@ import {
   CTableBody,
   CTableDataCell,
   CSpinner,
+  CBadge,
 } from '@coreui/react'
-import supabase from '../../../supaBaseClient' 
+import supabase from '../../../supaBaseClient'
 
 const ControleInadimplencia = () => {
   const [loading, setLoading] = useState(true)
@@ -32,19 +33,20 @@ const ControleInadimplencia = () => {
 
   const buscarInadimplentes = async () => {
     setLoading(true)
+
     let query = supabase
       .from('mensalidades')
       .select(
         `
         id,
-        aluno:alunos(nome, matricula),
+        aluno:alunos(id, nome, matricula_id),
         mes_referencia,
         ano_referencia,
         valor,
         status_pagamento
       `,
       )
-      .eq('status_pagamento', 'Atrasado')
+      .eq('status_pagamento', false) // pega só os que não foram pagos
       .order('ano_referencia', { ascending: false })
       .order('mes_referencia', { ascending: false })
 
@@ -75,18 +77,24 @@ const ControleInadimplencia = () => {
                   <CFormLabel>Mês</CFormLabel>
                   <CFormSelect value={mesFiltro} onChange={(e) => setMesFiltro(e.target.value)}>
                     <option value="">Todos</option>
-                    <option value="1">Janeiro</option>
-                    <option value="2">Fevereiro</option>
-                    <option value="3">Março</option>
-                    <option value="4">Abril</option>
-                    <option value="5">Maio</option>
-                    <option value="6">Junho</option>
-                    <option value="7">Julho</option>
-                    <option value="8">Agosto</option>
-                    <option value="9">Setembro</option>
-                    <option value="10">Outubro</option>
-                    <option value="11">Novembro</option>
-                    <option value="12">Dezembro</option>
+                    {[
+                      'Janeiro',
+                      'Fevereiro',
+                      'Março',
+                      'Abril',
+                      'Maio',
+                      'Junho',
+                      'Julho',
+                      'Agosto',
+                      'Setembro',
+                      'Outubro',
+                      'Novembro',
+                      'Dezembro',
+                    ].map((mes, i) => (
+                      <option key={i + 1} value={i + 1}>
+                        {mes}
+                      </option>
+                    ))}
                   </CFormSelect>
                 </CCol>
                 <CCol md={4}>
@@ -136,8 +144,14 @@ const ControleInadimplencia = () => {
                           <CTableDataCell>{item.aluno?.matricula}</CTableDataCell>
                           <CTableDataCell>{item.mes_referencia}</CTableDataCell>
                           <CTableDataCell>{item.ano_referencia}</CTableDataCell>
-                          <CTableDataCell>R$ {parseFloat(item.valor).toFixed(2)}</CTableDataCell>
-                          <CTableDataCell>{item.status_pagamento}</CTableDataCell>
+                          <CTableDataCell>R$ {parseFloat(item?.valor).toFixed(2)}</CTableDataCell>
+                          <CTableDataCell>
+                            {item.status_pagamento ? (
+                              <CBadge color="success">Pago</CBadge>
+                            ) : (
+                              <CBadge color="danger">Pendente</CBadge>
+                            )}
+                          </CTableDataCell>
                         </CTableRow>
                       ))
                     ) : (

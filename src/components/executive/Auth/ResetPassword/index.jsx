@@ -4,6 +4,7 @@ import { useNavigate, Link, useParams } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import Loader from '../../Common/Loader' // ajuste o path
 import { getImagePrefix } from '../../../../utils/util' // ajuste o path
+import { logo } from '../../../../assets' // ajuste o path
 
 const ResetPassword = () => {
   const { token } = useParams() // pega o token da rota /reset/:token
@@ -88,14 +89,14 @@ const ResetPassword = () => {
               <div className="mb-10 text-center">
                 <Link to="/" className="mx-auto inline-block max-w-[160px]">
                   <img
-                    src={`${getImagePrefix()}images/logo/logo.svg`}
+                    src={`${getImagePrefix()}${logo}`}
                     alt="logo"
                     width={140}
                     height={30}
                     className="dark:hidden"
                   />
                   <img
-                    src={`${getImagePrefix()}images/logo/logo-white.svg`}
+                    src={`${getImagePrefix()}${logo}`}
                     alt="logo"
                     width={140}
                     height={30}

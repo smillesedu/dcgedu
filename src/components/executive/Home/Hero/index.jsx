@@ -2,6 +2,12 @@ import { Icon } from '@iconify/react/dist/iconify.js'
 import { getImagePrefix } from '../../../../utils/util'
 import { useTranslation } from 'react-i18next';
 
+import {
+  ckeckCircle,
+  mahila,
+} from '../../../../assets'
+
+
 const Hero = () => {
   const { t } = useTranslation();
 
@@ -40,7 +46,7 @@ const Hero = () => {
             <div className="flex items-center justify-between pt-10 lg:pt-4">
               <div className="flex gap-2">
                 <img
-                  src={`${getImagePrefix()}images/banner/check-circle.svg`}
+                  src={`${getImagePrefix()}${ckeckCircle}`}
                   alt="check-image"
                   width={30}
                   height={30}
@@ -50,7 +56,7 @@ const Hero = () => {
               </div>
               <div className="flex gap-2">
                 <img
-                  src={`${getImagePrefix()}images/banner/check-circle.svg`}
+                  src={`${getImagePrefix()}${ckeckCircle}`}
                   alt="check-image"
                   width={30}
                   height={30}
@@ -60,7 +66,7 @@ const Hero = () => {
               </div>
               <div className="flex gap-2">
                 <img
-                  src={`${getImagePrefix()}images/banner/check-circle.svg`}
+                  src={`${getImagePrefix()}${ckeckCircle}`}
                   alt="check-image"
                   width={30}
                   height={30}
@@ -72,7 +78,7 @@ const Hero = () => {
           </div>
           <div className="col-span-6 flex justify-center">
             <img
-              src={`${getImagePrefix()}images/banner/mahila.png`}
+              src={`${getImagePrefix()}.${mahila}`}
               alt="nothing"
               width={1000}
               height={805}

@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { getImagePrefix } from '../../../utils/util'
+import { light404 } from '../../../../public/assets'
 
 const NotFound = () => {
   return (
@@ -10,7 +11,7 @@ const NotFound = () => {
           <div className="w-full px-4 md:w-5/12 lg:w-6/12">
             <div className="relative mx-auto aspect-[129/138] max-w-[357px] text-center">
               <img
-                src={`${getImagePrefix()}images/404.svg`}
+                src={`${getImagePrefix()}${light404}`}
                 alt="image"
                 width={0}
                 height={0}

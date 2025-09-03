@@ -1,4 +1,7 @@
 import { getImagePrefix } from '../../../../utils/util'
+import {
+  send,
+} from '../../../../assets'
 
 const Newsletter = () => {
   const isProd = process.env.NODE_ENV === 'production'
@@ -32,7 +35,7 @@ const Newsletter = () => {
                       className="p-3 lg:p-5 focus:outline-none focus:shadow-outline bg-ultramarine hover:bg-midnightblue duration-150 ease-in-out rounded-full"
                     >
                       <img
-                        src={`${getImagePrefix()}images/newsletter/send.svg`}
+                        src={`${getImagePrefix()}${send}`}
                         alt="send-icon"
                         width={30}
                         height={30}

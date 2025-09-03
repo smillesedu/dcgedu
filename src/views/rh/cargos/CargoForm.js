@@ -1,13 +1,28 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { addCargo } from './CargoService'
+import { getDepartamentos } from './DepertamentoService' // serviço que busca os departamentos
 
 const CargoForm = ({ onClose, refresh }) => {
   const [form, setForm] = useState({
     nome: '',
-    departamento: '',
+    departamento_id: '',
     nivel: '',
     faixa_salarial: '',
   })
+
+  const [departamentos, setDepartamentos] = useState([])
+
+  useEffect(() => {
+    const fetchDepartamentos = async () => {
+      try {
+        const data = await getDepartamentos()
+        setDepartamentos(data)
+      } catch (error) {
+        console.error("Erro ao carregar departamentos:", error)
+      }
+    }
+    fetchDepartamentos()
+  }, [])
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value })
@@ -33,14 +48,26 @@ const CargoForm = ({ onClose, refresh }) => {
           className="border p-2 rounded"
           required
         />
-        <input
-          type="text"
-          name="departamento"
-          placeholder="Departamento"
-          value={form.departamento}
-          onChange={handleChange}
-          className="border p-2 rounded"
-        />
+
+        {/* Select de Departamentos */}
+        <div>
+          <label className="form-label">Departamento</label>
+          <select
+            name="departamento_id"
+            className="border p-2 rounded w-full"
+            value={form.departamento_id || ""}
+            onChange={handleChange}
+            required
+          >
+            <option value="">Selecione um departamento</option>
+            {departamentos.map((d) => (
+              <option key={d.id} value={d.id}>
+                {d.nome}
+              </option>
+            ))}
+          </select>
+        </div>
+
         <input
           type="text"
           name="nivel"
@@ -57,6 +84,7 @@ const CargoForm = ({ onClose, refresh }) => {
           onChange={handleChange}
           className="border p-2 rounded"
         />
+
         <div className="flex gap-2 mt-2">
           <button type="submit" className="px-4 py-2 bg-green-600 text-white rounded">
             Salvar

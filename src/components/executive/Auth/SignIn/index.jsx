@@ -109,10 +109,12 @@ import SocialSignIn from '../SocialSignIn'
 import Logo from '../../Layout/Header/Logo'
 import Loader from '../../Common/Loader'
 import { UserAuth } from '../../../../context/AuthContext'
+import { useTranslation } from 'react-i18next'
 
 const Signin = () => {
   const navigate = useNavigate()
   const { signInUser } = UserAuth()
+  const { t, i18n } = useTranslation()
 
   const [loginData, setLoginData] = useState({ email: '', password: '' })
   const [loading, setLoading] = useState(false)
@@ -138,7 +140,7 @@ const Signin = () => {
         <Logo />
       </div>
 
-      <SocialSignIn />
+      {/* <SocialSignIn /> */}
 
       <span className="z-1 relative my-8 block text-center before:content-[''] before:absolute before:h-px before:w-40% before:bg-black/15 before:left-0 before:top-3 after:content-[''] after:absolute after:h-px after:w-40% after:bg-black/15 after:top-3 after:right-0">
         <span className="text-body-secondary relative z-10 inline-block px-3 text-base text-black">
@@ -153,7 +155,7 @@ const Signin = () => {
             placeholder="Email"
             value={loginData.email}
             onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
-            className="w-full rounded-md border border-black/20 bg-transparent px-5 py-3 text-base outline-none transition placeholder:text-grey focus:border-primary focus-visible:shadow-none text-white"
+            className="w-full rounded-md border border-black/20 bg-transparent px-5 py-3 text-black  text-base outline-none transition placeholder:text-grey focus:border-primary focus-visible:shadow-none"
           />
         </div>
         <div className="mb-[22px]">
@@ -162,32 +164,32 @@ const Signin = () => {
             placeholder="Password"
             value={loginData.password}
             onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
-            className="w-full rounded-md border border-black/20 bg-transparent px-5 py-3 text-base outline-none transition placeholder:text-grey focus:border-primary focus-visible:shadow-none text-white"
+            className="w-full rounded-md border border-black/20 bg-transparent px-5 py-3 text-black text-base outline-none transition placeholder:text-grey focus:border-primary focus-visible:shadow-none"
           />
         </div>
         <div className="mb-9">
           <button
             type="submit"
             disabled={loading}
-            className="bg-primary w-full py-3 rounded-lg text-18 font-medium border border-primary hover:text-primary hover:bg-transparent"
+            className="bg-primary w-full py-3 rounded-lg text-18 text-black font-medium border border-primary hover:text-white hover:bg-transparent"
           >
-            {loading ? <Loader /> : 'Sign In'}
+            {loading ? <Loader /> : t('login')}
           </button>
         </div>
       </form>
 
       <Link
         to="/forgot-password"
-        className="mb-2 inline-block text-base text-white hover:text-primary"
+        className="mb-2 inline-block text-base text-primary hover:text-primary"
       >
         Forgot Password?
       </Link>
-      <p className="text-body-secondary text-white text-base">
+      {/* <p className="text-body-secondary text-white text-base">
         Not a member yet?{' '}
         <Link to="/signup" className="text-primary hover:underline">
           Sign Up
         </Link>
-      </p>
+      </p> */}
     </>
   )
 }

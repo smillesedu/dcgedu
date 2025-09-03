@@ -15,7 +15,7 @@ const ControlePropostas = () => {
   const fetchPropostas = async () => {
     const { data, error } = await supabase
       .from('propostas')
-      .select('id, lead:leads(nome), valor, desconto, status, validade')
+      .select('id, lead:lead_id(nome), valor, desconto, status, validade')
       .order('id', { ascending: false })
     if (!error) setPropostas(data || [])
   }

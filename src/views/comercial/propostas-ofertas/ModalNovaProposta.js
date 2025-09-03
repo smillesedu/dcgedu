@@ -35,7 +35,7 @@ const ModalNovaProposta = ({ visible, onClose, onSave }) => {
         lead_id: leadId,
         valor: parseFloat(valor),
         desconto: parseInt(desconto),
-        status: 'Enviada',
+        status: true,
         validade,
       },
     ])

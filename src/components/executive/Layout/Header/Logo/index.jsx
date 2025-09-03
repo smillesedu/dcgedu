@@ -1,3 +1,4 @@
+import { logo } from '../../../../../assets'
 import { getImagePrefix } from '../../../../../utils/util'
 import { Link } from 'react-router-dom'
 
@@ -5,11 +6,11 @@ const Logo = () => {
   return (
     <Link href="/">
       <img
-        src={`${getImagePrefix()}images/logo/logo.svg`}
+        src={`${getImagePrefix()}${logo}`}
         alt="logo"
         width={160}
         height={50}
-        style={{ width: 'auto', height: 'auto' }}
+        style={{ width: '150px', height: 'auto' }}
         quality={100}
       />
     </Link>

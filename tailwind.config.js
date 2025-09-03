@@ -29,8 +29,8 @@ const config = {
         '75%': '75%',
       },
       backgroundImage: {
-        'newsletter-bg': `url('/images/newsletter/bgFile.png')`,
-        'newsletter-bg-2': `url('/E-learning/images/newsletter/bgFile.png')`,
+        'newsletter-bg': `url('./src/assets/images/newsletter/bgg.png')`,
+        'newsletter-bg-2': `url('./src/assets/images/newsletter/bgFile.png')`,
       },
     },
   },

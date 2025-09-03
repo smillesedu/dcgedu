@@ -1,7 +1,9 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 
-import ComponentsImg from 'src/assets/images/components.webp'
+import {
+  components
+} from '../assets'
 
 const DocsComponents = (props) => (
   <div className="bg-primary bg-opacity-10 border border-2 border-primary rounded mb-4">
@@ -9,7 +11,7 @@ const DocsComponents = (props) => (
       <div className="col-xl-auto col-12 d-none d-xl-block p-0">
         <img
           className="img-fluid"
-          src={ComponentsImg}
+          src={components}
           width="160px"
           height="160px"
           alt="CoreUI PRO hexagon"
@@ -25,7 +27,7 @@ const DocsComponents = (props) => (
         explore extended examples, detailed API documentation, and customization options, refer to
         our docs.
       </div>
-      <div className="col-md-auto col-12 mt-3 mt-lg-0">
+      {/* <div className="col-md-auto col-12 mt-3 mt-lg-0">
         <a
           className="btn btn-primary text-nowrap text-white"
           href={`https://coreui.io/react/docs/${props.href}`}
@@ -34,7 +36,7 @@ const DocsComponents = (props) => (
         >
           Explore Documentation
         </a>
-      </div>
+      </div> */}
     </div>
   </div>
 )

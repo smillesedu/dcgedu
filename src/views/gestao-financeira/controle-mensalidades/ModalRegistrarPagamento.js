@@ -112,6 +112,7 @@ const ModalRegistrarPagamento = ({ show, setShow, atualizar }) => {
         aluno_id: alunoId,
         pagador,
         tipo: item.value,
+        pago: true,
         metodo_pagamento: metodo,
         valor_unitario: item.valorUnitario,
         quantidade: item.quantidade,

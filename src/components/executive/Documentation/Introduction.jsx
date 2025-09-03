@@ -2,6 +2,14 @@ import { useState } from 'react'
 import { Icon } from '@iconify/react'
 import { DocNavigation } from './DocNavigation'
 
+import {
+  categoriesNext,
+  categoriesReact,
+  categoriesTailwind,
+  categoriesTypescript,
+  nextauth,
+} from '../../../assets'
+
 export const Introduction = () => {
   const [docNavbarOpen, setDocNavbarOpen] = useState(false)
 
@@ -9,31 +17,31 @@ export const Introduction = () => {
     {
       id: '1',
       packageName: 'NextJs',
-      img: '/images/documentation/Categories=Nextjs.svg',
+      img: categoriesNext,
       version: '15.0.3',
     },
     {
       id: '2',
       packageName: 'React',
-      img: '/images/documentation/Categories=React.svg',
+      img: categoriesReact,
       version: '18.3.1',
     },
     {
       id: '3',
       packageName: 'Tailwindcss',
-      img: '/images/documentation/Categories=Tailwind.svg',
+      img: categoriesTailwind,
       version: '3.4.1',
     },
     {
       id: '4',
       packageName: 'NextAuth',
-      img: '/images/documentation/nextauth.png',
+      img: nextauth,
       version: '4.24.7',
     },
     {
       id: '5',
       packageName: 'Typescript',
-      img: '/images/documentation/Categories=Typescript.svg',
+      img: categoriesTypescript,
       version: '5.6.3',
     },
   ]

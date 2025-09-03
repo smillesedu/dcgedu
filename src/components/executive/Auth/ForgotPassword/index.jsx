@@ -4,6 +4,10 @@ import axios from 'axios'
 import Loader from '../../Common/Loader' // ajuste o caminho se necessário
 import { useNavigate, Link } from 'react-router-dom'
 import { getImagePrefix } from '../../../../utils/util' // ajuste o caminho
+import {
+  logo
+} from '../../../../assets'
+
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('')
@@ -55,14 +59,14 @@ const ForgotPassword = () => {
               <div className="mb-10 text-center">
                 <Link to="/" className="mx-auto inline-block max-w-[160px]">
                   <img
-                    src={`${getImagePrefix()}images/logo/Logo.svg`}
+                    src={`${getImagePrefix()}${logo}`}
                     alt="logo"
                     width={140}
                     height={30}
                     className="dark:hidden"
                   />
                   <img
-                    src={`${getImagePrefix()}images/logo/logo-white.svg`}
+                    src={`${getImagePrefix()}${logo}`}
                     alt="logo"
                     width={140}
                     height={30}

@@ -6,6 +6,10 @@ import React from 'react'
 import { MentorData } from '../../../../app/api/data'
 import { getImagePrefix } from '../../../../utils/util'
 
+import {
+  linkedin,
+} from '../../../../assets'
+
 const Mentor = () => {
   const settings = {
     dots: false,
@@ -58,7 +62,7 @@ const Mentor = () => {
                   />
                   <div className="absolute right-[84px] bottom-[102px] bg-white rounded-full p-4">
                     <img
-                      src={`${getImagePrefix()}images/mentor/linkedin.svg`}
+                      src={`${getImagePrefix()}${linkedin}`}
                       alt="linkedin-image"
                       width={25}
                       height={24}

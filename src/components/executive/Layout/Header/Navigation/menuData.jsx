@@ -13,8 +13,8 @@
 // headerData.js
 export const headerData = [
   { label: "header.home", href: "/" },
-  { label: "header.courses", href: "/#courses" },
-  { label: "header.partners", href: "/#biss2biss" },
-  { label: "header.contact", href: "/#contato" },
+  { label: "header.courses", href: "#courses" },
+  { label: "header.partners", href: "#biss2biss" },
+  { label: "header.contact", href: "#contato" },
   { label: "header.executive", href: "/executive" },
 ]

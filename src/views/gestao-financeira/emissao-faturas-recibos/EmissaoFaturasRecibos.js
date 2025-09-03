@@ -16,29 +16,31 @@ import {
   CTableBody,
   CTableDataCell,
   CSpinner,
+  CBadge,
 } from '@coreui/react'
-import supabase from '../../../supaBaseClient' 
-// import jsPDF from 'jspdf'  // futuramente para gerar PDFs
+import { useNavigate } from 'react-router-dom'
+import supabase from '../../../supaBaseClient'
 
 const EmissaoFaturasRecibos = () => {
   const [matriculaBusca, setMatriculaBusca] = useState('')
   const [mensalidades, setMensalidades] = useState([])
   const [loading, setLoading] = useState(false)
+  const navigate = useNavigate()
 
   const buscarMensalidades = async () => {
     if (!matriculaBusca) return
     setLoading(true)
 
     const { data, error } = await supabase
-      .from('mensalidades')
+      .from('financeiro_pagamentos')
       .select(
         `
         id,
         aluno:alunos(nome, matricula),
         mes_referencia,
         ano_referencia,
-        valor,
-        status_pagamento,
+        valor_unitario,
+        pago,
         data_vencimento,
         data_pagamento
       `,
@@ -52,17 +54,22 @@ const EmissaoFaturasRecibos = () => {
   }
 
   const emitirFatura = (mensalidade) => {
-    // Aqui futuramente geramos PDF usando jsPDF ou PDFMake
     alert(
       `Fatura para ${mensalidade.aluno?.nome} - ${mensalidade.mes_referencia}/${mensalidade.ano_referencia}`,
     )
   }
 
   const emitirRecibo = (mensalidade) => {
-    // Aqui futuramente geramos PDF de recibo
     alert(
       `Recibo para ${mensalidade.aluno?.nome} - ${mensalidade.mes_referencia}/${mensalidade.ano_referencia}`,
     )
+  }
+
+  const irParaPagamento = (mensalidade) => {
+    // Redireciona e envia estado para abrir a modal do pagamento
+    navigate('/gestao-financeira/controle-mensalidades', {
+      state: { abrirPagamento: true, mensalidadeId: mensalidade.id },
+    })
   }
 
   return (
@@ -123,16 +130,42 @@ const EmissaoFaturasRecibos = () => {
                         <CTableDataCell>{item.aluno?.matricula}</CTableDataCell>
                         <CTableDataCell>{item.mes_referencia}</CTableDataCell>
                         <CTableDataCell>{item.ano_referencia}</CTableDataCell>
-                        <CTableDataCell>R$ {parseFloat(item.valor).toFixed(2)}</CTableDataCell>
-                        <CTableDataCell>{item.status_pagamento}</CTableDataCell>
                         <CTableDataCell>
-                          {item.status_pagamento !== 'Pago' ? (
-                            <CButton size="sm" color="warning" onClick={() => emitirFatura(item)}>
-                              Fatura
-                            </CButton>
+                          R$ {parseFloat(item.valor_unitario).toFixed(2)}
+                        </CTableDataCell>
+                        <CTableDataCell>
+                          {item.pago ? (
+                            <CBadge color="success">Pago</CBadge>
                           ) : (
-                            <CButton size="sm" color="success" onClick={() => emitirRecibo(item)}>
-                              Recibo
+                            <CBadge color="danger">Pendente</CBadge>
+                          )}
+                        </CTableDataCell>
+                        <CTableDataCell>
+                          {item.pago ? (
+                            <>
+                              <CButton
+                                size="sm"
+                                color="info"
+                                className="me-2"
+                                onClick={() => emitirFatura(item)}
+                              >
+                                Fatura
+                              </CButton>
+                              <CButton
+                                size="sm"
+                                color="success"
+                                onClick={() => emitirRecibo(item)}
+                              >
+                                Recibo
+                              </CButton>
+                            </>
+                          ) : (
+                            <CButton
+                              size="sm"
+                              color="warning"
+                              onClick={() => irParaPagamento(item)}
+                            >
+                              Pagar
                             </CButton>
                           )}
                         </CTableDataCell>

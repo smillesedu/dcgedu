@@ -9,6 +9,10 @@ import HeaderLink from './Navigation/HeaderLink'
 import MobileHeaderLink from './Navigation/MobileHeaderLink'
 import LanguageSelector from '../../../LanguageSelector'
 
+import {
+  closed,
+} from '../../../../assets'
+
 import { useTranslation } from "react-i18next"
 
 
@@ -62,8 +66,7 @@ const Header = () => {
 
   return (
     <header
-      className={`fixed top-0 z-40 w-full pb-5 transition-all duration-300 bg-white ${sticky ? 'shadow-lg py-5' : 'shadow-none py-6'
-        }`}
+      className={`fixed top-0 z-40 w-full pb-5 transition-all duration-300 bg-white ${sticky ? 'shadow-lg py-5' : 'shadow-none py-6'}`}
     >
       <div className="absolute right-10">
         <LanguageSelector />
@@ -105,12 +108,12 @@ const Header = () => {
               </div>
             )}
 
-            <button
+            {/* <button
               className="hidden lg:block bg-primary/15 hover:bg-primary text-primary hover:text-white px-16 py-3 rounded-full text-lg font-medium"
               onClick={() => setIsSignUpOpen(true)}
             >
               {t('logout')}
-            </button>
+            </button> */}
             {isSignUpOpen && (
               <div className="fixed top-0 left-0 w-full h-full bg-black/50 flex items-center justify-center z-50">
                 <div
@@ -161,7 +164,7 @@ const Header = () => {
             </h2>
             <button
               onClick={() => setNavbarOpen(false)}
-              className="bg-[url('/images/closed.svg')] bg-no-repeat bg-contain w-5 h-5 absolute top-0 right-0 mr-8 mt-8"
+              className="bg-[url(`${closed}`)] bg-no-repeat bg-contain w-5 h-5 absolute top-0 right-0 mr-8 mt-8"
               aria-label="Close menu Modal"
             ></button>
           </div>
@@ -179,7 +182,7 @@ const Header = () => {
               >
                 {t('login')}
               </button>
-              <button
+              {/* <button
                 className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-blue-700"
                 onClick={() => {
                   setIsSignUpOpen(true)
@@ -187,7 +190,7 @@ const Header = () => {
                 }}
               >
                 {t('logout')}
-              </button>
+              </button> */}
             </div>
           </nav>
         </div>
