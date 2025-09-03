@@ -18,28 +18,28 @@ import {
 
 export const TruestedCompanies = [
   {
-    imgSrc: airbnb,
+    imgSrc: './images/companies/airbnb.svg',
   },
   {
-    imgSrc: fedex,
+    imgSrc: './images/companies/fedex.svg',
   },
   {
-    imgSrc: google,
+    imgSrc: './images/companies/google.svg',
   },
   {
-    imgSrc: hubspot,
+    imgSrc: './images/companies/hubspot.svg',
   },
   {
-    imgSrc: microsoft,
+    imgSrc: './images/companies/microsoft.svg',
   },
   {
-    imgSrc: walmart,
+    imgSrc: './images/companies/walmart.svg',
   },
   {
-    imgSrc: airbnb,
+    imgSrc: './images/companies/airbnb.svg',
   },
   {
-    imgSrc: fedex,
+    imgSrc: './images/companies/fedex.svg',
   },
 ]
 
