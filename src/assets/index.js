@@ -71,8 +71,6 @@ import react from './images/react.jpg'
 import vue from './images/vue.jpg'
 
 export {
-  // logoB,
-  // sygnet,
   avatar_1,
   avatar_2,
   avatar_3,

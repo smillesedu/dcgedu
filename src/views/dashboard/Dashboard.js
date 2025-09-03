@@ -43,8 +43,6 @@ import {
   cilUserFemale,
 } from '@coreui/icons'
 
-
-
 import WidgetsBrand from '../widgets/WidgetsBrand'
 import WidgetsDropdown from '../widgets/WidgetsDropdown'
 import MainChart from './MainChart'
