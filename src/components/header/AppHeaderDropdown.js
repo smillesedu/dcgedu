@@ -21,7 +21,7 @@ import {
   cilUser,
 } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
-import { avatar_8 } from '../../../public/assets'
+import { avatar_8 } from '../../assets'
 
 
 const AppHeaderDropdown = () => {

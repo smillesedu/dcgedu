@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { getImagePrefix } from '../../../utils/util'
-import { light404 } from '../../../../public/assets'
+import { light404 } from '../../../assets'
 
 const NotFound = () => {
   return (

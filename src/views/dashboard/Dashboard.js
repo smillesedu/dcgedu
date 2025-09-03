@@ -48,7 +48,7 @@ import {
 import WidgetsBrand from '../widgets/WidgetsBrand'
 import WidgetsDropdown from '../widgets/WidgetsDropdown'
 import MainChart from './MainChart'
-import { avatar_1, avatar_2, avatar_3, avatar_4, avatar_5, avatar_6 } from '../../../public/assets'
+import { avatar_1, avatar_2, avatar_3, avatar_4, avatar_5, avatar_6 } from '../../assets'
 
 const Dashboard = () => {
   const progressExample = [
