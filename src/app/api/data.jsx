@@ -18,28 +18,28 @@ import {
 
 export const TruestedCompanies = [
   {
-    imgSrc: '/assets/images/companies/airbnb.svg',
+    imgSrc: './assets/images/companies/airbnb.svg',
   },
   {
-    imgSrc: '/assets/images/companies/fedex.svg',
+    imgSrc: './assets/images/companies/fedex.svg',
   },
   {
-    imgSrc: '/assets/images/companies/google.svg',
+    imgSrc: './assets/images/companies/google.svg',
   },
   {
     imgSrc: './assets/images/companies/hubspot.svg',
   },
   {
-    imgSrc: '/assets/images/companies/microsoft.svg',
+    imgSrc: './assets/images/companies/microsoft.svg',
   },
   {
-    imgSrc: '/assets/images/companies/walmart.svg',
+    imgSrc: './assets/images/companies/walmart.svg',
   },
   {
-    imgSrc: '/assets/images/companies/airbnb.svg',
+    imgSrc: './assets/images/companies/airbnb.svg',
   },
   {
-    imgSrc: '/assets/images/companies/fedex.svg',
+    imgSrc: './assets/images/companies/fedex.svg',
   },
 ]
 
@@ -104,32 +104,32 @@ export const MentorData = [
   {
     profession: 'Senior UX Designer',
     name: 'Shoo Thar Mien',
-    imgSrc: user3,
+    imgSrc: './assets/images/mentor/user3.png',
   },
   {
     profession: 'Senior UX Designer',
     name: 'Shoo Thar Mien',
-    imgSrc: user2,
+    imgSrc: './assets/images/mentor/user2.png',
   },
   {
     profession: 'Senior UX Designer',
     name: 'Shoo Thar Mien',
-    imgSrc: user1,
+    imgSrc: './assets/images/mentor/user1.png',
   },
   {
     profession: 'Senior UX Designer',
     name: 'Shoo Thar Mien',
-    imgSrc: user3,
+    imgSrc: './assets/images/mentor/user3.png',
   },
   {
     profession: 'Senior UX Designer',
     name: 'Shoo Thar Mien',
-    imgSrc: user2,
+    imgSrc: './assets/images/mentor/user2.png',
   },
   {
     profession: 'Senior UX Designer',
     name: 'Shoo Thar Mien',
-    imgSrc: user1,
+    imgSrc: './assets/images/mentor/user2.png',
   },
 ]
 
@@ -139,7 +139,7 @@ export const TestimonialData = [
     profession: 'CEO, Parkview Int.Ltd',
     comment:
       'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour',
-    imgSrc: user,
+    imgSrc: './assets/images/testimonial/user.svg',
     rating: 5,
   },
   {
@@ -147,7 +147,7 @@ export const TestimonialData = [
     profession: 'CEO, Parkview Int.Ltd',
     comment:
       'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour',
-    imgSrc: user2,
+    imgSrc: './assets/images/mentor/user2.png',
     rating: 5,
   },
   {
@@ -155,7 +155,7 @@ export const TestimonialData = [
     profession: 'CEO, Parkview Int.Ltd',
     comment:
       'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour',
-    imgSrc: user3,
+    imgSrc: './assets/images/mentor/user3.png',
     rating: 5,
   },
   {
@@ -163,7 +163,7 @@ export const TestimonialData = [
     profession: 'CEO, Parkview Int.Ltd',
     comment:
       'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour',
-    imgSrc: user1,
+    imgSrc: './assets/images/mentor/user1.png',
     rating: 5,
   },
   {
@@ -171,7 +171,7 @@ export const TestimonialData = [
     profession: 'CEO, Parkview Int.Ltd',
     comment:
       'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour',
-    imgSrc: user2,
+    imgSrc: './assets/images/mentor/user2.png',
     rating: 5,
   },
   {
@@ -179,7 +179,7 @@ export const TestimonialData = [
     profession: 'CEO, Parkview Int.Ltd',
     comment:
       'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour',
-    imgSrc: user3,
+    imgSrc: './assets/images/mentor/user3.png',
     rating: 5,
   },
 ]
