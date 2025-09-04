@@ -85,6 +85,7 @@ import {
   CFormCheck,
   CRow,
   CCol,
+  CFormTextarea,
 } from "@coreui/react"
 import { useForm } from "react-hook-form"
 import supabase from "../../../../supaBaseClient"
@@ -301,41 +302,60 @@ const PreInscricaoForm = ({ course, onCancel, show, setShow, showForm, setShowFo
                   </option>
                 ))}
               </CFormSelect>
+              <CRow>
+                {/* Gênero */}
+                <CCol md={6}>
+                  <div className="mb-3">
+                    <label className="form-label">Gênero</label>
+                    <div className="d-flex gap-4">
+                      <CFormCheck type="radio" value="Masculino" label="Masculino" {...register("genero")} />
+                      <CFormCheck type="radio" value="Feminino" label="Feminino" {...register("genero")} />
+                    </div>
+                  </div>
+                </CCol>
+                <CCol md={6}>
+                  {/* Estudante */}
+                  <div className="mb-3">
+                    <label className="form-label">É estudante?</label>
+                    <div className="d-flex gap-4">
+                      <CFormCheck type="radio" value="true" label="Sim" {...register("estudante")} />
+                      <CFormCheck type="radio" value="false" label="Não" {...register("estudante")} />
+                    </div>
+                  </div>
+                </CCol>
+              </CRow>
 
-              {/* Estudante */}
-              <div className="mb-3">
-                <label className="form-label">É estudante?</label>
-                <div className="d-flex gap-4">
-                  <CFormCheck type="radio" value="true" label="Sim" {...register("estudante")} />
-                  <CFormCheck type="radio" value="false" label="Não" {...register("estudante")} />
-                </div>
-              </div>
+              <CRow>
+                <CCol md={6}>
+                  {/* Trabalha */}
+                  <div className="mb-3">
+                    <label className="form-label">Trabalha?</label>
+                    <div className="d-flex gap-4">
+                      <CFormCheck type="radio" value="true" label="Sim" {...register("trabalha")} />
+                      <CFormCheck type="radio" value="false" label="Não" {...register("trabalha")} />
+                    </div>
+                  </div>
 
-              {/* Trabalha */}
-              <div className="mb-3">
-                <label className="form-label">Trabalha?</label>
-                <div className="d-flex gap-4">
-                  <CFormCheck type="radio" value="true" label="Sim" {...register("trabalha")} />
-                  <CFormCheck type="radio" value="false" label="Não" {...register("trabalha")} />
-                </div>
-              </div>
+                  {trabalha && (
+                    <CFormInput
+                      className="mb-3"
+                      label="Qual setor?"
+                      {...register("setor", { required: trabalha })}
+                    />
+                  )}
+                </CCol>
+                <CCol md={6}>
+                  {/* Deficiência */}
+                  <div className="mb-3">
+                    <label className="form-label">É portador de alguma deficiência?</label>
+                    <div className="d-flex gap-4">
+                      <CFormCheck type="radio" value="true" label="Sim" {...register("deficiencia")} />
+                      <CFormCheck type="radio" value="false" label="Não" {...register("deficiencia")} />
+                    </div>
+                  </div>
+                </CCol>
+              </CRow>
 
-              {trabalha && (
-                <CFormInput
-                  className="mb-3"
-                  label="Qual setor?"
-                  {...register("setor", { required: trabalha })}
-                />
-              )}
-
-              {/* Deficiência */}
-              <div className="mb-3">
-                <label className="form-label">É portador de alguma deficiência?</label>
-                <div className="d-flex gap-4">
-                  <CFormCheck type="radio" value="true" label="Sim" {...register("deficiencia")} />
-                  <CFormCheck type="radio" value="false" label="Não" {...register("deficiencia")} />
-                </div>
-              </div>
 
               {/* Redes Sociais */}
               <div className="mb-3">
