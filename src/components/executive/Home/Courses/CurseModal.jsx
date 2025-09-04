@@ -5,6 +5,8 @@ import PreInscricaoForm from "./PreInscricaoForm"
 
 const CourseModal = ({ isOpen, onClose, course }) => {
   const [showForm, setShowForm] = useState(false)
+  const [show, setShow] = useState(false)
+
 
   if (!course) return null
 
@@ -23,7 +25,7 @@ const CourseModal = ({ isOpen, onClose, course }) => {
           >
             ✖
           </button>
-          {!showForm ? (
+          {!show ? (
             <>
 
 
@@ -66,8 +68,7 @@ const CourseModal = ({ isOpen, onClose, course }) => {
               <div className="mt-8 flex justify-end">
                 <button
                   onClick={() => {
-                    alert("Inscrição realizada!");
-                    setShowForm(true);
+                    setShow(true);
                   }}
                   className="bg-primary text-white px-6 py-3 rounded-xl hover:bg-primary/90"
                 >
@@ -76,7 +77,7 @@ const CourseModal = ({ isOpen, onClose, course }) => {
               </div>
             </>
           ) : (
-            <PreInscricaoForm course={course} onCancel={() => setShowForm(false)} />
+              <PreInscricaoForm course={course} show={show} setShow={setShow} />
           )}
         </Dialog.Panel>
       </div>

@@ -78,7 +78,7 @@ const Hero = () => {
           </div>
           <div className="col-span-6 flex justify-center">
             <img
-              src={`.${mahila}`}
+              src={`${mahila}`}
               alt="nothing"
               width={1000}
               height={805}

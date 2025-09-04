@@ -1,24 +1,13 @@
-import React from 'react'
+import React, { useEffect, useState } from "react"
+import {
+  CRow, CCol, CCard, CCardHeader, CCardBody,
+  CProgress, CTable, CTableHead, CTableRow, CTableHeaderCell,
+  CTableBody, CTableDataCell, CBadge
+} from "@coreui/react"
+import supabase from "../../supaBaseClient"
 import classNames from 'classnames'
 
-import {
-  CAvatar,
-  CButton,
-  CButtonGroup,
-  CCard,
-  CCardBody,
-  CCardFooter,
-  CCardHeader,
-  CCol,
-  CProgress,
-  CRow,
-  CTable,
-  CTableBody,
-  CTableDataCell,
-  CTableHead,
-  CTableHeaderCell,
-  CTableRow,
-} from '@coreui/react'
+import { CAvatar, CButton, CButtonGroup, CCardFooter } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import {
   cibCcAmex,
@@ -47,14 +36,79 @@ import WidgetsBrand from '../widgets/WidgetsBrand'
 import WidgetsDropdown from '../widgets/WidgetsDropdown'
 import MainChart from './MainChart'
 
-import avatar_1 from '../../assets/images/avatars/1.jpg'
-import avatar_2 from '../../assets/images/avatars/2.jpg'
-import avatar_3 from '../../assets/images/avatars/3.jpg'
-import avatar_4 from '../../assets/images/avatars/4.jpg'
-import avatar_5 from '../../assets/images/avatars/5.jpg'
-import avatar_6 from '../../assets/images/avatars/6.jpg'
+import avatar_1 from '/assets/images/avatars/1.jpg'
+import avatar_2 from '/assets/images/avatars/2.jpg'
+import avatar_3 from '/assets/images/avatars/3.jpg'
+import avatar_4 from '/assets/images/avatars/4.jpg'
+import avatar_5 from '/assets/images/avatars/5.jpg'
+import avatar_6 from '/assets/images/avatars/6.jpg'
 
 const Dashboard = () => {
+  const [inscricoes, setInscricoes] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [progressData, setProgressData] = useState([])
+
+  useEffect(() => {
+    carregarDados()
+  }, [])
+
+
+  useEffect(() => {
+    buscarInscricoes()
+  }, [])
+
+
+  const carregarDados = async () => {
+    const { data, error } = await supabase.from("inscricoes").select("curso")
+    if (!error && data) {
+      const total = data.length
+      const contagemCursos = data.reduce((acc, i) => {
+        acc[i.curso] = (acc[i.curso] || 0) + 1
+        return acc
+      }, {})
+
+      const cores = ["info", "success", "warning", "danger", "primary"]
+      const mapped = Object.entries(contagemCursos).map(([curso, qtd], idx) => ({
+        title: curso.charAt(0).toUpperCase() + curso.slice(1),
+        value: qtd,
+        percent: ((qtd / total) * 100).toFixed(1),
+        color: cores[idx % cores.length],
+      }))
+
+      setProgressData(mapped)
+    }
+  }
+
+  const buscarInscricoes = async () => {
+    setLoading(true)
+    const { data, error } = await supabase
+      .from("inscricoes")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .limit(50) // pegar só os últimos 50 para o dashboard
+
+    if (!error) setInscricoes(data)
+    setLoading(false)
+  }
+
+  // --- Métricas ---
+  const total = inscricoes.length
+  const cursosCount = inscricoes.reduce((acc, i) => {
+    acc[i.curso] = (acc[i.curso] || 0) + 1
+    return acc
+  }, {})
+
+  const pagamentoCount = inscricoes.reduce((acc, i) => {
+    acc[i.pagamento] = (acc[i.pagamento] || 0) + 1
+    return acc
+  }, {})
+
+  const generoCount = inscricoes.reduce((acc, i) => {
+    acc[i.genero] = (acc[i.genero] || 0) + 1
+    return acc
+  }, {})
+
+
   const progressExample = [
     { title: 'Visits', value: '29.703 Users', percent: 40, color: 'success' },
     { title: 'Unique', value: '24.093 Users', percent: 20, color: 'info' },
@@ -208,7 +262,7 @@ const Dashboard = () => {
           </CRow>
           <MainChart />
         </CCardBody>
-        <CCardFooter>
+        {/* <CCardFooter>
           <CRow
             xs={{ cols: 1, gutter: 4 }}
             sm={{ cols: 2 }}
@@ -231,10 +285,34 @@ const Dashboard = () => {
               </CCol>
             ))}
           </CRow>
+        </CCardFooter> */}
+        <CCardFooter>
+          <CRow
+            xs={{ cols: 1, gutter: 4 }}
+            sm={{ cols: 2 }}
+            lg={{ cols: 4 }}
+            xl={{ cols: 5 }}
+            className="mb-2 text-center"
+          >
+            {progressData.map((item, index, items) => (
+              <CCol
+                className={classNames({
+                  "d-none d-xl-block": index + 1 === items.length,
+                })}
+                key={index}
+              >
+                <div className="text-body-secondary">{item.title}</div>
+                <div className="fw-semibold text-truncate">
+                  {item.value} ({item.percent}%)
+                </div>
+                <CProgress thin className="mt-2" color={item.color} value={item.percent} />
+              </CCol>
+            ))}
+          </CRow>
         </CCardFooter>
       </CCard>
       {/* <WidgetsBrand className="mb-4" withCharts /> */}
-      <CRow>
+      {/* <CRow>
         <CCol xs>
           <CCard className="mb-4">
             <CCardHeader>Traffic {' & '} Sales</CCardHeader>
@@ -372,6 +450,89 @@ const Dashboard = () => {
                         <div className="small text-body-secondary text-nowrap">Last login</div>
                         <div className="fw-semibold text-nowrap">{item.activity}</div>
                       </CTableDataCell>
+                    </CTableRow>
+                  ))}
+                </CTableBody>
+              </CTable>
+            </CCardBody>
+          </CCard>
+        </CCol>
+      </CRow> */}
+
+      <CRow>
+        <CCol xs>
+          <CCard className="mb-4">
+            <CCardHeader>📊 Inscrições e Métricas</CCardHeader>
+            <CCardBody>
+              <CRow>
+                <CCol xs={12} md={6}>
+                  <h6 className="mb-3">📘 Cursos</h6>
+                  {Object.entries(cursosCount).map(([curso, qtd]) => (
+                    <div key={curso} className="progress-group mb-3">
+                      <div className="progress-group-prepend">
+                        <span>{curso}</span>
+                      </div>
+                      <div className="progress-group-bars">
+                        <CProgress thin color="info" value={(qtd / total) * 100} />
+                        <span className="ms-2">{qtd}</span>
+                      </div>
+                    </div>
+                  ))}
+
+                  <h6 className="mt-4 mb-3">💳 Métodos de Pagamento</h6>
+                  {Object.entries(pagamentoCount).map(([metodo, qtd]) => (
+                    <div key={metodo} className="progress-group mb-3">
+                      <div className="progress-group-prepend">
+                        <span>{metodo}</span>
+                      </div>
+                      <div className="progress-group-bars">
+                        <CProgress thin color="success" value={(qtd / total) * 100} />
+                        <span className="ms-2">{qtd}</span>
+                      </div>
+                    </div>
+                  ))}
+                </CCol>
+
+                <CCol xs={12} md={6}>
+                  <h6 className="mb-3">👥 Gênero</h6>
+                  {Object.entries(generoCount).map(([genero, qtd]) => (
+                    <div key={genero} className="progress-group mb-3">
+                      <div className="progress-group-prepend">
+                        <span>{genero}</span>
+                      </div>
+                      <div className="progress-group-bars">
+                        <CProgress thin color="warning" value={(qtd / total) * 100} />
+                        <span className="ms-2">{qtd}</span>
+                      </div>
+                    </div>
+                  ))}
+                </CCol>
+              </CRow>
+
+              <hr />
+
+              {/* Últimos inscritos */}
+              <h6 className="mt-4 mb-3">📋 Últimos Inscritos</h6>
+              <CTable hover responsive>
+                <CTableHead>
+                  <CTableRow>
+                    <CTableHeaderCell>Nome</CTableHeaderCell>
+                    <CTableHeaderCell>Curso</CTableHeaderCell>
+                    <CTableHeaderCell>Pagamento</CTableHeaderCell>
+                    <CTableHeaderCell>Província</CTableHeaderCell>
+                    <CTableHeaderCell>Data</CTableHeaderCell>
+                  </CTableRow>
+                </CTableHead>
+                <CTableBody>
+                  {inscricoes.map((i) => (
+                    <CTableRow key={i.id}>
+                      <CTableDataCell>{i.nome}</CTableDataCell>
+                      <CTableDataCell>{i.curso}</CTableDataCell>
+                      <CTableDataCell>
+                        <CBadge color="info">{i.pagamento}</CBadge>
+                      </CTableDataCell>
+                      <CTableDataCell>{i.provincia}</CTableDataCell>
+                      <CTableDataCell>{new Date(i.created_at).toLocaleDateString()}</CTableDataCell>
                     </CTableRow>
                   ))}
                 </CTableBody>

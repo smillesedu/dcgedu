@@ -18,28 +18,28 @@ import {
 
 export const TruestedCompanies = [
   {
-    imgSrc: '../../assets/images/companies/airbnb.svg',
+    imgSrc: airbnb,
   },
   {
-    imgSrc: '../../assets/images/companies/fedex.svg',
+    imgSrc: fedex,
   },
   {
-    imgSrc: '../../assets/images/companies/google.svg',
+    imgSrc: google,
   },
   {
-    imgSrc: '../../assets/images/companies/hubspot.svg',
+    imgSrc: hubspot,
   },
   {
-    imgSrc: '../../assets/images/companies/microsoft.svg',
+    imgSrc: microsoft,
   },
   {
-    imgSrc: '../../assets/images/companies/walmart.svg',
+    imgSrc: walmart,
   },
   {
-    imgSrc: '../../assets/images/companies/airbnb.svg',
+    imgSrc: airbnb,
   },
   {
-    imgSrc: '../../assets/images/companies/fedex.svg',
+    imgSrc: fedex,
   },
 ]
 
@@ -47,7 +47,7 @@ export const courseData = [
   {
     heading: 'Full stack modern javascript',
     name: 'Colt stelle',
-    imgSrc: '../../assets/images/courses/courseone.png',
+    imgSrc: '/assets/images/courses/courseone.png',
     students: 150,
     classes: 12,
     price: 20,
@@ -56,7 +56,7 @@ export const courseData = [
   {
     heading: 'Design system with React programme',
     name: 'Colt stelle',
-    imgSrc: '../../assets/images/courses/coursetwo.png',
+    imgSrc: coursetwo,
     students: 130,
     classes: 12,
     price: 20,
@@ -65,7 +65,7 @@ export const courseData = [
   {
     heading: 'Design banner with Figma',
     name: 'Colt stelle',
-    imgSrc: '../../assets/images/courses/coursethree.png',
+    imgSrc: coursethree,
     students: 120,
     classes: 12,
     price: 20,
@@ -74,7 +74,7 @@ export const courseData = [
   {
     heading: 'We Launch Delia Webflow this Week!',
     name: 'Colt stelle',
-    imgSrc: '../../assets/images/courses/courseone.png',
+    imgSrc: courseone,
     students: 150,
     classes: 12,
     price: 20,
@@ -83,7 +83,7 @@ export const courseData = [
   {
     heading: 'We Launch Delia Webflow this Week!',
     name: 'Colt stelle',
-    imgSrc: '../../assets/images/courses/coursetwo.png',
+    imgSrc: coursetwo,
     students: 150,
     classes: 12,
     price: 20,
@@ -92,7 +92,7 @@ export const courseData = [
   {
     heading: 'We Launch Delia Webflow this Week!',
     name: 'Colt stelle',
-    imgSrc: '../../assets/images/courses/coursethree.png',
+    imgSrc: coursethree,
     students: 150,
     classes: 12,
     price: 20,
@@ -104,32 +104,32 @@ export const MentorData = [
   {
     profession: 'Senior UX Designer',
     name: 'Shoo Thar Mien',
-    imgSrc: '../../assets/images/mentor/user3.png',
+    imgSrc: user3,
   },
   {
     profession: 'Senior UX Designer',
     name: 'Shoo Thar Mien',
-    imgSrc: '../../assets/images/mentor/user2.png',
+    imgSrc: user2,
   },
   {
     profession: 'Senior UX Designer',
     name: 'Shoo Thar Mien',
-    imgSrc: '../../assets/images/mentor/user1.png',
+    imgSrc: user1,
   },
   {
     profession: 'Senior UX Designer',
     name: 'Shoo Thar Mien',
-    imgSrc: '../../assets/images/mentor/user3.png',
+    imgSrc: user3,
   },
   {
     profession: 'Senior UX Designer',
     name: 'Shoo Thar Mien',
-    imgSrc: '../../assets/images/mentor/user2.png',
+    imgSrc: user2,
   },
   {
     profession: 'Senior UX Designer',
     name: 'Shoo Thar Mien',
-    imgSrc: '../../assets/images/mentor/user2.png',
+    imgSrc: user2,
   },
 ]
 
@@ -139,7 +139,7 @@ export const TestimonialData = [
     profession: 'CEO, Parkview Int.Ltd',
     comment:
       'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour',
-    imgSrc: '../../assets/images/testimonial/user.svg',
+    imgSrc: '/assets/images/testimonial/user.svg',
     rating: 5,
   },
   {
@@ -147,7 +147,7 @@ export const TestimonialData = [
     profession: 'CEO, Parkview Int.Ltd',
     comment:
       'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour',
-    imgSrc: '../../assets/images/mentor/user2.png',
+    imgSrc: user2,
     rating: 5,
   },
   {
@@ -155,7 +155,7 @@ export const TestimonialData = [
     profession: 'CEO, Parkview Int.Ltd',
     comment:
       'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour',
-    imgSrc: '../../assets/images/mentor/user3.png',
+    imgSrc: user3,
     rating: 5,
   },
   {
@@ -163,7 +163,7 @@ export const TestimonialData = [
     profession: 'CEO, Parkview Int.Ltd',
     comment:
       'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour',
-    imgSrc: '../../assets/images/mentor/user1.png',
+    imgSrc: user1,
     rating: 5,
   },
   {
@@ -171,7 +171,7 @@ export const TestimonialData = [
     profession: 'CEO, Parkview Int.Ltd',
     comment:
       'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour',
-    imgSrc: '../../assets/images/mentor/user2.png',
+    imgSrc: user2,
     rating: 5,
   },
   {
@@ -179,7 +179,7 @@ export const TestimonialData = [
     profession: 'CEO, Parkview Int.Ltd',
     comment:
       'There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour',
-    imgSrc: '../../assets/images/mentor/user3.png',
+    imgSrc: user3,
     rating: 5,
   },
 ]
