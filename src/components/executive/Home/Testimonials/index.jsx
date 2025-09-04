@@ -79,7 +79,7 @@ const Testimonial = () => {
               >
                 <div className="absolute top-[-45px]">
                   <img
-                    src={`${getImagePrefix()}${items.imgSrc}`}
+                    src={`${items.imgSrc}`}
                     alt={items.name}
                     width={100}
                     height={100}

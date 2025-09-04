@@ -35,7 +35,7 @@ const Newsletter = () => {
                       className="p-3 lg:p-5 focus:outline-none focus:shadow-outline bg-ultramarine hover:bg-midnightblue duration-150 ease-in-out rounded-full"
                     >
                       <img
-                        src={`${getImagePrefix()}${send}`}
+                        src={`${send}`}
                         alt="send-icon"
                         width={30}
                         height={30}

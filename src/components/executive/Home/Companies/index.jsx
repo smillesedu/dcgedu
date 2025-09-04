@@ -48,7 +48,7 @@ const Companies = () => {
             {TruestedCompanies.map((item, i) => (
               <div key={i}>
                 <img
-                  src={`${getImagePrefix()}${item.imgSrc}`}
+                  src={`${item.imgSrc}`}
                   alt={item.imgSrc}
                   width={116}
                   height={36}

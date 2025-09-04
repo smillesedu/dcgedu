@@ -6,7 +6,7 @@ const Logo = () => {
   return (
     <Link href="/">
       <img
-        src={`${getImagePrefix()}${logo}`}
+        src={`${logo}`}
         alt="logo"
         width={160}
         height={50}

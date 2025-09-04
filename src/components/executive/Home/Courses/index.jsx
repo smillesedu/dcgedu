@@ -102,7 +102,7 @@ const Courses = () => {
               <div className="bg-white m-3 mb-12 px-3 pt-3 pb-12 shadow-course-shadow rounded-2xl h-full">
                 <div className="relative rounded-3xl">
                   <img
-                    src={`${getImagePrefix()}${items.imgSrc}`}
+                    src={`${items.imgSrc}`}
                     alt="course"
                     width={389}
                     height={262}

@@ -46,7 +46,7 @@ const Hero = () => {
             <div className="flex items-center justify-between pt-10 lg:pt-4">
               <div className="flex gap-2">
                 <img
-                  src={`${getImagePrefix()}${ckeckCircle}`}
+                  src={`${ckeckCircle}`}
                   alt="check-image"
                   width={30}
                   height={30}
@@ -56,7 +56,7 @@ const Hero = () => {
               </div>
               <div className="flex gap-2">
                 <img
-                  src={`${getImagePrefix()}${ckeckCircle}`}
+                  src={`${ckeckCircle}`}
                   alt="check-image"
                   width={30}
                   height={30}
@@ -66,7 +66,7 @@ const Hero = () => {
               </div>
               <div className="flex gap-2">
                 <img
-                  src={`${getImagePrefix()}${ckeckCircle}`}
+                  src={`${ckeckCircle}`}
                   alt="check-image"
                   width={30}
                   height={30}
@@ -78,7 +78,7 @@ const Hero = () => {
           </div>
           <div className="col-span-6 flex justify-center">
             <img
-              src={`${getImagePrefix()}.${mahila}`}
+              src={`.${mahila}`}
               alt="nothing"
               width={1000}
               height={805}
