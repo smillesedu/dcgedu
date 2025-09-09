@@ -18,29 +18,29 @@ import {
 
 export const TruestedCompanies = [
   {
-    imgSrc: airbnb,
+    imgSrc: "https://upload.wikimedia.org/wikipedia/commons/a/a9/Kaplan_International_Languages_Logo.png",
   },
   {
-    imgSrc: fedex,
+    imgSrc: "https://upload.wikimedia.org/wikipedia/commons/a/a2/Menaul_School_Logo.jpg",
   },
   {
-    imgSrc: google,
+    imgSrc: "https://upload.wikimedia.org/wikipedia/commons/d/d4/Pace_University_Logo.svg",
   },
   {
-    imgSrc: hubspot,
+    imgSrc: "https://deacollege.ca/wp-content/uploads/2024/05/6.2-e1716439429976-300x124.png",
   },
-  {
-    imgSrc: microsoft,
-  },
-  {
-    imgSrc: walmart,
-  },
-  {
-    imgSrc: airbnb,
-  },
-  {
-    imgSrc: fedex,
-  },
+  // {
+  //   imgSrc: microsoft,
+  // },
+  // {
+  //   imgSrc: walmart,
+  // },
+  // {
+  //   imgSrc: airbnb,
+  // },
+  // {
+  //   imgSrc: fedex,
+  // },
 ]
 
 export const courseData = [
