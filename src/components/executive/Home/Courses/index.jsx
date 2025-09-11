@@ -1,46 +1,40 @@
-import React from 'react'
-import Slider from 'react-slick'
-import { useTranslation } from 'react-i18next'
-import 'slick-carousel/slick/slick.css'
-import 'slick-carousel/slick/slick-theme.css'
-import { Icon } from '@iconify/react'
-import { courseData } from '../../../../app/api/data'
-import { getImagePrefix } from '../../../../utils/util'
-import CourseModal from './CurseModal'
+import React from "react"
+import Slider from "react-slick"
+import { useTranslation } from "react-i18next"
+import "slick-carousel/slick/slick.css"
+import "slick-carousel/slick/slick-theme.css"
+import { Icon } from "@iconify/react"
+import { courseData } from "../../../../app/api/data"
+import CourseModal from "./CurseModal"
 
 const Courses = () => {
   const [selectedCourse, setSelectedCourse] = React.useState(null)
   const [isModalOpen, setIsModalOpen] = React.useState(false)
+  const { t } = useTranslation()
 
   const openCourse = (course) => {
     setSelectedCourse(course)
     setIsModalOpen(true)
   }
 
-  const { t } = useTranslation();
+  // Configuração responsiva do Slider
   const settings = {
-    dots: false,
+    dots: true,
     infinite: true,
-    speed: 3,
-    slidesToShow: 3, // desktop
+    speed: 500,
+    arrows: false,
+    slidesToShow: 3, // Desktop
     slidesToScroll: 1,
     responsive: [
       {
-        breakpoint: 1024, // tablet
+        breakpoint: 1024, // Tablets
         settings: {
           slidesToShow: 2,
           slidesToScroll: 1,
         },
       },
       {
-        breakpoint: 768, // mobile
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 1,
-        },
-      },
-      {
-        breakpoint: 468, // mobile
+        breakpoint: 640, // Mobile
         settings: {
           slidesToShow: 1,
           slidesToScroll: 1,
@@ -62,11 +56,11 @@ const Courses = () => {
             <Icon
               key={`full-${i}`}
               icon="tabler:star-filled"
-              className="text-yellow-500 text-xl inline-block"
+              className="text-yellow-500 text-xl"
             />
           ))}
         {halfStars > 0 && (
-          <Icon icon="tabler:star-half-filled" className="text-yellow-500 text-xl inline-block" />
+          <Icon icon="tabler:star-half-filled" className="text-yellow-500 text-xl" />
         )}
         {Array(emptyStars)
           .fill(0)
@@ -74,7 +68,7 @@ const Courses = () => {
             <Icon
               key={`empty-${i}`}
               icon="tabler:star-filled"
-              className="text-gray-400 text-xl inline-block"
+              className="text-gray-400 text-xl"
             />
           ))}
       </>
@@ -82,85 +76,6 @@ const Courses = () => {
   }
 
   return (
-    // <section id="courses">
-    //   <div className="container mx-auto lg:max-w-screen-xl md:max-w-screen-md px-4">
-    //     <div className="sm:flex justify-between items-center mb-20">
-    //       <h2 className="text-midnight_text text-4xl lg:text-5xl font-semibold mb-5 sm:mb-0">
-    //         {t("coursesSection.popular")}.
-    //       </h2>
-    //       <a
-    //         href="/"
-    //         className="text-primary text-lg font-medium hover:tracking-widest duration-500"
-    //       >
-    //         {t("coursesSection.explore")} &nbsp;&gt;&nbsp;
-    //       </a>
-    //     </div>
-
-    //     <Slider {...settings}>
-    //       {courseData.map((items, i) => (
-    //         <div key={i} onClick={() => openCourse(items)} className="cursor-pointer">
-    //           <div className="bg-white m-3 mb-12 px-3 pt-3 pb-12 shadow-course-shadow rounded-2xl h-full">
-    //             <div className="relative rounded-3xl">
-    //               <img
-    //                 src={`${items.imgSrc}`}
-    //                 alt="course"
-    //                 width={389}
-    //                 height={262}
-    //                 className="m-auto clipPath"
-    //               />
-    //               <div className="absolute right-5 -bottom-2 bg-secondary rounded-full p-6">
-    //                 <h3 className="text-white uppercase text-center text-sm font-medium">
-    //                   {t("coursesSection.bestSeller")}
-    //                 </h3>
-    //               </div>
-    //             </div>
-
-    //             <div className="px-3 pt-6">
-    //               <a href="#" className="text-2xl font-bold text-black max-w-75% inline-block">
-    //                 {items.heading}
-    //               </a>
-    //               <h3 className="text-base font-normal pt-6 text-black/75">{items.name}</h3>
-    //               <div className="flex justify-between items-center py-6 border-b">
-    //                 <div className="flex items-center gap-4">
-    //                   <h3 className="text-red-700 text-2xl font-medium">{items.rating}</h3>
-    //                   <div className="flex">{renderStars(items.rating)}</div>
-    //                 </div>
-    //                 <h3 className="text-3xl font-medium">${items.price}</h3>
-    //               </div>
-    //               <div className="flex justify-between pt-6">
-    //                 <div className="flex gap-4">
-    //                   <Icon
-    //                     icon="solar:notebook-minimalistic-outline"
-    //                     className="text-primary text-xl inline-block me-2"
-    //                   />
-    //                   <h3 className="text-base font-medium text-black opacity-75">
-    //                     {items.classes} {t("coursesSection.classes")}
-    //                   </h3>
-    //                 </div>
-    //                 <div className="flex gap-4">
-    //                   <Icon
-    //                     icon="solar:users-group-rounded-linear"
-    //                     className="text-primary text-xl inline-block me-2"
-    //                   />
-    //                   <h3 className="text-base font-medium text-black opacity-75">
-    //                     {items.students} {t("coursesSection.students")}
-    //                   </h3>
-    //                 </div>
-    //               </div>
-    //             </div>
-    //           </div>
-    //         </div>
-    //       ))}
-    //     </Slider>
-
-    //     {/* Modal de detalhes */}
-    //     <CourseModal
-    //       isOpen={isModalOpen}
-    //       onClose={() => setIsModalOpen(false)}
-    //       course={selectedCourse}
-    //     />
-    //   </div>
-    // </section>
     <section id="courses" className="py-12 md:py-16">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Cabeçalho */}
@@ -179,21 +94,23 @@ const Courses = () => {
         {/* Slider responsivo */}
         <Slider {...settings}>
           {courseData.map((items, i) => (
-            <div key={i} onClick={() => openCourse(items)} className="cursor-pointer">
-              <div className="bg-white m-2 sm:m-3 mb-10 px-3 pt-3 pb-8 shadow-course-shadow rounded-2xl h-full">
+            <div key={i} onClick={() => openCourse(items)} className="cursor-pointer px-2">
+              <div className="bg-white mb-10 px-3 pt-3 pb-8 shadow-course-shadow rounded-2xl h-full">
+                {/* Imagem */}
                 <div className="relative rounded-2xl overflow-hidden">
                   <img
                     src={items.imgSrc}
-                    alt="course"
-                    className="w-full h-auto object-cover rounded-2xl"
+                    alt={items.heading}
+                    className="w-full h-52 sm:h-64 md:h-72 lg:h-80 object-cover rounded-2xl"
                   />
-                  <div className="absolute right-4 -bottom-2 bg-secondary rounded-full p-3 sm:p-5">
+                  <div className="absolute right-4 -bottom-2 bg-secondary rounded-full p-3 sm:p-4">
                     <h3 className="text-white uppercase text-xs sm:text-sm font-medium text-center">
                       {t("coursesSection.bestSeller")}
                     </h3>
                   </div>
                 </div>
 
+                {/* Conteúdo */}
                 <div className="px-2 sm:px-4 pt-6">
                   <a
                     href="#"

@@ -66,6 +66,7 @@ const Header = () => {
 
   return (
     <header
+      id="home"
       className={`fixed top-0 z-40 w-full pb-5 transition-all duration-300 bg-white ${sticky ? 'shadow-lg py-5' : 'shadow-none py-6'}`}
     >
       <div className="absolute right-10">
@@ -112,7 +113,7 @@ const Header = () => {
               className="hidden lg:block bg-primary/15 hover:bg-primary text-primary hover:text-white px-16 py-3 rounded-full text-lg font-medium"
               onClick={() => setIsSignUpOpen(true)}
             >
-              {t('logout')}
+              {t('register')}
             </button> */}
             {isSignUpOpen && (
               <div className="fixed top-0 left-0 w-full h-full bg-black/50 flex items-center justify-center z-50">
@@ -189,7 +190,7 @@ const Header = () => {
                   setNavbarOpen(false)
                 }}
               >
-                {t('logout')}
+                {t('register')}
               </button> */}
             </div>
           </nav>

@@ -22,3 +22,12 @@ section {
 .slick-dots li button:before {
   font-size: 11px !important;
 }
+
+.slick-slide {
+  display: flex !important;
+  justify-content: center;
+}
+
+.slick-slide > div {
+  width: 100%;
+}

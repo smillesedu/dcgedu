@@ -2,6 +2,7 @@
   "welcome": "Bienvenido a la aplicación",
   "login": "Iniciar sesión",
   "logout": "Cerrar sesión",
+  "register": "Registrar(se)",
   "language": "Idioma",
   "header": {
     "home": "Inicio",

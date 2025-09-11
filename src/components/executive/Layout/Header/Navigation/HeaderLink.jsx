@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { useTranslation } from "react-i18next"
+import { HashLink } from 'react-router-hash-link';
 
 
 const HeaderLink = ({ item }) => {
@@ -29,7 +30,7 @@ const HeaderLink = ({ item }) => {
 
   return (
     <div className="relative" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-      <Link
+      <HashLink
         to={item.href}
         className={`text-lg flex hover:text-black capitalized relative ${
           isActive
@@ -50,7 +51,7 @@ const HeaderLink = ({ item }) => {
             />
           </svg>
         )}
-      </Link>
+      </HashLink>
 
       {submenuOpen && (
         <div
@@ -61,7 +62,7 @@ const HeaderLink = ({ item }) => {
           {item.submenu?.map((subItem, index) => {
             const isSubItemActive = pathname === subItem.href
             return (
-              <Link
+              <HashLink
                 key={index}
                 to={subItem.href}
                 className={`block px-4 py-2 ${
@@ -71,7 +72,7 @@ const HeaderLink = ({ item }) => {
                 }`}
               >
                 {t(item.label)}
-              </Link>
+              </HashLink>
             )
           })}
         </div>

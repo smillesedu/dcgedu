@@ -2,6 +2,7 @@
   "welcome": "Welcome to the application",
   "login": "Login",
   "logout": "Logout",
+  "register": "Register",
   "language": "Language",
   "header": {
     "home": "Home",

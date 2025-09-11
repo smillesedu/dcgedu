@@ -121,168 +121,229 @@ const Toasts = React.lazy(() => import('./views/notifications/toasts/Toasts'))
 const Widgets = React.lazy(() => import('./views/widgets/Widgets'))
 
 const routes = [
-  { path: '/', name: 'Home', element: Dashboard },
+  { path: '/', name: 'Home', element: Dashboard, roles: ['admin', 'rh', 'comercial'] },
   // { path: '/sevem-smilles', name: 'Sevem Smilles', element: SevemSmilles },
-  { path: '/dashboard', name: 'Dashboard', element: Dashboard },
+  {
+    path: '/dashboard',
+    name: 'Dashboard',
+    element: Dashboard,
+    roles: ['admin', 'rh', 'comercial'],
+  },
   { path: '/theme', name: 'Theme', element: Colors, exact: true },
   { path: '/theme/colors', name: 'Colors', element: Colors },
   { path: '/theme/typography', name: 'Typography', element: Typography },
-  { path: '/base', name: 'Base', element: Cards, exact: true },
-  { path: '/base/accordion', name: 'Accordion', element: Accordion },
-  { path: '/base/breadcrumbs', name: 'Breadcrumbs', element: Breadcrumbs },
-  { path: '/base/cards', name: 'Cards', element: Cards },
-  { path: '/base/carousels', name: 'Carousel', element: Carousels },
-  { path: '/base/collapses', name: 'Collapse', element: Collapses },
-  { path: '/base/list-groups', name: 'List Groups', element: ListGroups },
-  { path: '/base/cursos-groups', name: 'Cursos Groups', element: CursosGroups },
-  { path: '/base/navs', name: 'Navs', element: Navs },
-  { path: '/base/paginations', name: 'Paginations', element: Paginations },
-  { path: '/base/placeholders', name: 'Placeholders', element: Placeholders },
-  { path: '/base/popovers', name: 'Popovers', element: Popovers },
-  { path: '/base/progress', name: 'Progress', element: Progress },
+
+  { path: '/base', name: 'Base', element: Cards, exact: true, roles: ['admin'] },
+  { path: '/base/list-groups', name: 'List Groups', element: ListGroups, roles: ['admin'] },
+  { path: '/base/cursos-groups', name: 'Cursos Groups', element: CursosGroups, roles: ['admin'] },
+  { path: '/base/accordion', name: 'Accordion', element: Accordion, roles: ['admin'] },
+  { path: '/base/popovers', name: 'Popovers', element: Popovers, roles: ['admin'] },
+  { path: '/base/carousels', name: 'Carousel', element: Carousels, roles: ['admin'] },
+  { path: '/buttons/buttons', name: 'Buttons', element: Buttons, roles: ['admin'] },
+  { path: '/buttons/dropdowns', name: 'Dropdowns', element: Dropdowns, roles: ['admin'] },
+  { path: '/base/cards', name: 'Cards', element: Cards, roles: ['admin'] },
+  { path: '/base/collapses', name: 'Collapse', element: Collapses, roles: ['admin'] },
+  { path: '/base/navs', name: 'Navs', element: Navs, roles: ['admin'] },
+  { path: '/base/paginations', name: 'Paginations', element: Paginations, roles: ['admin'] },
+  { path: '/base/placeholders', name: 'Placeholders', element: Placeholders, roles: ['admin', 'Professor'] },
+
+  { path: '/base/breadcrumbs', name: 'Breadcrumbs', element: Breadcrumbs, },
   { path: '/base/spinners', name: 'Spinners', element: Spinners },
   { path: '/base/tabs', name: 'Tabs', element: Tabs },
   { path: '/base/tables', name: 'Tables', element: Tables },
   { path: '/base/tooltips', name: 'Tooltips', element: Tooltips },
   { path: '/buttons', name: 'Buttons', element: Buttons, exact: true },
-  { path: '/buttons/buttons', name: 'Buttons', element: Buttons },
-  { path: '/buttons/dropdowns', name: 'Dropdowns', element: Dropdowns },
-  { path: '/buttons/button-groups', name: 'Button Groups', element: ButtonGroups },
-  { path: '/buttons/look-teatcher', name: 'Acompanhamento', element: LookTeacher },
-  {
-    path: '/buttons/teatcher-portal',
-    name: 'Portal do Professor',
-    element: TeacherPortal,
-  },
+
+  // Gestão de perfis
+  { path: '/buttons/button-groups', name: 'Button Groups', element: ButtonGroups, roles: ['admin'] },
+  { path: '/base/progress', name: 'Progress', element: Progress, roles: ['admin'] },
   {
     path: '/buttons/time-controler',
     name: 'Controle de Carga Horária',
     element: TimeControler,
+    roles: ['admin']
   },
-  { path: '/charts', name: 'Charts', element: Charts },
+  { path: '/buttons/look-teatcher', name: 'Acompanhamento', element: LookTeacher, roles: ['admin'] },
+
+
+
+
+  { path: '/charts', name: 'Charts', element: Charts, roles: ['admin', 'rh', 'comercial'] },
   { path: '/forms', name: 'Forms', element: FormControl, exact: true },
-  { path: '/forms/form-control', name: 'Form Control', element: FormControl },
   { path: '/forms/select', name: 'Select', element: Select },
-  { path: '/forms/checks-radios', name: 'Checks & Radios', element: ChecksRadios },
-  { path: '/forms/range', name: 'Range', element: Range },
-  { path: '/forms/input-group', name: 'Input Group', element: InputGroup },
-  { path: '/forms/floating-labels', name: 'Floating Labels', element: FloatingLabels },
+
+  // Portal
+  { path: '/forms/checks-radios', name: 'Checks & Radios', element: ChecksRadios, roles: ['admin', 'Aluno'] },
+  { path: '/forms/floating-labels', name: 'Floating Labels', element: FloatingLabels, roles: ['admin', 'Aluno'] },
+  { path: '/forms/form-control', name: 'Form Control', element: FormControl, roles: ['admin', 'Aluno'] },
+  { path: '/forms/input-group', name: 'Input Group', element: InputGroup, roles: ['admin', 'Aluno'] },
+  { path: '/forms/range', name: 'Range', element: Range, roles: ['admin', 'Aluno', 'Professor'] },
+  {
+    path: '/buttons/teatcher-portal',
+    name: 'Portal do Professor',
+    element: TeacherPortal,
+    roles: ['admin', 'Professor']
+  },
+
+
+
+
   { path: '/forms/layout', name: 'Layout', element: Layout },
   { path: '/forms/validation', name: 'Validation', element: Validation },
-  { path: '/icons', exact: true, name: 'Icons', element: CoreUIIcons },
-  { path: '/icons/coreui-icons', name: 'CoreUI Icons', element: CoreUIIcons },
-  { path: '/icons/notification', name: 'Notification', element: Notification },
+
+
+  // Portal dos pais
+  { path: '/icons/coreui-icons', name: 'CoreUI Icons', element: CoreUIIcons, roles: ['admin', 'Aluno'] },
+  { path: '/icons/notification', name: 'Notification', element: Notification, roles: ['admin', 'Aluno'] },
+  { path: '/icons', exact: true, name: 'Icons', element: CoreUIIcons, roles: ['admin', 'Aluno'] },
+  { path: '/icons/flags', name: 'Flags', element: Flags, roles: ['admin', 'Aluno'] },
+  { path: '/icons/brands', name: 'Brands', element: Brands, roles: ['admin', 'Aluno'] },
+
+
+  // Gestão financeira
   {
     path: '/gestao-financeira',
     name: 'Gestão Financeira',
     element: ControleMensalidades,
     exact: true,
+    roles: ['admin', 'financas']
   },
   {
     path: '/gestao-financeira/controle-inadimplencia',
     name: 'Controle de Inadimplência',
     element: ControleInadimplencia,
+    roles: ['admin', 'financas']
   },
   {
     path: '/gestao-financeira/controle-mensalidades',
     name: 'Controle de Mensalidades',
     element: ControleMensalidades,
+    roles: ['admin', 'financas']
   },
   {
     path: '/gestao-financeira/descontos-bolsas',
     name: 'Descontos e Bolsas',
     element: DescontosBolsas,
+    roles: ['admin', 'financas']
   },
   {
     path: '/gestao-financeira/emissao-faturas-recibos',
     name: 'Emissão de Faturas e Recibos',
     element: EmissaoFaturasRecibos,
+    roles: ['admin', 'financas'],
   },
   {
     path: '/gestao-financeira/pagamento-faturacao',
     name: 'Pagamentos e Faturação',
     element: PagamentosFaturacao,
+    roles: ['admin', 'financas']
   },
   {
     path: '/gestao-financeira/parametros-regras-academicas',
     name: 'Parâmetros e Regras Acadêmicas',
     element: ParametrosRegras,
+    roles: ['admin', 'financas']
   },
   {
     path: '/gestao-financeira/relatorio-financeiro',
     name: 'Relatório Financeiro',
     element: RelatorioFinanceiro,
+    roles: ['admin', 'financas'],
   },
+
+
+
   {
     path: '/comercial/gestao-leads',
     name: 'Gestão de Leads e Oportunidades',
     element: GestaoLeads,
+    roles: ['admin', 'comercial']
   },
-  { path: '/comercial/funil-vendas', name: 'Funil de Vendas', element: FunilVendas },
+  {
+    path: '/comercial/funil-vendas', name: 'Funil de Vendas', element: FunilVendas, roles: ['admin', 'comercial']
+  },
   {
     path: '/comercial/propostas-ofertas',
     name: 'Relatórios Comerciais',
     element: PropostasOfertas,
+    roles: ['admin', 'comercial']
+
   },
   {
     path: '/comercial/relatorios-comercial',
     name: 'Equipe Comercial',
     element: RelatoriosComercial,
+    roles: ['admin', 'comercial']
+
   },
   {
     path: '/comercial/equipe-comercial',
     name: 'Propostas Comerciais e Ofertas',
     element: EquipeComercial,
+    roles: ['admin', 'comercial']
+
   },
 
-  { path: '/rh/cargos', name: 'Cargos e Funções', element: ListaCargos },
-  { path: '/rh/departamentos', name: 'Departamentos', element: ListaDepartamentos },
-  { path: '/rh/funcionarios', name: 'Funcionarios', element: ListaFuncionarios },
-  { path: '/rh/folha-pagamento', name: 'Folha de Pagamento', element: GerarFolha },
+  {
+    path: '/rh/cargos', name: 'Cargos e Funções', element: ListaCargos, roles: ['admin', 'rh']
+  },
+  { path: '/rh/departamentos', name: 'Departamentos', element: ListaDepartamentos, roles: ['admin', 'rh'] },
+  { path: '/rh/funcionarios', name: 'Funcionarios', element: ListaFuncionarios, roles: ['admin', 'rh'] },
+  { path: '/rh/folha-pagamento', name: 'Folha de Pagamento', element: GerarFolha, roles: ['admin', 'rh'] },
   {
     path: '/rh/recibos-pagamento',
     name: 'Recibo de Pagamento',
     element: RecibosPagamento,
+    roles: ['admin', 'rh']
   },
-  { path: '/rh/presencas', name: 'Presenças e Faltas', element: RegistroPonto },
+  { path: '/rh/presencas', name: 'Presenças e Faltas', element: RegistroPonto, roles: ['admin', 'rh'] },
   {
     path: '/rh/relatorio-presencas',
     name: 'Relatório de Presenças ',
     element: RelatorioPresencas,
+    roles: ['admin', 'rh']
   },
 
   {
     path: '/config/config-geral',
     name: 'Configurações Gereais ',
     element: ConfiguracoesGerais,
+    roles: ['admin']
   },
-  { path: '/config/integracoes', name: 'Integrações', element: Integracoes },
+  { path: '/config/integracoes', name: 'Integrações', element: Integracoes, roles: ['admin', 'rh'] },
   {
     path: '/config/parametros-academico',
     name: 'Parâmetro Acadêmico',
     element: ParametrosAcademicos,
+    roles: ['admin'],
   },
   {
     path: '/config/parametros-finaceiros',
     name: 'Parâmetro Financeiro',
     element: ParametrosFinanceiros,
+    roles: ['admin'],
   },
-  { path: '/config/personalizacao', name: 'Personalização', element: Personalizacao },
-  { path: '/config/user-profile', name: 'Perfil do Usuário', element: UsuariosPerfis },
+  { path: '/config/personalizacao', name: 'Personalização', element: Personalizacao, roles: ['admin'], },
+  { path: '/config/user-profile', name: 'Perfil do Usuário', element: UsuariosPerfis, },
 
-  { path: '/icons/flags', name: 'Flags', element: Flags },
-  { path: '/icons/brands', name: 'Brands', element: Brands },
-  { path: '/notifications', name: 'Notifications', element: Alerts, exact: true },
-  { path: '/notifications/alerts', name: 'Alerts', element: Alerts },
-  { path: '/notifications/badges', name: 'Badges', element: Badges },
-  { path: '/notifications/modals', name: 'Modals', element: Modals },
-  { path: '/notifications/toasts', name: 'Toasts', element: Toasts },
+
+
+
+  // Gestão escolar
+  { path: '/notifications/alerts', name: 'Alerts', element: Alerts, roles: ['admin'] },
+  { path: '/notifications/badges', name: 'Badges', element: Badges, roles: ['admin'] },
+  { path: '/notifications/modals', name: 'Modals', element: Modals, roles: ['admin'] },
+  { path: '/notifications/toasts', name: 'Toasts', element: Toasts, roles: ['admin'] },
   {
     path: '/notifications/relatorio-gerais',
     name: 'Relatório Gerais',
     element: RelatorioGerais,
+    roles: ['admin']
   },
-  { path: '/widgets', name: 'Widgets', element: Widgets },
+  { path: '/notifications', name: 'Notifications', element: Alerts, exact: true, roles: ['admin'], },
+
+
+  { path: '/widgets', name: 'Widgets', element: Widgets, roles: ['admin'], },
 ]
 
 export default routes

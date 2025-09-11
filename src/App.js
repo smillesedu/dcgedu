@@ -45,41 +45,45 @@ const App = () => {
   }, []) // eslint-disable-line
 
   return (
-    <AuthContextProvider>
-      <HashRouter>
-        <Suspense
-          fallback={
-            <div className="pt-3 text-center">
-              <CSpinner color="primary" variant="grow" />
-            </div>
-          }
-        >
-          <Routes>
-            {/* Rotas públicas */}
-            {/* <Route path="/sevem-smilles" element={<RootLayout />} /> */}
-            <Route path="/register" element={<Register />} />
-            <Route path="/500" element={<Page500 />} />
-            <Route index path="/" element={<RootLayout />} />
-            <Route path="*" element={<Page404 />} />
+    <React.StrictMode>
 
-            {/* Rotas protegidas */}
-            <Route
-              path="/"
-              element={
-                <ProtectedRoute>
-                  <DefaultLayout />
-                </ProtectedRoute>
-              }
-            >
-              {routes.map((route, idx) => {
-                const Component = route.element
-                return <Route key={idx} path={route.path} element={<Component />} />
-              })}
-            </Route>
-          </Routes>
-        </Suspense>
-      </HashRouter>
-    </AuthContextProvider>
+      <AuthContextProvider>
+        <HashRouter>
+          <Suspense
+            fallback={
+              <div className="pt-3 text-center">
+                <CSpinner color="primary" variant="grow" />
+              </div>
+            }
+          >
+            <Routes>
+              {/* Rotas públicas */}
+              {/* <Route path="/sevem-smilles" element={<RootLayout />} /> */}
+              <Route path="/register" element={<Register />} />
+              <Route path="/500" element={<Page500 />} />
+              <Route index path="/" element={<RootLayout />} />
+              <Route path="*" element={<Page404 />} />
+
+              {/* Rotas protegidas */}
+              <Route
+                path="/"
+                element={
+                  <ProtectedRoute requiredRoles={['admin', 'gestor', 'Professor', 'Aluno']}>
+                    <DefaultLayout />
+                  </ProtectedRoute>
+                }
+              >
+                {routes.map((route, idx) => {
+                  const Component = route.element
+                  return <Route key={idx} path={route.path} element={<Component />} />
+                })}
+              </Route>
+            </Routes>
+          </Suspense>
+        </HashRouter>
+      </AuthContextProvider>
+    </React.StrictMode>
+
   )
 }
 

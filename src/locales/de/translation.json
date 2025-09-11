@@ -2,6 +2,7 @@
   "welcome": "Willkommen in der Anwendung",
   "login": "Einloggen",
   "logout": "Ausloggen",
+  "register": "Registrieren",
   "language": "Sprache",
   "header": {
     "home": "Startseite",

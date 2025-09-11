@@ -19,15 +19,19 @@ import {
 export const TruestedCompanies = [
   {
     imgSrc: "https://upload.wikimedia.org/wikipedia/commons/a/a9/Kaplan_International_Languages_Logo.png",
+    href: "https://www.kaplaninternational.com/"
   },
   {
     imgSrc: "https://upload.wikimedia.org/wikipedia/commons/a/a2/Menaul_School_Logo.jpg",
+    href: "https://www.menaulschool.org/"
   },
   {
     imgSrc: "https://upload.wikimedia.org/wikipedia/commons/d/d4/Pace_University_Logo.svg",
+    href: "https://www.pace.edu/"
   },
   {
     imgSrc: "https://deacollege.ca/wp-content/uploads/2024/05/6.2-e1716439429976-300x124.png",
+    href: "https://deacollege.ca"
   },
   // {
   //   imgSrc: microsoft,

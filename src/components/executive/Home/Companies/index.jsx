@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next'
 // Ajuste o caminho conforme sua estrutura de pastas
 import { TruestedCompanies } from '../../../../app/api/data'
 import { getImagePrefix } from '../../../../utils/util'
+import { Link } from 'react-router-dom'
 
 const Companies = () => {
   const { t } = useTranslation();
@@ -38,7 +39,7 @@ const Companies = () => {
   }
 
   return (
-    <section className="text-center">
+    <section id="biss2biss" className="text-center">
       <div className="container mx-auto lg:max-w-screen-xl md:max-w-screen-md px-4">
         <h2 className="text-midnight_text text-2xl font-semibold">
           {t("partners.title")}
@@ -47,6 +48,7 @@ const Companies = () => {
           <Slider {...settings}>
             {TruestedCompanies.map((item, i) => (
               <div key={i}>
+                <Link to={item.href} target="_blank">
                 <img
                   src={`${item.imgSrc}`}
                   alt={item.imgSrc}
@@ -54,6 +56,7 @@ const Companies = () => {
                   height={36}
                   className="mx-auto"
                 />
+                </Link>
               </div>
             ))}
           </Slider>
